@@ -1,0 +1,1 @@
+"./adc14vna.o" "./DynamicCommandParser.o" "./main.o" "./quadrature.o" "./si5351.o" "./vna_2017.o" -Wl,--start-group -Wl,-T"/home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/runtime/wiring/msp432/linker.cmd" -lMSP-EXP432P401R_core -l:msp432p4xx_driverlib.a -lstdc++ -lgcc -lc -lm -lnosys -Wl,--end-group 
