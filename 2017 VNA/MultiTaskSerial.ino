@@ -13,14 +13,10 @@ void loopSerial()
    if(sendMeasurement&&(indexSending < frequencyIndex))
    {
        indexSending = frequencyIndex;
-       Serial.print(refSum,0); // 0 means this is an integer.
+       Serial.print(refSum);
        Serial.print(", ");
-       Serial.println(measSum,0);
+       Serial.println(measSum);
        Serial.flush();
        sendMeasurement = false;
    }
-/*  For debugging  *
-  Serial.print("Task 1 millis: ");
-  Serial.println(millis());
-  delay(1000);*/
 }

@@ -78,8 +78,8 @@ vna_2017.o: vna_2017.cpp \
  /home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/runtime/wiring/Arduino.h \
  /home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/runtime/wiring/Energia.h \
  /home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/runtime/wiring/Wire.h \
- /home/frohro/workspace_v7/2017\ VNA/si5351.h \
- /home/frohro/workspace_v7/2017\ VNA/quadrature.h \
+ /home/frohro/Projects/2017_VNA/2017\ VNA/si5351.h \
+ /home/frohro/Projects/2017_VNA/2017\ VNA/quadrature.h \
  /home/frohro/ti/simplelink_msp432_sdk_1_30_00_40/source/ti/devices/msp432p4xx/driverlib/driverlib.h \
  /home/frohro/ti/simplelink_msp432_sdk_1_30_00_40/source/ti/devices/msp432p4xx/driverlib/adc14.h \
  /home/frohro/ti/simplelink_msp432_sdk_1_30_00_40/source/ti/devices/msp432p4xx/inc/msp.h \
@@ -120,8 +120,8 @@ vna_2017.o: vna_2017.cpp \
  /home/frohro/ti/simplelink_msp432_sdk_1_30_00_40/source/ti/devices/msp432p4xx/driverlib/wdt_a.h \
  /home/frohro/ti/simplelink_msp432_sdk_1_30_00_40/source/ti/devices/msp432p4xx/driverlib/sysctl.h \
  /home/frohro/ti/simplelink_msp432_sdk_1_30_00_40/source/ti/devices/msp432p4xx/driverlib/flash.h \
- /home/frohro/workspace_v7/2017\ VNA/DynamicCommandParser.h \
- /home/frohro/workspace_v7/2017\ VNA/adc14vna.h \
+ /home/frohro/Projects/2017_VNA/2017\ VNA/DynamicCommandParser.h \
+ /home/frohro/Projects/2017_VNA/2017\ VNA/adc14vna.h \
  /home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/sysbios/family/arm/m3/Hwi.h \
  /home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/sysbios/family/arm/m3/Hwi__prologue.h \
  /home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/sysbios/family/arm/m3/package/package.defs.h \
@@ -286,9 +286,9 @@ vna_2017.o: vna_2017.cpp \
 
 /home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/runtime/wiring/Wire.h:
 
-/home/frohro/workspace_v7/2017\ VNA/si5351.h:
+/home/frohro/Projects/2017_VNA/2017\ VNA/si5351.h:
 
-/home/frohro/workspace_v7/2017\ VNA/quadrature.h:
+/home/frohro/Projects/2017_VNA/2017\ VNA/quadrature.h:
 
 /home/frohro/ti/simplelink_msp432_sdk_1_30_00_40/source/ti/devices/msp432p4xx/driverlib/driverlib.h:
 
@@ -370,9 +370,9 @@ vna_2017.o: vna_2017.cpp \
 
 /home/frohro/ti/simplelink_msp432_sdk_1_30_00_40/source/ti/devices/msp432p4xx/driverlib/flash.h:
 
-/home/frohro/workspace_v7/2017\ VNA/DynamicCommandParser.h:
+/home/frohro/Projects/2017_VNA/2017\ VNA/DynamicCommandParser.h:
 
-/home/frohro/workspace_v7/2017\ VNA/adc14vna.h:
+/home/frohro/Projects/2017_VNA/2017\ VNA/adc14vna.h:
 
 /home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/sysbios/family/arm/m3/Hwi.h:
 

@@ -60,7 +60,8 @@
  *            4.1, 4.3, 4.5, 4.7 are the eventual pins needed.
  *
  * Author: Timothy Logan
- * This was modified by Rob Frohne to do multiple ADC at 8 kHz sample rate.
+ * This was modified by Rob Frohne to do multiple ADC at 8 kHz sample rate,
+ * and in concert with Energia.
  ******************************************************************************/
 #include "adc14vna.h"
 /* DriverLib Includes */
@@ -78,8 +79,7 @@ const Timer_A_UpModeConfig upModeConfig =
 {
  TIMER_A_CLOCKSOURCE_SMCLK,           // SMCLK Clock Source
  TIMER_A_CLOCKSOURCE_DIVIDER_1,       // SMCLK/1 = 48MHz
- (SMCLK_FREQUENCY/SAMPLE_FREQUENCY)/4,  // Number of counts
- // (The /4 because SMCLK is divided by 4 in Energia setup needed for Serial class)
+ (SMCLK_FREQUENCY/SAMPLE_FREQUENCY),  // Number of counts
  TIMER_A_TAIE_INTERRUPT_DISABLE,      // Disable Timer ISR
  TIMER_A_CCIE_CCR0_INTERRUPT_DISABLE, // Disable CCR0
  TIMER_A_DO_CLEAR                     // Clear Counter
@@ -106,55 +106,32 @@ extern volatile bool doneADC = false;
 int adc14_main(void)
 {
     int i;
-    // Halting WDT
-    Hwi_Params params;
 
     // Register interrupt (sets up IRQ vectors)
+    Hwi_Params params;
     Hwi_Params_init(&params);
     Hwi_create(INT_ADC14, ADC14_IRQHandler, &params, 0);
     Hwi_setPriority(INT_ADC14, 60);
-
 
     // Configuring debugging pins as output for debugging...
     GPIO_setAsOutputPin(GPIO_PORT_P5, GPIO_PIN5);
     GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0);
 
-
-    // Set to Vcore1
-    //PCM_setCoreVoltageLevel(PCM_VCORE1);
-
-    // Set to use DCDC
-    //PCM_setPowerState(PCM_AM_DCDC_VCORE1);
-
-    // Initializes Clock System
-    /*  These commented out because we need the Energia clock setup.  The
-     *  data structures for the timer are adjusted accordingly.  The time
-     *  between conversions may be four times as much as we had with these
-     *  parameters below, but this seems like the easiest way to make everything
-     *  play together for now.
-    CS_setDCOCenteredFrequency(CS_DCO_FREQUENCY_48);
-    CS_initClockSignal(CS_MCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1 );
-    CS_initClockSignal(CS_HSMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1 );
-    CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1 );
-    CS_initClockSignal(CS_ACLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_1);
-     */
-
-
     //Zero-filling buffer
     memset(resultsBuffer, 0x00, 8);
 
     // Setting reference voltage to 2.5  and enabling reference
-    REF_A_setReferenceVoltage(REF_A_VREF2_5V);
-    REF_A_enableReferenceVoltage();
+    //REF_A_setReferenceVoltage(REF_A_VREF2_5V);
+    //REF_A_enableReferenceVoltage();
 
     //Initializing ADC (MCLK/1/1)
     ADC14_enableModule();
     ADC14_initModule(ADC_CLOCKSOURCE_MCLK, ADC_PREDIVIDER_1, ADC_DIVIDER_1,
-                         0);
+                     0);
 
     //Configuring GPIOs for Analog In
     GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P4,
-        GPIO_PIN1 | GPIO_PIN3 | GPIO_PIN5 | GPIO_PIN7, GPIO_TERTIARY_MODULE_FUNCTION);
+         GPIO_PIN1 | GPIO_PIN3 | GPIO_PIN5 | GPIO_PIN7, GPIO_TERTIARY_MODULE_FUNCTION);
 
 
     // Configuring ADC Memory (ADC_MEM0 - ADC_MEM3 (A6, A12, A10, A8)  with no repeat)
@@ -162,17 +139,17 @@ int adc14_main(void)
     ADC14_configureMultiSequenceMode(ADC_MEM0, ADC_MEM3, false);
 
     ADC14_configureConversionMemory(ADC_MEM0,
-                                        ADC_VREFPOS_INTBUF_VREFNEG_VSS,
-                                        ADC_INPUT_A6, ADC_NONDIFFERENTIAL_INPUTS);
+                                    ADC_VREFPOS_INTBUF_VREFNEG_VSS,
+                                    ADC_INPUT_A6, ADC_NONDIFFERENTIAL_INPUTS);
     ADC14_configureConversionMemory(ADC_MEM1,
-                                        ADC_VREFPOS_INTBUF_VREFNEG_VSS,
-                                        ADC_INPUT_A12, ADC_NONDIFFERENTIAL_INPUTS);
+                                    ADC_VREFPOS_INTBUF_VREFNEG_VSS,
+                                    ADC_INPUT_A12, ADC_NONDIFFERENTIAL_INPUTS);
     ADC14_configureConversionMemory(ADC_MEM2,
-                                        ADC_VREFPOS_INTBUF_VREFNEG_VSS,
-                                        ADC_INPUT_A10, ADC_NONDIFFERENTIAL_INPUTS);
+                                    ADC_VREFPOS_INTBUF_VREFNEG_VSS,
+                                    ADC_INPUT_A10, ADC_NONDIFFERENTIAL_INPUTS);
     ADC14_configureConversionMemory(ADC_MEM3,
-                                        ADC_VREFPOS_INTBUF_VREFNEG_VSS,
-                                        ADC_INPUT_A8, ADC_NONDIFFERENTIAL_INPUTS);
+                                    ADC_VREFPOS_INTBUF_VREFNEG_VSS,
+                                    ADC_INPUT_A8, ADC_NONDIFFERENTIAL_INPUTS);
 
     //  Enabling the interrupt when a conversion on channel 3 (end of sequence)
     //  is complete and enabling conversions
@@ -192,10 +169,7 @@ int adc14_main(void)
 
     // Setting up the sample timer to automatically step through the sequence
     // convert.
-
     ADC14_enableSampleTimer(ADC_AUTOMATIC_ITERATION);
-
-    //ADC14_toggleConversionTrigger();
 
     // Enabling Interrupts
     Interrupt_enableInterrupt(INT_ADC14);
@@ -221,7 +195,6 @@ void ADC14_IRQHandler(void)
 {
     uint64_t status;
     static int i = 0;
-
     status = ADC14_getEnabledInterruptStatus();
     ADC14_clearInterruptFlag(status);
 
@@ -234,7 +207,6 @@ void ADC14_IRQHandler(void)
         refRe[i] = resultsBuffer[2];
         refIm[i] = resultsBuffer[3];
         GPIO_toggleOutputOnPin(GPIO_PORT_P5, GPIO_PIN5);
-        //i=(i+1)%SAMPLE_LENGTH;
         ADC14_disableConversion();
         if (i!=SAMPLE_LENGTH)
         {
@@ -245,15 +217,8 @@ void ADC14_IRQHandler(void)
         {
             i=0;
             doneADC = true;
+            //ADC14_enableConversion(); // Temporary for testing!
         }
     }
 }
-
-void startSampling(void)
-{
-    ADC14_enableConversion();  // It is a mystery why I need to do this
-                               // instead of just calling ADC14_enableConversion()
-                               // from the .ino file!
-}
-
 

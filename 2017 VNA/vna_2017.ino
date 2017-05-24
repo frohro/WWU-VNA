@@ -3,7 +3,7 @@
 #include "si5351.h"
 #include "quadrature.h"
 #include <ti/devices/msp432p4xx/driverlib/driverlib.h>
-#include "DynamicCommandParser.h"
+#include "DynamicCommandParser.h" // https://github.com/mdjarv/DynamicCommandParser
 
 extern "C"{
 #include "adc14vna.h"
@@ -32,7 +32,8 @@ volatile float  refSum, measSum;
 float shift[SAMPLE_LENGTH];  // Make this constant sometime.
 
 int simpleDownConverter(void);
-void processCommand(char **values, int valueCount);
+void sweepFreqMeas(char **values, int valueCount);
+void voltageMeasurement(char **values, int valueCount);
 
 void setup()
 {
@@ -40,8 +41,11 @@ void setup()
 
     adc14_main();
     si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0);
-    dcp.addParser("MEASURE", processCommand);
-    for(n=0;n<SAMPLE_LENGTH;n++)
+    // For frequency sweep: "^SWEEP,Fmin,Fmax,NFreq$"
+    dcp.addParser("SWEEP", sweepFreqMeas);
+    // Returns single freqency measurements as a function of time:  "^TIME,Freq$"
+    dcp.addParser("TIME", voltageMeasurement);
+    for(n=0;n<SAMPLE_LENGTH;n++) // Initialize shift, should make constant later.
     {
         shift[n] = cos(OMEGA_IF*n/SAMPLE_FREQUENCY)\
                 *0.5*(1-cos(2*PI*n/(SAMPLE_LENGTH-1))); // Hanning window
@@ -53,7 +57,7 @@ void setup()
     // Query a status update and wait a bit to let the Si5351 populate the
     // status flags correctly.
     si5351.update_status();
-    ADC14_enableConversion(); // Start conversions for testing.
+    //ADC14_enableConversion(); // Start conversions (only for testing).
     delay(500);
 }
 
@@ -85,23 +89,25 @@ int simpleDownConverter(void)    // Do DSP here.
     return(1);  // Later fix this to report errors if there are any.
 }
 
-void processCommand(char **values, int valueCount)
+void sweepFreqMeas(char **values, int valueCount)
 {
     int i;
     unsigned long long fMin, fMax, deltaFreq, freq[MAX_NUMBER_FREQ];
     if(valueCount != 4)
     {
+        Serial.println("In sweepFreqMeas, number of arguments is not correct.");
         return;  // Something is wrong if you end up here.
     }
-    fMin = atoi(values[0])*100ULL;
-    fMax = atoi(values[1])*100ULL;
-    numberFrequenciestoMeasure = atoi(values[2]);
+    fMin = atoi(values[1])*100ULL;
+    fMax = atoi(values[2])*100ULL;
+    numberFrequenciestoMeasure = atoi(values[3]);
 
     deltaFreq = (fMax-fMin)/numberFrequenciestoMeasure;
     /* The idea is that we will get the first frequency's data, and then
      * send it out the serial port to gnu octave while we are getting the
      * next frequency's data.  We use the multithreaded Energia stuff to do
-     * this.  The MultiTaskSerial.ino does the sending.
+     * this.  The MultiTaskSerial.ino does the sending.  We compute the data
+     * after we have collected the SAMPLE_LENGTH of it.
      */
     for(i=0;i<numberFrequenciestoMeasure;i++)
     {
@@ -109,9 +115,8 @@ void processCommand(char **values, int valueCount)
         si5351.set_freq(freq[i], SI5351_CLK0);
         si5351.set_freq(freq[i]+100ULL*F_IF, SI5351_CLK1);
         si5351.set_freq(freq[i]+100ULL*F_IF, SI5351_CLK2);
-        //ADC14_enableConversion();
-        delay(1000);
-        startSampling();
+        delay(1000); // Do we need this long?
+        ADC14_enableConversion();
         while(!doneADC)
         {
             //sleep(10); // Wait until it is done converting everything.
@@ -128,4 +133,31 @@ void processCommand(char **values, int valueCount)
         sendMeasurement = true;
     }
     return;
+}
+
+void voltageMeasurement(char **values, int valueCount)
+{
+    int j;
+    unsigned long long freq;
+    if(valueCount != 2)
+    {
+        Serial.println("In voltageMeasurement, number of arguments is not correct.");
+        return;  // Something is wrong if you end up here.
+    }
+    freq = atoi(values[1]);
+    si5351.set_freq(freq, SI5351_CLK0);
+    si5351.set_freq(freq+100ULL*F_IF, SI5351_CLK1);
+    si5351.set_freq(freq+100ULL*F_IF, SI5351_CLK2);
+    delay(1000);
+    for(j=0;j<SAMPLE_LENGTH;j++)
+    {
+        Serial.print(refRe[j]);
+        Serial.print(", ");
+        Serial.print(refIm[j]);
+        Serial.print(", ");
+        Serial.print(measRe[j]);
+        Serial.print(", ");
+        Serial.println(measIm[j]);
+        Serial.flush(); // Waits until completion of transmitted data.
+    }
 }
