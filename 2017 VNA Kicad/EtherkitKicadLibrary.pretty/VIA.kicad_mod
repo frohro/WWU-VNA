@@ -1,0 +1,10 @@
+(module VIA (layer F.Cu)
+  (fp_text reference VIA (at 0 1.2) (layer F.SilkS) hide
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+  (fp_text value VAL** (at 0 1.2) (layer F.SilkS) hide
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+  (pad "" thru_hole circle (at 0 0) (size 0.2 0.2) (drill 0.15) (layers *.Cu *.Mask F.SilkS)
+    (clearance 0.05) (zone_connect 2))
+)

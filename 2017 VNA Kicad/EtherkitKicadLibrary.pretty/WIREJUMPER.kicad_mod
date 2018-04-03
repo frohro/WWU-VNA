@@ -1,0 +1,9 @@
+(module WIREJUMPER (layer F.Cu)
+  (fp_text reference "" (at 0 4.54914) (layer F.SilkS) hide
+    (effects (font (thickness 0.3048)))
+  )
+  (fp_text value VAL** (at 0 2.3495) (layer F.SilkS) hide
+    (effects (font (size 0.50038 0.50038) (thickness 0.12446)))
+  )
+  (pad 1 thru_hole circle (at 0 0) (size 1.19888 1.19888) (drill 0.70104) (layers *.Cu *.Mask F.SilkS))
+)
