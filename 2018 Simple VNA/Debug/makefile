@@ -2,7 +2,7 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
-CG_TOOL_ROOT := /home/frohro/.energia15/packages/energia/tools/arm-none-eabi-gcc/4.8.4-20140725
+CG_TOOL_ROOT := /home/frohro/ti/ccsv7/tools/compiler/gcc-arm-none-eabi-6-2017-q1-update
 
 GEN_OPTS__FLAG := 
 GEN_CMDS__FLAG := 
@@ -34,7 +34,11 @@ RMDIR := rm -rf
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
+-include Debug__GNU/subdir_vars.mk
+-include Debug__TI/subdir_vars.mk
 -include subdir_rules.mk
+-include Debug__GNU/subdir_rules.mk
+-include Debug__TI/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -131,37 +135,37 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-2017\ VNA.out \
+2018\ Simple\ VNA.out \
 
 EXE_OUTPUTS__QUOTED += \
-"2017 VNA.out" \
+"2018 Simple VNA.out" \
 
 BIN_OUTPUTS += \
-2017\ VNA.hex \
+2018\ Simple\ VNA.hex \
 
 BIN_OUTPUTS__QUOTED += \
-"2017 VNA.hex" \
+"2018 Simple VNA.hex" \
 
 
 # All Target
 all: $(OBJS) $(GEN_CMDS)
-	@$(MAKE) --no-print-directory -Onone "2017 VNA.out"
+	@$(MAKE) --no-print-directory -Onone "2018 Simple VNA.out"
 
 dependents:
-	-cd /home/frohro/workspace_v7/MSP-EXP432P401R_core/Debug && $(MAKE) clean all
+	-cd /home/frohro/workspace_v7/MSP-EXP432P401R_core/Debug && $(MAKE) all
 
 # Tool invocations
-2017\ VNA.out: $(OBJS) $(GEN_CMDS) /home/frohro/workspace_v7/MSP-EXP432P401R_core/Debug/libMSP-EXP432P401R_core.a
+2018\ Simple\ VNA.out: $(OBJS) $(GEN_CMDS) /home/frohro/workspace_v7/MSP-EXP432P401R_core/Debug/libMSP-EXP432P401R_core.a
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: GNU Linker'
-	"/home/frohro/.energia15/packages/energia/tools/arm-none-eabi-gcc/4.8.4-20140725/bin/arm-none-eabi-gcc" -fno-exceptions -Dxdc_target_types__=gnu/targets/arm/std.h -Dxdc_target_name__=M4F -Dxdc_cfg__xheader__=\"configPkg/package/cfg/energia_pm4fg.h\" -DTARGET_IS_MSP432P4XX -DBOARD_MSP_EXP432P401R -Dxdc__nolocalstring=1 -D__MSP432P401R__ -DCORE_VERSION=380 -DF_CPU=48000000L -DENERGIA_MSP_EXP432P401R -DENERGIA_ARCH_MSP432 -DENERGIA=18 -DARDUINO=10610 -Os -ffunction-sections -fdata-sections -g -gdwarf-3 -gstrict-dwarf -w -Wall -mabi=aapcs -fno-threadsafe-statics -mabi=aapcs -fno-threadsafe-statics -march=armv7e-m -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wl,-Map,"2017 VNA.map" -nostartfiles -Wl,--gc-sections -L"/home/frohro/workspace_v7/MSP-EXP432P401R_core/Debug" -L"/home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432" -L"/home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/runtime/wiring/msp432" -L"/home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/runtime/wiring/msp432/variants/MSP_EXP432P401R" -L"/home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/gnu/targets/arm/libs/install-native/arm-none-eabi/lib/armv7e-m/fpu" -L"/home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/system/driverlib/MSP432P4xx/gcc" -Wl,--undefined,main -Os -Wl,--check-sections -o"2017 VNA.out" $(ORDERED_OBJS)
+	"/home/frohro/ti/ccsv7/tools/compiler/gcc-arm-none-eabi-6-2017-q1-update/bin/arm-none-eabi-gcc" -fno-exceptions -Dxdc_target_types__=gnu/targets/arm/std.h -Dxdc_target_name__=M4F -Dxdc_cfg__xheader__=\"configPkg/package/cfg/energia_pm4fg.h\" -DTARGET_IS_MSP432P4XX -DBOARD_MSP_EXP432P401R -Dxdc__nolocalstring=1 -D__MSP432P401R__ -DCORE_VERSION=380 -DF_CPU=48000000L -DENERGIA_MSP_EXP432P401R -DENERGIA_ARCH_MSP432 -DENERGIA=18 -DARDUINO=10610 -Os -ffunction-sections -fdata-sections -g -gdwarf-3 -gstrict-dwarf -w -Wall -mabi=aapcs -fno-threadsafe-statics -mabi=aapcs -fno-threadsafe-statics -march=armv7e-m -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wl,-Map,"2018 Simple VNA.map" -nostartfiles -Wl,--gc-sections -L"/home/frohro/workspace_v7/MSP-EXP432P401R_core/Debug" -L"/home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432" -L"/home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/runtime/wiring/msp432" -L"/home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/runtime/wiring/msp432/variants/MSP_EXP432P401R" -L"/home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/gnu/targets/arm/libs/install-native/arm-none-eabi/lib/armv7e-m/fpu" -L"/home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/system/driverlib/MSP432P4xx/gcc" -Wl,--undefined,main -Os -Wl,--check-sections -o"2018 Simple VNA.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
-2017\ VNA.hex: $(EXE_OUTPUTS)
+2018\ Simple\ VNA.hex: $(EXE_OUTPUTS)
 	@echo 'Building files: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo 'Invoking: GNU Objcopy Utility'
-	"/home/frohro/.energia15/packages/energia/tools/arm-none-eabi-gcc/4.8.4-20140725/bin/arm-none-eabi-objcopy"  $(EXE_OUTPUTS__QUOTED) "2017 VNA.hex"
+	"/home/frohro/ti/ccsv7/tools/compiler/gcc-arm-none-eabi-6-2017-q1-update/bin/arm-none-eabi-objcopy"  $(EXE_OUTPUTS__QUOTED) "2018 Simple VNA.hex"
 	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo ' '
 

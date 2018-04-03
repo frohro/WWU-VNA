@@ -1,6 +1,6 @@
 #include "Energia.h"
 
-#line 1 "/home/frohro/Projects/2017_VNA/2017 VNA/vna_2017.ino"
+#line 1 "/home/frohro/Projects/2017_VNA/2018 Simple VNA/vna_2017.ino"
 #include "Arduino.h"
 #include "Wire.h"
 #include "si5351.h"
@@ -10,6 +10,8 @@
 
 void setup();
 void loop();
+void setOscillator (unsigned long long freq);
+void sendSampleRate (char **values, int valueCount);
 void setupSerial();
 void loopSerial();
 
@@ -26,39 +28,38 @@ extern "C"{
 #define OMEGA_IF F_IF*2*PI
 
 Si5351 si5351;
-DynamicCommandParser dcp('^', '$', ',');
+DynamicCommandParser dcp('^', '$', ',');  
 
-volatile uint16_t refRe[SAMPLE_LENGTH];
-volatile uint16_t refIm[SAMPLE_LENGTH];
-volatile uint16_t measRe[SAMPLE_LENGTH];
-volatile uint16_t measIm[SAMPLE_LENGTH];
+volatile uint16_t ref[SAMPLE_LENGTH];
+volatile uint16_t meas[SAMPLE_LENGTH];
 extern volatile bool doneADC;
 volatile bool sendMeasurement = false;
 volatile int numberFrequenciestoMeasure, frequencyIndex;
 volatile float  refSum, measSum;
 
-
 float shift[SAMPLE_LENGTH];  
 
 int simpleDownConverter(void);
 void sweepFreqMeas(char **values, int valueCount);
-void voltageMeasurement(char **values, int valueCount);
+void voltageMeasurement(char **values, int valueCount); 
+void setOscillator(unsigned long long freq);
+void sendSampleRate(char **values, int valueCount);
 
 void setup()
 {
-    int n;
-
     adc14_main(); 
     si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0);
-
     
-    DynamicCommandParser dcp('^', '$', ',');
+    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
+    setOscillator(200000000ULL);
+    
     
     dcp.addParser("SWEEP", sweepFreqMeas);
     
     dcp.addParser("TIME", voltageMeasurement);
-
-    for(n=0;n<SAMPLE_LENGTH;n++) 
+    
+    dcp.addParser("SAMPLERATE", sendSampleRate);
+    for(int n=0;n<SAMPLE_LENGTH;n++) 
     {
         shift[n] = cos(OMEGA_IF*n/SAMPLE_FREQUENCY)\
                 *0.5*(1-cos(2*PI*n/(SAMPLE_LENGTH-1))); 
@@ -76,24 +77,18 @@ void loop()
 int simpleDownConverter(void)    
 {
     int j;
-    float refReSum, refImSum, measReSum, measImSum;
-    refReSum = 0;
-    refImSum = 0;
-    measReSum = 0;
-    measImSum = 0;
+    float refSum, measSum;
+    refSum = 0.0;
+    measSum = 0.0;
     for(j=0;j<SAMPLE_LENGTH;j++)
     {
-        refReSum = refRe[j]*shift[j]+refReSum;
-        refImSum = refIm[j]*shift[j]+refImSum;
-        measReSum = measRe[j]*shift[j]+measReSum;
-        measImSum = measIm[j]*shift[j]+measImSum;
+        refSum = ref[j]*shift[j]+refSum;
+        measSum = meas[j]*shift[j]+measSum;
     }
-    refSum = refReSum + refImSum;  
-    measSum = measReSum + measImSum;
     return(1);  
 }
 
-void sweepFreqMeas(char **values, int valueCount)
+void sweepFreqMeas(char **values, int valueCount) 
 {
     int i;
     unsigned long long fMin, fMax, deltaFreq, freq[MAX_NUMBER_FREQ];
@@ -122,11 +117,8 @@ void sweepFreqMeas(char **values, int valueCount)
 
     for(i=0;i<numberFrequenciestoMeasure;i++)
     {
-        freq[i]=(fMin+i*deltaFreq);
-        si5351.set_freq(freq[i], SI5351_CLK0);
-        si5351.set_freq(freq[i]+100ULL*F_IF, SI5351_CLK1);
-        si5351.set_freq(freq[i]+100ULL*F_IF, SI5351_CLK2);
-        delay(1000); 
+        freq[i]=fMin+i*deltaFreq;
+        setOscillator(freq[i]);
         ADC14_enableConversion();
         while(!doneADC)
         {
@@ -150,35 +142,64 @@ void sweepFreqMeas(char **values, int valueCount)
     return;
 }
 
-void voltageMeasurement(char **values, int valueCount)
+void voltageMeasurement(char **values, int valueCount) 
 {
     int j;
     unsigned long long freq;
-    if(valueCount != 2)
+    if (valueCount != 2)
     {
-        Serial.println("In voltageMeasurement, number of arguments is not correct.");
+        Serial.println(
+                "In voltageMeasurement, number of arguments is not correct.");
         return;  
     }
     freq = atoi(values[1]);
+    setOscillator(freq);
+    ADC14_enableConversion();
+    while(!doneADC)
+    {}
+    {
+        for (j = 0; j < SAMPLE_LENGTH; j++)
+        {
+            Serial.print(ref[j]);
+            Serial.print(", ");
+            
+        }
+        Serial.print('\n');
+        
+        Serial.flush();
+        delay(500);
+        for (j = 0; j < SAMPLE_LENGTH; j++)
+        {
+            Serial.print(meas[j]);
+            Serial.print(", ");
+            
+        }
+        Serial.print('\n');
+        
+        Serial.flush();
+    }
+    Serial.print('Done sending both ref and meas.');
+}
+
+void setOscillator (unsigned long long freq)
+{
     si5351.set_freq(freq, SI5351_CLK0);
     si5351.set_freq(freq+100ULL*F_IF, SI5351_CLK1);
     si5351.set_freq(freq+100ULL*F_IF, SI5351_CLK2);
-    delay(1000);
-    for(j=0;j<SAMPLE_LENGTH;j++)
-    {
-        Serial.print(refRe[j]);
-        Serial.print(", ");
-        Serial.print(refIm[j]);
-        Serial.print(", ");
-        Serial.print(measRe[j]);
-        Serial.print(", ");
-        Serial.println(measIm[j]);
-        Serial.flush(); 
-    }
+    delay(1000); 
+}
+
+void sendSampleRate (char **values, int valueCount)
+{
+    int Fs = SAMPLE_FREQUENCY;
+    int N = SAMPLE_LENGTH;
+    Serial.println(Fs);
+    Serial.println(N);
 }
 
 
-#line 1 "/home/frohro/Projects/2017_VNA/2017 VNA/MultiTaskSerial.ino"
+
+#line 1 "/home/frohro/Projects/2017_VNA/2018 Simple VNA/MultiTaskSerial.ino"
 
 
 

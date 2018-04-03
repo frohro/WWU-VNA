@@ -72,9 +72,9 @@ main.o: main.cpp \
  /home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/sysbios/gates/GateMutex.h \
  /home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/sysbios/gates/package/package.defs.h \
  /home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/drivers/bsp/Board.h \
- /home/frohro/ti/simplelink_msp432p4_sdk_1_50_00_12/source/ti/drivers/UART.h \
- /home/frohro/ti/simplelink_msp432p4_sdk_1_50_00_12/source/ti/drivers/I2C.h \
- /home/frohro/ti/simplelink_msp432p4_sdk_1_50_00_12/source/ti/drivers/SPI.h \
+ /home/frohro/ti/simplelink_msp432p4_sdk_1_60_00_12/source/ti/drivers/UART.h \
+ /home/frohro/ti/simplelink_msp432p4_sdk_1_60_00_12/source/ti/drivers/I2C.h \
+ /home/frohro/ti/simplelink_msp432p4_sdk_1_60_00_12/source/ti/drivers/SPI.h \
  /home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/runtime/wiring/WCharacter.h \
  /home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/runtime/wiring/HardwareSerial.h \
  /home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/runtime/wiring/Stream.h \
@@ -232,11 +232,11 @@ main.o: main.cpp \
 
 /home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/drivers/bsp/Board.h:
 
-/home/frohro/ti/simplelink_msp432p4_sdk_1_50_00_12/source/ti/drivers/UART.h:
+/home/frohro/ti/simplelink_msp432p4_sdk_1_60_00_12/source/ti/drivers/UART.h:
 
-/home/frohro/ti/simplelink_msp432p4_sdk_1_50_00_12/source/ti/drivers/I2C.h:
+/home/frohro/ti/simplelink_msp432p4_sdk_1_60_00_12/source/ti/drivers/I2C.h:
 
-/home/frohro/ti/simplelink_msp432p4_sdk_1_50_00_12/source/ti/drivers/SPI.h:
+/home/frohro/ti/simplelink_msp432p4_sdk_1_60_00_12/source/ti/drivers/SPI.h:
 
 /home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/runtime/wiring/WCharacter.h:
 

@@ -9,21 +9,17 @@ GEN_CMDS__FLAG :=
 
 ORDERED_OBJS += \
 "./adc14vna.o" \
+"./startup_msp432p401r_ccs.o" \
+"./startup_msp432p401r_gcc.o" \
+"./system_msp432p401r.o" \
 "./DynamicCommandParser.o" \
-"./main.o" \
+"./MultiTaskSerial.o" \
 "./quadrature.o" \
 "./si5351.o" \
 "./vna_2017.o" \
 $(GEN_CMDS__FLAG) \
 -Wl,--start-group \
--Wl,-T"/home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/runtime/wiring/msp432/linker.cmd" \
--lMSP-EXP432P401R_core \
--l:msp432p4xx_driverlib.a \
--lstdc++ \
--lgcc \
 -lc \
--lm \
--lnosys \
 -Wl,--end-group \
 
 -include ../makefile.init
@@ -131,46 +127,47 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-2017\ VNA.out \
+2018\ Simple\ VNA.out \
 
 EXE_OUTPUTS__QUOTED += \
-"2017 VNA.out" \
+"2018 Simple VNA.out" \
 
 BIN_OUTPUTS += \
-2017\ VNA.hex \
+2018\ Simple\ VNA.hex \
 
 BIN_OUTPUTS__QUOTED += \
-"2017 VNA.hex" \
+"2018 Simple VNA.hex" \
 
 
 # All Target
 all: $(OBJS) $(GEN_CMDS)
-	@$(MAKE) --no-print-directory -Onone "2017 VNA.out"
+	@$(MAKE) --no-print-directory -Onone "2018 Simple VNA.out"
 
 dependents:
 	-cd /home/frohro/workspace_v7/MSP-EXP432P401R_core/Debug && $(MAKE) clean all
 
 # Tool invocations
-2017\ VNA.out: $(OBJS) $(GEN_CMDS) /home/frohro/workspace_v7/MSP-EXP432P401R_core/Debug/libMSP-EXP432P401R_core.a
+2018\ Simple\ VNA.out: $(OBJS) $(GEN_CMDS) /home/frohro/workspace_v7/MSP-EXP432P401R_core/Debug/libMSP-EXP432P401R_core.a
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: GNU Linker'
-	"/home/frohro/.energia15/packages/energia/tools/arm-none-eabi-gcc/4.8.4-20140725/bin/arm-none-eabi-gcc" -fno-exceptions -Dxdc_target_types__=gnu/targets/arm/std.h -Dxdc_target_name__=M4F -Dxdc_cfg__xheader__=\"configPkg/package/cfg/energia_pm4fg.h\" -DTARGET_IS_MSP432P4XX -DBOARD_MSP_EXP432P401R -Dxdc__nolocalstring=1 -D__MSP432P401R__ -DCORE_VERSION=380 -DF_CPU=48000000L -DENERGIA_MSP_EXP432P401R -DENERGIA_ARCH_MSP432 -DENERGIA=18 -DARDUINO=10610 -Os -ffunction-sections -fdata-sections -g -gdwarf-3 -gstrict-dwarf -w -Wall -mabi=aapcs -fno-threadsafe-statics -mabi=aapcs -fno-threadsafe-statics -march=armv7e-m -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wl,-Map,"2017 VNA.map" -nostartfiles -Wl,--gc-sections -L"/home/frohro/workspace_v7/MSP-EXP432P401R_core/Debug" -L"/home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432" -L"/home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/runtime/wiring/msp432" -L"/home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/ti/runtime/wiring/msp432/variants/MSP_EXP432P401R" -L"/home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/cores/msp432/gnu/targets/arm/libs/install-native/arm-none-eabi/lib/armv7e-m/fpu" -L"/home/frohro/.energia15/packages/energia/hardware/msp432/3.8.0/system/driverlib/MSP432P4xx/gcc" -Wl,--undefined,main -Os -Wl,--check-sections -o"2017 VNA.out" $(ORDERED_OBJS)
+	"/home/frohro/.energia15/packages/energia/tools/arm-none-eabi-gcc/4.8.4-20140725/bin/arm-none-eabi-gcc" -g -gdwarf-3 -gstrict-dwarf -Wall -Wl,-Map,"2018 Simple VNA.map" -o"2018 Simple VNA.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
-2017\ VNA.hex: $(EXE_OUTPUTS)
+2018\ Simple\ VNA.hex: $(EXE_OUTPUTS)
 	@echo 'Building files: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo 'Invoking: GNU Objcopy Utility'
-	"/home/frohro/.energia15/packages/energia/tools/arm-none-eabi-gcc/4.8.4-20140725/bin/arm-none-eabi-objcopy"  $(EXE_OUTPUTS__QUOTED) "2017 VNA.hex"
+	"/home/frohro/.energia15/packages/energia/tools/arm-none-eabi-gcc/4.8.4-20140725/bin/arm-none-eabi-objcopy"  $(EXE_OUTPUTS__QUOTED) "2018 Simple VNA.hex"
 	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "DynamicCommandParser.o" "adc14vna.o" "quadrature.o" "si5351.o" "main.o" "vna_2017.o" 
-	-$(RM) "adc14vna.d" 
-	-$(RM) "DynamicCommandParser.d" "quadrature.d" "si5351.d" "main.d" "vna_2017.d" 
+	-$(RM) "DynamicCommandParser.o" "MultiTaskSerial.o" "adc14vna.o" "quadrature.o" "si5351.o" "startup_msp432p401r_ccs.o" "startup_msp432p401r_gcc.o" "system_msp432p401r.o" "vna_2017.o" 
+	-$(RM) "MultiTaskSerial.d" "vna_2017.d" 
+	-$(RM) "adc14vna.d" "startup_msp432p401r_ccs.d" "startup_msp432p401r_gcc.d" "system_msp432p401r.d" 
+	-$(RM) "DynamicCommandParser.d" "quadrature.d" "si5351.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

@@ -17,39 +17,38 @@ extern "C"{
 #define OMEGA_IF F_IF*2*PI
 
 Si5351 si5351;
-DynamicCommandParser dcp('^', '$', ',');
+DynamicCommandParser dcp('^', '$', ',');  //https://github.com/mdjarv/DynamicCommandParser
 
-volatile uint16_t refRe[SAMPLE_LENGTH];
-volatile uint16_t refIm[SAMPLE_LENGTH];
-volatile uint16_t measRe[SAMPLE_LENGTH];
-volatile uint16_t measIm[SAMPLE_LENGTH];
+volatile uint16_t ref[SAMPLE_LENGTH];
+volatile uint16_t meas[SAMPLE_LENGTH];
 extern volatile bool doneADC;
 volatile bool sendMeasurement = false;
 volatile int numberFrequenciestoMeasure, frequencyIndex;
 volatile float  refSum, measSum;
 
-
 float shift[SAMPLE_LENGTH];  // Make this constant sometime.
 
 int simpleDownConverter(void);
 void sweepFreqMeas(char **values, int valueCount);
-void voltageMeasurement(char **values, int valueCount);
+void voltageMeasurement(char **values, int valueCount); // For testing (sending individual voltages.
+void setOscillator(unsigned long long freq);
+void sendSampleRate(char **values, int valueCount);
 
 void setup()
 {
-    int n;
-
     adc14_main(); // Initialize ADC14 for multichannel conversion at 8 kHz.
     si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0);
-
+    // For debugging 1/4/2018
+    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
+    setOscillator(200000000ULL);
     // Initialize the data parser using the start, end and delimiting character
-    DynamicCommandParser dcp('^', '$', ',');
     // For frequency sweep: "^SWEEP,Fmin,Fmax,NFreq$"
     dcp.addParser("SWEEP", sweepFreqMeas);
-    // Returns single freqency measurements as a function of time:  "^TIME,Freq$"
+    // Returns single frequency measurements as a function of time:  "^TIME,Freq$"
     dcp.addParser("TIME", voltageMeasurement);
-
-    for(n=0;n<SAMPLE_LENGTH;n++) // Initialize shift, should make constant later.
+    // Returns the sample rate:  "^SAMPLERATE,Fs$"
+    dcp.addParser("SAMPLERATE", sendSampleRate);
+    for(int n=0;n<SAMPLE_LENGTH;n++) // Initialize shift, should make constant later.
     {
         shift[n] = cos(OMEGA_IF*n/SAMPLE_FREQUENCY)\
                 *0.5*(1-cos(2*PI*n/(SAMPLE_LENGTH-1))); // Hanning window
@@ -67,24 +66,18 @@ void loop()
 int simpleDownConverter(void)    // Do DSP here.
 {
     int j;
-    float refReSum, refImSum, measReSum, measImSum;
-    refReSum = 0;
-    refImSum = 0;
-    measReSum = 0;
-    measImSum = 0;
+    float refSum, measSum;
+    refSum = 0.0;
+    measSum = 0.0;
     for(j=0;j<SAMPLE_LENGTH;j++)
     {
-        refReSum = refRe[j]*shift[j]+refReSum;
-        refImSum = refIm[j]*shift[j]+refImSum;
-        measReSum = measRe[j]*shift[j]+measReSum;
-        measImSum = measIm[j]*shift[j]+measImSum;
+        refSum = ref[j]*shift[j]+refSum;
+        measSum = meas[j]*shift[j]+measSum;
     }
-    refSum = refReSum + refImSum;  // Not I/Q mixer average.
-    measSum = measReSum + measImSum;
     return(1);  // Later fix this to report errors if there are any.
 }
 
-void sweepFreqMeas(char **values, int valueCount)
+void sweepFreqMeas(char **values, int valueCount) // Might change functiono type to return errors.
 {
     int i;
     unsigned long long fMin, fMax, deltaFreq, freq[MAX_NUMBER_FREQ];
@@ -113,11 +106,8 @@ void sweepFreqMeas(char **values, int valueCount)
      */
     for(i=0;i<numberFrequenciestoMeasure;i++)
     {
-        freq[i]=(fMin+i*deltaFreq);
-        si5351.set_freq(freq[i], SI5351_CLK0);
-        si5351.set_freq(freq[i]+100ULL*F_IF, SI5351_CLK1);
-        si5351.set_freq(freq[i]+100ULL*F_IF, SI5351_CLK2);
-        delay(1000); // Do we need this long?
+        freq[i]=fMin+i*deltaFreq;
+        setOscillator(freq[i]);
         ADC14_enableConversion();
         while(!doneADC)
         {
@@ -141,29 +131,58 @@ void sweepFreqMeas(char **values, int valueCount)
     return;
 }
 
-void voltageMeasurement(char **values, int valueCount)
+void voltageMeasurement(char **values, int valueCount) // Might want to return error number.
 {
     int j;
     unsigned long long freq;
-    if(valueCount != 2)
+    if (valueCount != 2)
     {
-        Serial.println("In voltageMeasurement, number of arguments is not correct.");
+        Serial.println(
+                "In voltageMeasurement, number of arguments is not correct.");
         return;  // Something is wrong if you end up here.
     }
     freq = atoi(values[1]);
+    setOscillator(freq);
+    ADC14_enableConversion();
+    while(!doneADC)
+    {}
+    {
+        for (j = 0; j < SAMPLE_LENGTH; j++)
+        {
+            Serial.print(ref[j]);
+            Serial.print(", ");
+            //Serial.flush(); // Waits until completion of transmitted data.
+        }
+        Serial.print('\n');
+        //Serial.println();
+        Serial.flush();
+        delay(500);
+        for (j = 0; j < SAMPLE_LENGTH; j++)
+        {
+            Serial.print(meas[j]);
+            Serial.print(", ");
+            //Serial.flush(); // Waits until completion of transmitted data.
+        }
+        Serial.print('\n');
+        //Serial.println();
+        Serial.flush();
+    }
+    Serial.print('Done sending both ref and meas.');
+}
+
+void setOscillator (unsigned long long freq)
+{
     si5351.set_freq(freq, SI5351_CLK0);
     si5351.set_freq(freq+100ULL*F_IF, SI5351_CLK1);
     si5351.set_freq(freq+100ULL*F_IF, SI5351_CLK2);
-    delay(1000);
-    for(j=0;j<SAMPLE_LENGTH;j++)
-    {
-        Serial.print(refRe[j]);
-        Serial.print(", ");
-        Serial.print(refIm[j]);
-        Serial.print(", ");
-        Serial.print(measRe[j]);
-        Serial.print(", ");
-        Serial.println(measIm[j]);
-        Serial.flush(); // Waits until completion of transmitted data.
-    }
+    delay(1000); // Wait for oscillator and steady state.  Do we need 1 second?
 }
+
+void sendSampleRate (char **values, int valueCount)
+{
+    int Fs = SAMPLE_FREQUENCY;
+    int N = SAMPLE_LENGTH;
+    Serial.println(Fs);
+    Serial.println(N);
+}
+
