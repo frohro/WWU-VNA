@@ -24,3 +24,9 @@ _autosave-*
 # Exported BOM files
 *.xml
 *.csv
+
+# Code Composer Studio
+Release/*
+.xdchelp
+config/*
+.launches/*
