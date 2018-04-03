@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:2017 VNA-cache
 EELAYER 26 0
 EELAYER END
 $Descr USLetter 11000 8500
@@ -553,8 +552,6 @@ Wire Wire Line
 	1800 3950 2000 3950
 Text Notes 3550 800  0    60   ~ 0
 Make HF signal traces 50 ohms.
-Wire Wire Line
-	5850 2650 5850 2800
 Text Notes 5800 1100 2    120  ~ 0
 Output Port
 Text Notes 4450 2950 0    120  ~ 0
@@ -660,14 +657,8 @@ Wire Wire Line
 	2200 6300 2350 6300
 Wire Wire Line
 	2500 4800 2350 4800
-Wire Wire Line
-	3400 1800 3700 1800
-Wire Wire Line
-	3200 2100 3400 2100
-Wire Wire Line
-	3400 2100 3650 2100
 $Comp
-L test:TEST Ref_o1
+L Connector_Specialized:Test_Point Ref_o1
 U 1 1 5A457BE5
 P 4950 5800
 F 0 "Ref_o1" H 5028 5940 50  0000 L CNN
@@ -678,7 +669,7 @@ F 3 "" H 4950 5800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L test:TEST Test_o1
+L Connector_Specialized:Test_Point Test_o1
 U 1 1 5A45924B
 P 4900 4300
 F 0 "Test_o1" H 4978 4440 50  0000 L CNN
@@ -689,7 +680,7 @@ F 3 "" H 4900 4300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L test:TEST LO_I1
+L Connector_Specialized:Test_Point LO_I1
 U 1 1 5A45A99E
 P 3400 2100
 F 0 "LO_I1" H 3150 2150 50  0000 L CNN
@@ -699,9 +690,8 @@ F 3 "" H 3400 2100 50  0001 C CNN
 	1    3400 2100
 	-1   0    0    1   
 $EndComp
-Connection ~ 3400 1800
 $Comp
-L test:TEST LO_Q1
+L Connector_Specialized:Test_Point LO_Q1
 U 1 1 5A45ACB4
 P 3400 1800
 F 0 "LO_Q1" H 3650 1850 50  0000 R CNN
@@ -711,9 +701,8 @@ F 3 "" H 3400 1800 50  0001 C CNN
 	1    3400 1800
 	1    0    0    -1  
 $EndComp
-Connection ~ 3400 2100
 $Comp
-L test:TEST A_GND1
+L Connector_Specialized:Test_Point A_GND1
 U 1 1 5A4615E3
 P 5850 2650
 F 0 "A_GND1" V 5900 2850 50  0000 L CNN
@@ -746,9 +735,6 @@ F 3 "" H 5850 1300 50  0000 C CNN
 	1    5850 1300
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	5850 2650 5850 2600
-Connection ~ 5850 2650
 $Bitmap
 Pos 9950 7050
 Scale 1.000000
@@ -1326,10 +1312,8 @@ Wire Wire Line
 Connection ~ 4550 6300
 Connection ~ 4950 6300
 Connection ~ 3650 4800
-Wire Wire Line
-	3400 4800 3450 4800
 $Comp
-L 2016_VNA-cache:R R16
+L Device:R R16
 U 1 1 5A56900D
 P 3450 4950
 F 0 "R16" H 3250 5000 50  0000 L CNN
@@ -1339,9 +1323,6 @@ F 3 "" H 3450 4950 50  0000 C CNN
 	1    3450 4950
 	1    0    0    -1  
 $EndComp
-Connection ~ 3450 4800
-Wire Wire Line
-	3450 4800 3650 4800
 $Comp
 L power:GND #PWR034
 U 1 1 5A569091
@@ -1354,10 +1335,8 @@ F 3 "" H 3450 5100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Connection ~ 3700 6300
-Wire Wire Line
-	3400 6300 3500 6300
 $Comp
-L 2016_VNA-cache:R R17
+L Device:R R17
 U 1 1 5A57071D
 P 3500 6450
 F 0 "R17" H 3300 6500 50  0000 L CNN
@@ -1367,7 +1346,6 @@ F 3 "" H 3500 6450 50  0000 C CNN
 	1    3500 6450
 	1    0    0    -1  
 $EndComp
-Connection ~ 3500 6300
 $Comp
 L power:GND #PWR035
 U 1 1 5A5707C3
@@ -1380,8 +1358,6 @@ F 3 "" H 3500 6600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3500 6300 3700 6300
-Wire Wire Line
 	4650 1300 5700 1300
 Wire Wire Line
 	3700 6300 3800 6300
@@ -1390,8 +1366,6 @@ Wire Wire Line
 Connection ~ 4150 6300
 Wire Wire Line
 	3650 4800 3750 4800
-Wire Wire Line
-	3200 1800 3400 1800
 Wire Wire Line
 	3200 1300 3200 1500
 $Comp
@@ -1487,4 +1461,14 @@ F 3 "" H 5050 2600 50  0001 C CNN
 	1    5050 2600
 	-1   0    0    -1  
 $EndComp
+Wire Wire Line
+	5850 2600 5850 2800
+Wire Wire Line
+	3200 1800 3700 1800
+Wire Wire Line
+	3200 2100 3650 2100
+Wire Wire Line
+	3400 4800 3650 4800
+Wire Wire Line
+	3400 6300 3700 6300
 $EndSCHEMATC
