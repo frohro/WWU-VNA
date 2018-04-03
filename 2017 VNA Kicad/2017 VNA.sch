@@ -15,7 +15,7 @@ Comment3 "This version is designed to be as simple and cheap as can be."
 Comment4 ""
 $EndDescr
 $Comp
-L 2017-VNA-cache(copy):GND #PWR08
+L power:GND #PWR08
 U 1 1 58E1B90C
 P 3200 1900
 F 0 "#PWR08" H 3200 1650 50  0001 C CNN
@@ -26,7 +26,7 @@ F 3 "" H 3200 1900 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):R R10
+L Device:R R10
 U 1 1 58E9B450
 P 6000 2800
 F 0 "R10" V 5900 2750 50  0000 L CNN
@@ -37,7 +37,7 @@ F 3 "" H 6000 2800 50  0001 C CNN
 	0    1    -1   0   
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):R R11
+L Device:R R11
 U 1 1 58E9B48A
 P 5700 2800
 F 0 "R11" V 5600 2750 50  0000 L CNN
@@ -48,7 +48,7 @@ F 3 "" H 5700 2800 50  0001 C CNN
 	0    1    -1   0   
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR024
+L power:GND #PWR024
 U 1 1 58E9B5C7
 P 5550 2850
 F 0 "#PWR024" H 5550 2600 50  0001 C CNN
@@ -59,7 +59,7 @@ F 3 "" H 5550 2850 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR011
+L power:GND #PWR011
 U 1 1 58E9D796
 P 4650 2600
 F 0 "#PWR011" H 4650 2350 50  0001 C CNN
@@ -70,7 +70,7 @@ F 3 "" H 4650 2600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR04
+L power:GND #PWR04
 U 1 1 58E9D84B
 P 5850 1500
 F 0 "#PWR04" H 5850 1250 50  0001 C CNN
@@ -89,7 +89,7 @@ SCL
 Text Label 7100 3350 2    60   ~ 0
 SDA
 $Comp
-L 2017-VNA-cache(copy):R R1
+L Device:R R1
 U 1 1 58EB88FC
 P 1600 2150
 F 0 "R1" V 1650 1950 50  0000 C CNN
@@ -100,7 +100,7 @@ F 3 "" H 1600 2150 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):R R2
+L Device:R R2
 U 1 1 58EB89D4
 P 1600 2250
 F 0 "R2" V 1650 2400 50  0000 C CNN
@@ -111,7 +111,7 @@ F 3 "" H 1600 2250 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):+3V3 #PWR010
+L power:+3V3 #PWR010
 U 1 1 58EB8C13
 P 1300 2250
 F 0 "#PWR010" H 1300 2100 50  0001 C CNN
@@ -126,7 +126,7 @@ LO_I
 Text Label 3700 1800 0    60   ~ 0
 LO_Q
 $Comp
-L 2017-VNA-cache(copy):+3V3 #PWR05
+L power:+3V3 #PWR05
 U 1 1 58EAE7D3
 P 1900 1550
 F 0 "#PWR05" H 1900 1400 50  0001 C CNN
@@ -137,7 +137,7 @@ F 3 "" H 1900 1550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):+3V3 #PWR09
+L power:+3V3 #PWR09
 U 1 1 58EAEA90
 P 3450 2000
 F 0 "#PWR09" H 3450 1850 50  0001 C CNN
@@ -150,7 +150,7 @@ $EndComp
 Text Notes 2050 1600 0    60   ~ 0
 Use Z0=85 for clocks.\n
 $Comp
-L 2017-VNA-cache(copy):+3V3 #PWR02
+L power:+3V3 #PWR02
 U 1 1 58EB9EBE
 P 7100 1550
 F 0 "#PWR02" H 7100 1400 50  0001 C CNN
@@ -161,7 +161,7 @@ F 3 "" H 7100 1550 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR012
+L power:GND #PWR012
 U 1 1 58EBB1B7
 P 7100 3750
 F 0 "#PWR012" H 7100 3500 50  0001 C CNN
@@ -172,7 +172,7 @@ F 3 "" H 7100 3750 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR03
+L power:GND #PWR03
 U 1 1 58EBB59B
 P 9300 1550
 F 0 "#PWR03" H 9300 1300 50  0001 C CNN
@@ -187,7 +187,7 @@ Test_In
 Text Label 7100 3950 2    60   ~ 0
 A14
 $Comp
-L 2017-VNA-cache(copy):C C2
+L Device:C C2
 U 1 1 58ED63FA
 P 1600 1450
 F 0 "C2" H 1450 1550 50  0000 L CNN
@@ -198,7 +198,7 @@ F 3 "" H 1600 1450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR01
+L power:GND #PWR01
 U 1 1 58ED6400
 P 1700 1300
 F 0 "#PWR01" H 1700 1050 50  0001 C CNN
@@ -225,7 +225,7 @@ NoConn ~ 7100 2750
 NoConn ~ 7100 2150
 NoConn ~ 7100 1950
 $Comp
-L 2017-VNA-cache(copy):C C1
+L Device:C C1
 U 1 1 58F0F34B
 P 4500 1300
 F 0 "C1" V 4450 1450 50  0000 C CNN
@@ -238,7 +238,7 @@ $EndComp
 Text Label 5000 4700 0    60   ~ 0
 A13
 $Comp
-L 2017-VNA-cache(copy):R R4
+L Device:R R4
 U 1 1 58EC6DA8
 P 3250 4800
 F 0 "R4" V 3150 4800 50  0000 C CNN
@@ -249,7 +249,7 @@ F 3 "" H 3250 4800 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):C C7
+L Device:C C7
 U 1 1 58EC6DBD
 P 2350 4950
 F 0 "C7" H 2465 4996 50  0000 L CNN
@@ -260,7 +260,7 @@ F 3 "" H 2350 4950 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR015
+L power:GND #PWR015
 U 1 1 58EC6DC3
 P 2350 5100
 F 0 "#PWR015" H 2350 4850 50  0001 C CNN
@@ -273,7 +273,7 @@ $EndComp
 Text Label 5050 6000 0    60   ~ 0
 A14
 $Comp
-L 2017-VNA-cache(copy):C C9
+L Device:C C9
 U 1 1 58EC72CD
 P 2350 6450
 F 0 "C9" H 2465 6496 50  0000 L CNN
@@ -284,7 +284,7 @@ F 3 "" H 2350 6450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR020
+L power:GND #PWR020
 U 1 1 58EC72D3
 P 2350 6600
 F 0 "#PWR020" H 2350 6350 50  0001 C CNN
@@ -298,7 +298,7 @@ Text Label 3800 1500 0    60   ~ 0
 Ref_In
 NoConn ~ 9300 2150
 $Comp
-L 2017-VNA-cache(copy):L L1
+L Device:L L1
 U 1 1 58ECE5D0
 P 5850 2450
 F 0 "L1" H 5903 2496 50  0000 L CNN
@@ -310,7 +310,7 @@ F 4 "490-6654-1-ND" H 5850 2450 60  0001 C CNN "Digikey Part No"
 	-1   0    0    1   
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):C C4
+L Device:C C4
 U 1 1 58ECE88F
 P 5350 2300
 F 0 "C4" V 5098 2300 50  0000 C CNN
@@ -374,7 +374,7 @@ NoConn ~ 7100 5350
 NoConn ~ 7100 1750
 NoConn ~ 7100 2950
 $Comp
-L 2017-VNA-cache(copy):GND #PWR016
+L power:GND #PWR016
 U 1 1 58F4B912
 P 1800 5150
 F 0 "#PWR016" H 1800 4900 50  0001 C CNN
@@ -387,7 +387,7 @@ $EndComp
 Text Label 1500 4600 2    60   ~ 0
 LO_I
 $Comp
-L 2017-VNA-cache(copy):C C5
+L Device:C C5
 U 1 1 58F4B920
 P 1800 4100
 F 0 "C5" H 1650 4200 50  0000 L CNN
@@ -398,7 +398,7 @@ F 3 "" H 1800 4100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR013
+L power:GND #PWR013
 U 1 1 58F4E786
 P 2000 3950
 F 0 "#PWR013" H 2000 3700 50  0001 C CNN
@@ -414,7 +414,7 @@ NoConn ~ 9300 4950
 Wire Wire Line
 	4650 2600 4650 2500
 $Comp
-L 2017-VNA-cache(copy):C C3
+L Device:C C3
 U 1 1 58F68F00
 P 6800 1800
 F 0 "C3" H 6915 1846 50  0000 L CNN
@@ -425,7 +425,7 @@ F 3 "" H 6800 1800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR07
+L power:GND #PWR07
 U 1 1 58F69018
 P 6800 1950
 F 0 "#PWR07" H 6800 1700 50  0001 C CNN
@@ -440,7 +440,7 @@ Wire Wire Line
 Wire Wire Line
 	7100 1650 7100 1550
 $Comp
-L 2017-VNA-cache(copy):C C11
+L Device:C C11
 U 1 1 58F654B3
 P 5850 3100
 F 0 "C11" H 5700 3000 50  0000 L CNN
@@ -451,7 +451,7 @@ F 3 "" H 5850 3100 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR025
+L power:GND #PWR025
 U 1 1 58F6570B
 P 5850 3250
 F 0 "#PWR025" H 5850 3000 50  0001 C CNN
@@ -463,7 +463,7 @@ F 3 "" H 5850 3250 50  0001 C CNN
 $EndComp
 Connection ~ 5850 2800
 $Comp
-L 2017-VNA-cache(copy):GND #PWR06
+L power:GND #PWR06
 U 1 1 58F7233B
 P 1400 1650
 F 0 "#PWR06" H 1400 1400 50  0001 C CNN
@@ -480,7 +480,7 @@ Wire Wire Line
 Wire Wire Line
 	1300 1650 1400 1650
 $Comp
-L 2017-VNA-cache(copy):TEST GND1
+L Connector_Specialized:Test_Point GND1
 U 1 1 58F7A588
 P 8100 6200
 F 0 "GND1" H 8178 6340 50  0000 L CNN
@@ -491,7 +491,7 @@ F 3 "" H 8100 6200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR017
+L power:GND #PWR017
 U 1 1 58F7A6C2
 P 8100 6200
 F 0 "#PWR017" H 8100 5950 50  0001 C CNN
@@ -502,7 +502,7 @@ F 3 "" H 8100 6200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):TEST GND2
+L Connector_Specialized:Test_Point GND2
 U 1 1 58F7AA4D
 P 8450 6200
 F 0 "GND2" H 8528 6340 50  0000 L CNN
@@ -513,7 +513,7 @@ F 3 "" H 8450 6200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR018
+L power:GND #PWR018
 U 1 1 58F7AA53
 P 8450 6200
 F 0 "#PWR018" H 8450 5950 50  0001 C CNN
@@ -538,7 +538,7 @@ NoConn ~ 9300 3150
 NoConn ~ 9300 3550
 NoConn ~ 7100 4750
 $Comp
-L 2016_VNA-cache:EXP-_MSP432P401R_BoosterPack B1
+L cx3225:EXP-_MSP432P401R_BoosterPack B1
 U 1 1 5A3C5894
 P 8200 3450
 F 0 "B1" H 8200 5743 60  0000 C CNN
@@ -600,7 +600,7 @@ Low Pass\nFilters
 Text Notes 1150 7200 0    119  ~ 0
 Sampling\nDownconverters
 $Comp
-L 2017-VNA-cache(copy):+3V3 #PWR014
+L power:+3V3 #PWR014
 U 1 1 5A423713
 P 1800 4250
 F 0 "#PWR014" H 1800 4100 50  0001 C CNN
@@ -612,7 +612,7 @@ F 3 "" H 1800 4250 50  0001 C CNN
 $EndComp
 NoConn ~ 7100 3550
 $Comp
-L 2017-VNA-cache(copy):+3V3 #PWR023
+L power:+3V3 #PWR023
 U 1 1 5A426D12
 P 6150 2800
 F 0 "#PWR023" H 6150 2650 50  0001 C CNN
@@ -634,7 +634,7 @@ F 3 "https://www.silabs.com/documents/public/data-sheets/Si5351-B.pdf" H 2550 19
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):NL7WB66 U2
+L nl7w66:NL7WB66 U2
 U 1 1 5A4348B9
 P 1900 4700
 F 0 "U2" H 2241 4746 50  0000 L CNN
@@ -646,14 +646,14 @@ F 3 "http://www.onsemi.com/pub/Collateral/NL7WB66-D.PDF" H 1900 4700 50  0001 C 
 $EndComp
 Connection ~ 1800 4250
 $Comp
-L 2017-VNA-cache(copy):NL7WB66 U2
-U 2 1 5A434AC4
+L nl7w66:NL7WB66 U2
+U 1 1 5A434AC4
 P 1900 6200
 F 0 "U2" H 2241 6246 50  0000 L CNN
 F 1 "NL7WB66" H 2200 6150 50  0000 L CNN
 F 2 "SMA:VFSOP-8" H 2050 5850 50  0001 L CNN
 F 3 "http://www.onsemi.com/pub/Collateral/NL7WB66-D.PDF" H 1900 6200 50  0001 C CNN
-	2    1900 6200
+	1    1900 6200
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -1010,7 +1010,7 @@ Connection ~ 2350 4800
 Wire Wire Line
 	2350 4800 2200 4800
 $Comp
-L 2017-VNA-cache(copy):GND #PWR028
+L power:GND #PWR028
 U 1 1 5A3F7D0B
 P 1800 6650
 F 0 "#PWR028" H 1800 6400 50  0001 C CNN
@@ -1021,7 +1021,7 @@ F 3 "" H 1800 6650 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):+3V3 #PWR029
+L power:+3V3 #PWR029
 U 1 1 5A3F7E9E
 P 1800 5750
 F 0 "#PWR029" H 1800 5600 50  0001 C CNN
@@ -1032,7 +1032,7 @@ F 3 "" H 1800 5750 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):C C6
+L Device:C C6
 U 1 1 5A4DCD69
 P 3650 4950
 F 0 "C6" H 3500 4850 50  0000 L CNN
@@ -1043,7 +1043,7 @@ F 3 "" H 3650 4950 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR019
+L power:GND #PWR019
 U 1 1 5A4DDE87
 P 3650 5100
 F 0 "#PWR019" H 3650 4850 50  0001 C CNN
@@ -1068,7 +1068,7 @@ Wire Wire Line
 Text Notes 4350 1900 0    50   ~ 0
 Attenuator drops the voltage to 2.5V peak to peak.
 $Comp
-L 2017-VNA-cache(copy):R R8
+L Device:R R8
 U 1 1 5A5198BB
 P 3900 4800
 F 0 "R8" V 3800 4800 50  0000 C CNN
@@ -1081,7 +1081,7 @@ $EndComp
 Text Notes 3000 5450 0    39   ~ 0
 Need test channel\ninput Z = 50 at RF
 $Comp
-L 2017-VNA-cache(copy):C C10
+L Device:C C10
 U 1 1 5A5198C3
 P 4100 4950
 F 0 "C10" H 3950 4850 50  0000 L CNN
@@ -1092,7 +1092,7 @@ F 3 "" H 4100 4950 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR026
+L power:GND #PWR026
 U 1 1 5A5198CA
 P 4100 5100
 F 0 "#PWR026" H 4100 4850 50  0001 C CNN
@@ -1106,7 +1106,7 @@ Wire Wire Line
 	4050 4800 4100 4800
 Connection ~ 4100 4800
 $Comp
-L 2017-VNA-cache(copy):R R12
+L Device:R R12
 U 1 1 5A51AA5A
 P 4300 4800
 F 0 "R12" V 4200 4800 50  0000 C CNN
@@ -1117,7 +1117,7 @@ F 3 "" H 4300 4800 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):C C13
+L Device:C C13
 U 1 1 5A51AA62
 P 4500 4950
 F 0 "C13" H 4350 4850 50  0000 L CNN
@@ -1128,7 +1128,7 @@ F 3 "" H 4500 4950 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR030
+L power:GND #PWR030
 U 1 1 5A51AA69
 P 4500 5100
 F 0 "#PWR030" H 4500 4850 50  0001 C CNN
@@ -1143,7 +1143,7 @@ Wire Wire Line
 Wire Wire Line
 	4100 4800 4150 4800
 $Comp
-L 2017-VNA-cache(copy):R R7
+L Device:R R7
 U 1 1 5A524463
 P 3250 6300
 F 0 "R7" V 3150 6300 50  0000 C CNN
@@ -1154,7 +1154,7 @@ F 3 "" H 3250 6300 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):C C8
+L Device:C C8
 U 1 1 5A52446A
 P 3700 6450
 F 0 "C8" H 3550 6350 50  0000 L CNN
@@ -1165,7 +1165,7 @@ F 3 "" H 3700 6450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR021
+L power:GND #PWR021
 U 1 1 5A524471
 P 3700 6600
 F 0 "#PWR021" H 3700 6350 50  0001 C CNN
@@ -1176,7 +1176,7 @@ F 3 "" H 3700 6600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):R R9
+L Device:R R9
 U 1 1 5A524479
 P 3950 6300
 F 0 "R9" V 3850 6300 50  0000 C CNN
@@ -1187,7 +1187,7 @@ F 3 "" H 3950 6300 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):C C12
+L Device:C C12
 U 1 1 5A524480
 P 4150 6450
 F 0 "C12" H 4000 6350 50  0000 L CNN
@@ -1198,7 +1198,7 @@ F 3 "" H 4150 6450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR027
+L power:GND #PWR027
 U 1 1 5A524487
 P 4150 6600
 F 0 "#PWR027" H 4150 6350 50  0001 C CNN
@@ -1209,7 +1209,7 @@ F 3 "" H 4150 6600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):R R13
+L Device:R R13
 U 1 1 5A52448F
 P 4350 6300
 F 0 "R13" V 4250 6300 50  0000 C CNN
@@ -1220,7 +1220,7 @@ F 3 "" H 4350 6300 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):C C14
+L Device:C C14
 U 1 1 5A524496
 P 4550 6450
 F 0 "C14" H 4400 6350 50  0000 L CNN
@@ -1231,7 +1231,7 @@ F 3 "" H 4550 6450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR031
+L power:GND #PWR031
 U 1 1 5A52449D
 P 4550 6600
 F 0 "#PWR031" H 4550 6350 50  0001 C CNN
@@ -1249,7 +1249,7 @@ Wire Wire Line
 	5500 2300 5850 2300
 Connection ~ 5850 2300
 $Comp
-L 2017-VNA-cache(copy):R R14
+L Device:R R14
 U 1 1 5A5366DE
 P 4700 4800
 F 0 "R14" V 4600 4800 50  0000 C CNN
@@ -1260,7 +1260,7 @@ F 3 "" H 4700 4800 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):C C15
+L Device:C C15
 U 1 1 5A5366E5
 P 4900 4950
 F 0 "C15" H 4750 4850 50  0000 L CNN
@@ -1271,7 +1271,7 @@ F 3 "" H 4900 4950 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR032
+L power:GND #PWR032
 U 1 1 5A5366EC
 P 4900 5100
 F 0 "#PWR032" H 4900 4850 50  0001 C CNN
@@ -1287,7 +1287,7 @@ Wire Wire Line
 	4550 4800 4500 4800
 Connection ~ 4500 4800
 $Comp
-L 2017-VNA-cache(copy):R R15
+L Device:R R15
 U 1 1 5A539586
 P 4750 6300
 F 0 "R15" V 4650 6300 50  0000 C CNN
@@ -1298,7 +1298,7 @@ F 3 "" H 4750 6300 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):C C16
+L Device:C C16
 U 1 1 5A53958D
 P 4950 6450
 F 0 "C16" H 4800 6350 50  0000 L CNN
@@ -1309,7 +1309,7 @@ F 3 "" H 4950 6450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 2017-VNA-cache(copy):GND #PWR033
+L power:GND #PWR033
 U 1 1 5A539594
 P 4950 6600
 F 0 "#PWR033" H 4950 6350 50  0001 C CNN
@@ -1343,7 +1343,7 @@ Connection ~ 3450 4800
 Wire Wire Line
 	3450 4800 3650 4800
 $Comp
-L 2017-VNA-cache(copy):GND #PWR034
+L power:GND #PWR034
 U 1 1 5A569091
 P 3450 5100
 F 0 "#PWR034" H 3450 4850 50  0001 C CNN
@@ -1369,7 +1369,7 @@ F 3 "" H 3500 6450 50  0000 C CNN
 $EndComp
 Connection ~ 3500 6300
 $Comp
-L 2017-VNA-cache(copy):GND #PWR035
+L power:GND #PWR035
 U 1 1 5A5707C3
 P 3500 6600
 F 0 "#PWR035" H 3500 6350 50  0001 C CNN
@@ -1463,7 +1463,7 @@ Wire Wire Line
 Wire Wire Line
 	4950 6000 6450 6000
 $Comp
-L 2016_VNA-cache:R R?
+L Device:R R?
 U 1 1 5A773E10
 P 5050 2450
 F 0 "R?" H 5120 2496 50  0000 L CNN
@@ -1477,7 +1477,7 @@ Connection ~ 5050 2300
 Wire Wire Line
 	5050 2300 5200 2300
 $Comp
-L 2017-VNA-cache(copy):GND #PWR?
+L power:GND #PWR?
 U 1 1 5A773EA6
 P 5050 2600
 F 0 "#PWR?" H 5050 2350 50  0001 C CNN
