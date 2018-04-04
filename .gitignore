@@ -25,6 +25,13 @@ _autosave-*
 *.xml
 *.csv
 
+# Gerber
+*.gbr
+*.drl
+
+# Zip
+*.zip
+
 # Code Composer Studio
 Release/*
 .xdchelp
