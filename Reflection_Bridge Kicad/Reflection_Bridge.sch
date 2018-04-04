@@ -1,0 +1,174 @@
+EESchema Schematic File Version 4
+LIBS:Reflection_Bridge-cache
+EELAYER 26 0
+EELAYER END
+$Descr USLetter 11000 8500
+encoding utf-8
+Sheet 1 1
+Title "Reflection Bridge"
+Date "2017-04-20"
+Rev "0.1"
+Comp "Walla Walla University"
+Comment1 "Rob Frohne"
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L sma:SMA_Female P1
+U 1 1 58F53FEF
+P 4400 3350
+F 0 "P1" H 4501 3326 50  0000 L CNN
+F 1 "SMA_Female" H 4501 3235 50  0000 L CNN
+F 2 "SMA:SMA_EDGE" H 4400 3350 50  0001 C CNN
+F 3 "" H 4400 3350 50  0000 C CNN
+	1    4400 3350
+	-1   0    0    -1  
+$EndComp
+$Comp
+L sma:SMA_Female P2
+U 1 1 58F540C0
+P 5300 4750
+F 0 "P2" H 5401 4726 50  0000 L CNN
+F 1 "SMA_Female" H 5401 4635 50  0000 L CNN
+F 2 "SMA:SMA_EDGE" H 5300 4750 50  0001 C CNN
+F 3 "" H 5300 4750 50  0000 C CNN
+	1    5300 4750
+	1    0    0    -1  
+$EndComp
+$Comp
+L sma:SMA_Female P3
+U 1 1 58F540F2
+P 5350 3850
+F 0 "P3" H 5451 3826 50  0000 L CNN
+F 1 "SMA_Female" H 5451 3735 50  0000 L CNN
+F 2 "SMA:SMA_EDGE" H 5350 3850 50  0001 C CNN
+F 3 "" H 5350 3850 50  0000 C CNN
+	1    5350 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R1
+U 1 1 58F5412A
+P 4600 3500
+F 0 "R1" H 4670 3546 50  0000 L CNN
+F 1 "51" H 4670 3455 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805" V 4530 3500 50  0001 C CNN
+F 3 "" H 4600 3500 50  0001 C CNN
+	1    4600 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R3
+U 1 1 58F5415E
+P 5150 3500
+F 0 "R3" H 5220 3546 50  0000 L CNN
+F 1 "51" H 5220 3455 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805" V 5080 3500 50  0001 C CNN
+F 3 "" H 5150 3500 50  0001 C CNN
+	1    5150 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R2
+U 1 1 58F541D6
+P 4600 3850
+F 0 "R2" H 4670 3896 50  0000 L CNN
+F 1 "51" H 4670 3805 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805" V 4530 3850 50  0001 C CNN
+F 3 "" H 4600 3850 50  0001 C CNN
+	1    4600 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Transformer_1P_1S T1
+U 1 1 58F5423A
+P 4750 4550
+F 0 "T1" H 4950 4550 50  0000 C CNN
+F 1 "Transformer_1P_1S" H 4850 4250 50  0000 C CNN
+F 2 "SMA:1_to_1_Balun" H 4750 4550 50  0001 C CNN
+F 3 "" H 4750 4550 50  0001 C CNN
+	1    4750 4550
+	1    0    0    1   
+$EndComp
+$Comp
+L power:GND #PWR01
+U 1 1 58F542AA
+P 4600 4000
+F 0 "#PWR01" H 4600 3750 50  0001 C CNN
+F 1 "GND" H 4605 3827 50  0000 C CNN
+F 2 "" H 4600 4000 50  0001 C CNN
+F 3 "" H 4600 4000 50  0001 C CNN
+	1    4600 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR02
+U 1 1 58F542CA
+P 5350 4050
+F 0 "#PWR02" H 5350 3800 50  0001 C CNN
+F 1 "GND" H 5355 3877 50  0000 C CNN
+F 2 "" H 5350 4050 50  0001 C CNN
+F 3 "" H 5350 4050 50  0001 C CNN
+	1    5350 4050
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR03
+U 1 1 58F542E3
+P 4350 4750
+F 0 "#PWR03" H 4350 4500 50  0001 C CNN
+F 1 "GND" H 4355 4577 50  0000 C CNN
+F 2 "" H 4350 4750 50  0001 C CNN
+F 3 "" H 4350 4750 50  0001 C CNN
+	1    4350 4750
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR04
+U 1 1 58F542FC
+P 4400 3550
+F 0 "#PWR04" H 4400 3300 50  0001 C CNN
+F 1 "GND" H 4300 3450 50  0000 C CNN
+F 2 "" H 4400 3550 50  0001 C CNN
+F 3 "" H 4400 3550 50  0001 C CNN
+	1    4400 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR05
+U 1 1 58F54315
+P 5300 4950
+F 0 "#PWR05" H 5300 4700 50  0001 C CNN
+F 1 "GND" H 5305 4777 50  0000 C CNN
+F 2 "" H 5300 4950 50  0001 C CNN
+F 3 "" H 5300 4950 50  0001 C CNN
+	1    5300 4950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4550 3350 4600 3350
+Connection ~ 4600 3350
+Wire Wire Line
+	4600 3700 4600 3650
+Wire Wire Line
+	5150 3650 5150 3850
+Wire Wire Line
+	5150 3850 5200 3850
+Connection ~ 5150 3850
+Wire Wire Line
+	4350 3700 4350 4350
+Connection ~ 4600 3700
+Text Notes 4100 3300 0    60   ~ 0
+Input
+Text Notes 5300 3750 0    60   ~ 0
+Device Under Test
+Text Notes 5250 4650 0    60   ~ 0
+Reflected
+Wire Wire Line
+	4600 3700 4350 3700
+Wire Wire Line
+	4600 3350 5150 3350
+Wire Wire Line
+	5150 3850 5150 4350
+$EndSCHEMATC
