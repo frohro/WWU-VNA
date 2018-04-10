@@ -2,7 +2,7 @@
 #include "Wire.h"
 #include "si5351.h"
 #include "quadrature.h"
-#include <ti/devices/msp432p4xx/driverlib/driverlib.h>
+#include <driverlib.h>
 #include "DynamicCommandParser.h" // https://github.com/mdjarv/DynamicCommandParser
 
 extern "C"{

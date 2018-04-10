@@ -7,9 +7,10 @@
 
 #ifndef SERIAL_COMM_H_
 #define SERIAL_COMM_H_
-#include <ti/devices/msp432p4xx/inc/msp432.h>
+//#include <ti/devices/msp432p4xx/inc/msp432.h>
+#include <msp432.h>
 /* DriverLib Includes */
-#include <ti/devices/msp432p4xx/driverlib/driverlib.h>
+#include <driverlib.h>
 #include <ti/sysbios/family/arm/m3/Hwi.h>
 #include <stdbool.h>
 

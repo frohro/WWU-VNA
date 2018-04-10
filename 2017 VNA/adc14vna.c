@@ -65,7 +65,7 @@
  ******************************************************************************/
 #include "adc14vna.h"
 /* DriverLib Includes */
-#include <ti/devices/msp432p4xx/driverlib/driverlib.h>
+#include <driverlib.h>
 
 /* Standard Includes */
 #include <stdint.h>
