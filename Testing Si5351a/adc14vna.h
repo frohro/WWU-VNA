@@ -14,6 +14,6 @@
 #define SAMPLE_FREQUENCY    8000
 #define SAMPLE_LENGTH       512
 
-int adc14_main(void);;
+int adc14_main(void);
 
 #endif /* ADC14VNA_H_ */
