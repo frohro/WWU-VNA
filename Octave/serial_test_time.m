@@ -33,13 +33,12 @@ set(s1,'timeout', 255); % 12.3 Seconds as an example here
 %set(s1, 'dataterminalready', 'on'); % Sets the DTR line
 % Optional - Flush input and output buffers
 srl_flush(s1);
-string_to_send = strcat("^SAMPLERATE,","$\n")
+string_to_send = strcat("^SAMPLERATE,","$\n");
 srl_write(s1,string_to_send);
 Fs = str2num(ReadToTermination(s1,10));
-string_to_send = strcat("^SAMPLELENGTH,""$\n")
-T = 1/Fs
-N = str2num(ReadToTermination(s1,10))
-pause(1);
+N = str2num(ReadToTermination(s1,10));
+F_IF = str2num(ReadToTermination(s1,10));
+T = 1/Fs;
 string_to_send = strcat("Testing! ^TIME,",num2str(uint64(fMin)),"$\n")
 srl_write(s1,string_to_send);
 ref(1,:) = str2num(ReadToTermination(s1,10));
@@ -57,11 +56,17 @@ title('Results')
 xlabel('Time (s)')
 figure(2)
 f=-1/2/T:1/N/T:1/2/T-1/N/T;
-plot(f,abs(fftshift(fft(ref))),f,abs(fftshift(fft(meas))),"linewidth",1)
-legend('ref','meas')
+Ref = fft(ref);
+Meas = fft(meas);
+H1 = Meas(F_IF*N/Fs)/Ref(F_IF*N/Fs)
+H3 = Meas(3*F_IF*N/Fs)/Ref(3*F_IF*N/Fs)
+H5 = Meas(5*F_IF*N/Fs)/Ref(5*F_IF*N/Fs)
+H7 = Meas(7*F_IF*N/Fs)/Ref(7*F_IF*N/Fs)
+plot(f,abs(fftshift(Ref)),"linewidth",1)
 xlabel('frequency (Hz)')
+title('Reference Response');
 figure(3)
-plot(f,abs(fftshift(fft(meas))),"linewidth",1)
+plot(f,abs(fftshift(Meas)),"linewidth",1)
 xlabel('frequency (Hz)')
 title('Measured Response');
 % Finally, Close the port

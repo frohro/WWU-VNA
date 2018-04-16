@@ -7,7 +7,7 @@
  */
 volatile extern bool sendMeasurement;
 volatile extern int numberFrequenciestoMeasure, frequencyIndex;
-volatile extern float  refSum, measSum;
+volatile extern float refSumRe, measSumRe, refSumIm, measSumIm;
 
 void setupSerial()
 {
@@ -20,9 +20,13 @@ void loopSerial()
    if(sendMeasurement&&(indexSending < frequencyIndex))
    {
        indexSending = frequencyIndex;
-       Serial.print(refSum);
+       Serial.print(refSumRe);
        Serial.print(", ");
-       Serial.println(measSum);
+       Serial.print(refSumIm);
+       Serial.print(", ");
+       Serial.print(measSumRe);
+       Serial.print(", ");
+       Serial.print(measSumIm);
        Serial.flush();
        sendMeasurement = false;
    }

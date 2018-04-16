@@ -13,8 +13,7 @@ extern "C"{
 
 #define BUFFER_LENGTH 256
 #define MAX_NUMBER_FREQ 1000
-#define F_IF 500
-#define OMEGA_IF F_IF*2*PI
+
 
 Si5351 si5351;
 DynamicCommandParser dcp('^', '$', ',');  //https://github.com/mdjarv/DynamicCommandParser
@@ -24,7 +23,7 @@ volatile uint16_t meas[SAMPLE_LENGTH];
 extern volatile bool doneADC;
 volatile bool sendMeasurement = false;
 volatile int numberFrequenciestoMeasure, frequencyIndex;
-volatile float  refSum, measSum;
+volatile float refSumRe, measSumRe, refSumIm, measSumIm;
 
 float shift[SAMPLE_LENGTH];  // Make this constant sometime.
 
@@ -48,10 +47,21 @@ void setup()
     dcp.addParser("TIME", voltageMeasurement);
     // Returns the sample rate:  "^SAMPLERATE,Fs$"
     dcp.addParser("SAMPLERATE", sendSampleRate);
-    for(int n=0;n<SAMPLE_LENGTH;n++) // Initialize shift, should make constant later.
+    /*for(int n=0;n<SAMPLE_LENGTH;n++) // Initialize shift, should make constant later.
     {
+        * Pick one:  This is with a Hanning window; uses more memory, and isn't as good
+         * for a perfect sample length and rate which we control.
         shift[n] = cos(OMEGA_IF*n/SAMPLE_FREQUENCY)\
                 *0.5*(1-cos(2*PI*n/(SAMPLE_LENGTH-1))); // Hanning window
+        *
+    }*/
+    /* This is no window: and partially optimized for RAM use:  You could improve it by
+     * a factor of two, but using a quarter of a cycle.  With no window, we need to make
+     * sure the sampling interval is an integer number of cycles. */
+
+    for(int n=0;n<SAMPLES_IN_ONE_CYCLE;n++)
+    {
+        shift[n] = cos(OMEGA_IF*n/SAMPLE_FREQUENCY);
     }
 }
 
@@ -65,13 +75,17 @@ void loop()
 
 int simpleDownConverter(void)    // Do DSP here.
 {
-    int j;
-    refSum = 0.0;
-    measSum = 0.0;
-    for(j=0;j<SAMPLE_LENGTH;j++)
+    refSumRe = 0.0;
+    refSumIm = 0.0;
+    measSumRe = 0.0;
+    measSumRe = 0.0;
+    for(int n=0;n<SAMPLE_LENGTH;n++)
     {
-        refSum = ref[j]*shift[j]+refSum;
-        measSum = meas[j]*shift[j]+measSum;
+        /* This needs to be changed if you use a Hanning window */
+       refSumRe += shift[n%SAMPLES_IN_ONE_CYCLE]*ref[n];
+       refSumIm -= shift[(n+(int)(SAMPLES_IN_ONE_CYCLE/4+0.5))%SAMPLES_IN_ONE_CYCLE]*ref[n];
+       measSumRe += shift[n%SAMPLES_IN_ONE_CYCLE]*ref[n];
+       measSumIm -= shift[(n+(int)(SAMPLES_IN_ONE_CYCLE/4+0.5))%SAMPLES_IN_ONE_CYCLE]*ref[n];
     }
     return(1);  // Later fix this to report errors if there are any.
 }
@@ -184,5 +198,7 @@ void sendSampleRate (char **values, int valueCount)
     int N = SAMPLE_LENGTH;
     Serial.println(Fs);
     Serial.println(N);
+    Serial.println(F_IF);
 }
+
 
