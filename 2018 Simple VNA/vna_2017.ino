@@ -66,7 +66,6 @@ void loop()
 int simpleDownConverter(void)    // Do DSP here.
 {
     int j;
-    float refSum, measSum;
     refSum = 0.0;
     measSum = 0.0;
     for(j=0;j<SAMPLE_LENGTH;j++)
@@ -77,7 +76,7 @@ int simpleDownConverter(void)    // Do DSP here.
     return(1);  // Later fix this to report errors if there are any.
 }
 
-void sweepFreqMeas(char **values, int valueCount) // Might change functiono type to return errors.
+void sweepFreqMeas(char **values, int valueCount) // Might change function type to return errors.
 {
     int i;
     unsigned long long fMin, fMax, deltaFreq, freq[MAX_NUMBER_FREQ];
@@ -128,6 +127,7 @@ void sweepFreqMeas(char **values, int valueCount) // Might change functiono type
         frequencyIndex = i;
         sendMeasurement = true;
     }
+    // After we are done sending all the data, we should probably send a termination character or string.
     return;
 }
 
