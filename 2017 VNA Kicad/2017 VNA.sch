@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:2017 VNA-cache
 EELAYER 26 0
 EELAYER END
 $Descr USLetter 11000 8500
@@ -1191,7 +1190,7 @@ L Device:C C12
 U 1 1 5A524480
 P 4150 6450
 F 0 "C12" H 4000 6350 50  0000 L CNN
-F 1 "0.1uF" H 4250 6450 50  0000 L CNN
+F 1 "1nF" H 4250 6450 50  0000 L CNN
 F 2 "Capacitors_SMD:C_0805" H 4188 6300 50  0001 C CNN
 F 3 "" H 4150 6450 50  0001 C CNN
 	1    4150 6450
@@ -1482,4 +1481,6 @@ Wire Wire Line
 	3400 4800 3650 4800
 Wire Wire Line
 	3400 6300 3700 6300
+Text Notes 1450 7700 0    50   ~ 0
+C12 was wrong.  It is now changed from 0.01uF to 1nF on the schematic, and needs to be changed on the boards.
 $EndSCHEMATC

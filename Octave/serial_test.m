@@ -18,8 +18,8 @@ endif
 % Naturally, set the COM port # to match your device
 % Use this crazy notation for any COM port number: 1 - 255
 %s1 = serial("/dev/pts/2");
-s1 = serial("/tmp/ttyDUMMY"); % $ interceptty /dev/ttyACM0 /tmp/ttyDUMMY
-
+%s1 = serial("/tmp/ttyDUMMY"); % $ interceptty /dev/ttyACM0 /tmp/ttyDUMMY
+s1 = serial("/dev/ttyACM0");
 pause(1); % Wait a second as it takes some ports a while to wake up
 % Set the port parameters
 set(s1,'baudrate', 115200);
