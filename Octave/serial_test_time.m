@@ -6,7 +6,7 @@
 
 clc; clear; clear all; close all;
 
-fMin = 15e6; % Note:  We need to figure out what the aliased frequency is
+fMin = 20e6; % Note:  We need to figure out what the aliased frequency is
 % and make sure it doesn't interfere with our measurement even with the LPF.
 
 % Load the package
@@ -40,7 +40,8 @@ Fs = str2num(ReadToTermination(s1,10));
 N = str2num(ReadToTermination(s1,10));
 F_IF = str2num(ReadToTermination(s1,10));
 T = 1/Fs;
-string_to_send = strcat("Testing! ^TIME,",num2str(uint64(fMin)),"$\n")
+srl_flush(s1);
+string_to_send = strcat("^TIME,",num2str(uint64(fMin)),"$\n")
 srl_write(s1,string_to_send);
 ref(1,:) = str2num(ReadToTermination(s1,10));
 pause(1);
@@ -59,6 +60,8 @@ figure(2)
 f=-1/2/T:1/N/T:1/2/T-1/N/T;
 Ref = fft(ref);
 Meas = fft(meas);
+Ref(F_IF*N/Fs)
+Meas(F_IF*N/Fs)
 H1 = Meas(F_IF*N/Fs)/Ref(F_IF*N/Fs)
 H3 = Meas(3*F_IF*N/Fs)/Ref(3*F_IF*N/Fs)
 H5 = Meas(5*F_IF*N/Fs)/Ref(5*F_IF*N/Fs)

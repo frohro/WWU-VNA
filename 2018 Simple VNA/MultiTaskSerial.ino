@@ -16,18 +16,19 @@ void setupSerial()
 
 void loopSerial()
 {
+  //This is slow, so comment this out.
    static int indexSending = -1;
    if(sendMeasurement&&(indexSending < frequencyIndex))
    {
        indexSending = frequencyIndex;
-       Serial.print(refSumRe);
+/*     Serial.print(refSumRe);
        Serial.print(", ");
        Serial.print(refSumIm);
        Serial.print(", ");
        Serial.print(measSumRe);
        Serial.print(", ");
        Serial.print(measSumIm);
-       Serial.flush();
+       Serial.flush();*/
        sendMeasurement = false;
    }
 }

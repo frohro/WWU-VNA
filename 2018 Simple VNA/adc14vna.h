@@ -12,10 +12,10 @@
 #define SMCLK_FREQUENCY     12000000
 
 #define SAMPLE_FREQUENCY    192000
-#define SAMPLE_LENGTH       3840  // 8192 is too big.
+#define SAMPLE_LENGTH       3840/2  // 8192 is too big.
 #define F_IF 500
-#define OMEGA_IF F_IF*2*PI
-#define SAMPLES_IN_ONE_CYCLE (int)(SAMPLE_FREQUENCY/OMEGA_IF+0.5)
+#define OMEGA_IF F_IF*TWO_PI
+#define SAMPLES_IN_ONE_CYCLE 384 //(int)((float)SAMPLE_FREQUENCY/(float)F_IF)
 /* Make sure these above are such that SAMPLE_FREQUENCY/OMEGA_IF/4 is an integer
  * so that there are an integer number of points in a quarter cycles of the IF frequency.
  */

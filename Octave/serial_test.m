@@ -3,8 +3,8 @@
 
 clc; clear;
 
-fMin = 1e6;
-fMax = 1e6;
+fMin = 50e6;
+fMax = 50e6;
 nFreq = 1;
 
 Sum = zeros(nFreq,2);
@@ -18,8 +18,8 @@ endif
 % Naturally, set the COM port # to match your device
 % Use this crazy notation for any COM port number: 1 - 255
 %s1 = serial("/dev/pts/2");
-%s1 = serial("/tmp/ttyDUMMY"); % $ interceptty /dev/ttyACM0 /tmp/ttyDUMMY
-s1 = serial("/dev/ttyACM0");
+s1 = serial("/tmp/ttyDUMMY"); % $ interceptty /dev/ttyACM0 /tmp/ttyDUMMY
+%s1 = serial("/dev/ttyACM0");
 pause(1); % Wait a second as it takes some ports a while to wake up
 % Set the port parameters
 set(s1,'baudrate', 115200);
@@ -33,12 +33,25 @@ set(s1,'timeout', 255); % 12.3 Seconds as an example here
 %set(s1, 'dataterminalready', 'on'); % Sets the DTR line
 % Optional - Flush input and output buffers
 srl_flush(s1);
-string_to_send = strcat("Testing! ^SWEEP,",num2str(uint64(fMin)),","...
+string_to_send = strcat("^SWEEP,",num2str(uint64(fMin)),","...
                   ,num2str(uint64(fMax)),",",num2str(uint64(nFreq)),"$\n")
 srl_write(s1,string_to_send);
 for i=1:nFreq
-  Sum(i,:) = str2num(ReadToTermination(s1, 10))
-  %String = ReadToTermination(s1,10)
+  refSumRe(i,:) = str2num(ReadToTermination(s1, 10))
 endfor
+for i=1:nFreq
+  refSumIm(i,:) = str2num(ReadToTermination(s1, 10))
+endfor
+for i=1:nFreq
+  measSumRe(i,:) = str2num(ReadToTermination(s1, 10))
+endfor
+for i=1:nFreq
+  measSumIm(i,:) = str2num(ReadToTermination(s1, 10))
+endfor
+refSum = refSumRe + j*refSumIm
+measSum = measSumRe + j*measSumIm
+H1 = measSum/refSum
+%abs(H1)
+%angle(H1)*180/pi
 % Finally, Close the port
 fclose(s1);

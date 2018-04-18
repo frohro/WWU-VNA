@@ -25,7 +25,9 @@ volatile bool sendMeasurement = false;
 volatile int numberFrequenciestoMeasure, frequencyIndex;
 volatile float refSumRe, measSumRe, refSumIm, measSumIm;
 
-float shift[SAMPLE_LENGTH];  // Make this constant sometime.
+float shift[SAMPLES_IN_ONE_CYCLE];  // Make this constant sometime.
+float test[SAMPLE_LENGTH];
+float test1[SAMPLE_LENGTH];
 
 int simpleDownConverter(void);
 void sweepFreqMeas(char **values, int valueCount);
@@ -41,28 +43,33 @@ void setup()
     si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
     setOscillator(200000000ULL);
     // Initialize the data parser using the start, end and delimiting character
+    Serial.begin(115200);
     // For frequency sweep: "^SWEEP,Fmin,Fmax,NFreq$"
     dcp.addParser("SWEEP", sweepFreqMeas);
     // Returns single frequency measurements as a function of time:  "^TIME,Freq$"
     dcp.addParser("TIME", voltageMeasurement);
     // Returns the sample rate:  "^SAMPLERATE,Fs$"
     dcp.addParser("SAMPLERATE", sendSampleRate);
-    /*for(int n=0;n<SAMPLE_LENGTH;n++) // Initialize shift, should make constant later.
-    {
-        * Pick one:  This is with a Hanning window; uses more memory, and isn't as good
-         * for a perfect sample length and rate which we control.
-        shift[n] = cos(OMEGA_IF*n/SAMPLE_FREQUENCY)\
-                *0.5*(1-cos(2*PI*n/(SAMPLE_LENGTH-1))); // Hanning window
-        *
-    }*/
+
     /* This is no window: and partially optimized for RAM use:  You could improve it by
      * a factor of two, but using a quarter of a cycle.  With no window, we need to make
      * sure the sampling interval is an integer number of cycles. */
-
     for(int n=0;n<SAMPLES_IN_ONE_CYCLE;n++)
     {
         shift[n] = cos(OMEGA_IF*n/SAMPLE_FREQUENCY);
     }
+    for(int n=0;n<SAMPLE_LENGTH;n++) // Initialize shift, should make constant later.
+     {
+         test[n] = shift[n%SAMPLES_IN_ONE_CYCLE];
+         test1[n] = shift[(n+(int)(SAMPLES_IN_ONE_CYCLE/4+0.5))%SAMPLES_IN_ONE_CYCLE];
+
+         /* Pick one:  This is with a Hanning window; uses more memory, and isn't as good
+          * for a perfect sample length and rate which we control.
+         shift[n] = cos(OMEGA_IF*n/SAMPLE_FREQUENCY)\
+                 *0.5*(1-cos(2*PI*n/(SAMPLE_LENGTH-1))); // Hanning window
+         */
+     }
+    Serial.println("Done with setup.");
 }
 
 void loop()
@@ -82,10 +89,10 @@ int simpleDownConverter(void)    // Do DSP here.
     for(int n=0;n<SAMPLE_LENGTH;n++)
     {
         /* This needs to be changed if you use a Hanning window */
-       refSumRe += shift[n%SAMPLES_IN_ONE_CYCLE]*ref[n];
-       refSumIm -= shift[(n+(int)(SAMPLES_IN_ONE_CYCLE/4+0.5))%SAMPLES_IN_ONE_CYCLE]*ref[n];
-       measSumRe += shift[n%SAMPLES_IN_ONE_CYCLE]*ref[n];
-       measSumIm -= shift[(n+(int)(SAMPLES_IN_ONE_CYCLE/4+0.5))%SAMPLES_IN_ONE_CYCLE]*ref[n];
+        refSumRe += shift[n%SAMPLES_IN_ONE_CYCLE]*ref[n];
+        refSumIm -= shift[(n+(int)(SAMPLES_IN_ONE_CYCLE/4+0.5))%SAMPLES_IN_ONE_CYCLE]*ref[n];
+        measSumRe += shift[n%SAMPLES_IN_ONE_CYCLE]*meas[n];
+        measSumIm -= shift[(n+(int)(SAMPLES_IN_ONE_CYCLE/4+0.5))%SAMPLES_IN_ONE_CYCLE]*meas[n];
     }
     return(1);  // Later fix this to report errors if there are any.
 }
@@ -141,6 +148,26 @@ void sweepFreqMeas(char **values, int valueCount) // Might change function type 
         frequencyIndex = i;
         sendMeasurement = true;
     }
+    for(i=0;i<numberFrequenciestoMeasure;i++)
+    {
+        Serial.print(refSumRe);
+        Serial.println(", ");
+    }
+    for(i=0;i<numberFrequenciestoMeasure;i++)
+    {
+        Serial.print(refSumIm);
+        Serial.println(", ");
+    }
+    for(i=0;i<numberFrequenciestoMeasure;i++)
+    {
+        Serial.print(measSumRe);
+        Serial.println(", ");
+    }
+    for(i=0;i<numberFrequenciestoMeasure;i++)
+    {
+        Serial.print(measSumIm);
+        Serial.println(", ");
+    }
     // After we are done sending all the data, we should probably send a termination character or string.
     return;
 }
@@ -169,7 +196,7 @@ void voltageMeasurement(char **values, int valueCount) // Might want to return e
         }
         Serial.print('\n');
         //Serial.println();
-        Serial.flush();
+//        Serial.flush();
         delay(500);
         for (j = 0; j < SAMPLE_LENGTH; j++)
         {
@@ -179,7 +206,7 @@ void voltageMeasurement(char **values, int valueCount) // Might want to return e
         }
         Serial.print('\n');
         //Serial.println();
-        Serial.flush();
+//        Serial.flush();
     }
     Serial.print('Done sending both ref and meas.');
 }
