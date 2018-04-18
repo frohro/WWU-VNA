@@ -21,9 +21,9 @@ void setup() {
     si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0); // 0,6,8,10pf
     si5351.set_correction(-26550, SI5351_PLL_INPUT_XO);
     si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
-    si5351.set_freq(1000000000ULL, SI5351_CLK0);
-    si5351.set_freq(1000000000ULL, SI5351_CLK1);
-    si5351.set_freq(1000000000ULL, SI5351_CLK2);
+    si5351.set_freq(500000000ULL, SI5351_CLK0);
+    si5351.set_freq(500000000ULL, SI5351_CLK1);
+    //si5351.set_freq(1000000000ULL, SI5351_CLK2);
     adc14_main(); // Initialize ADC14 for multichannel conversion at 8 kHz.
     ADC14_enableConversion();
             while(1)
