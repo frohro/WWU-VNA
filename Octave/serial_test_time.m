@@ -69,6 +69,7 @@ H7 = Meas(7*F_IF*N/Fs)/Ref(7*F_IF*N/Fs)
 plot(f,abs(fftshift(Ref)),"linewidth",1)
 xlabel('frequency (Hz)')
 title('Reference Response');
+[maxR,imaxR] = max(abs(Ref))
 figure(3)
 plot(f,abs(fftshift(Meas)),"linewidth",1)
 xlabel('frequency (Hz)')

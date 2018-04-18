@@ -39,9 +39,10 @@ void setup()
 {
     adc14_main(); // Initialize ADC14 for multichannel conversion at 8 kHz.
     si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0);
+    si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0); // 0,6,8,10pf
+    si5351.set_correction(-26555, SI5351_PLL_INPUT_XO); // Calibrate it for my analyzer.
     // For debugging 1/4/2018
     si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
-    setOscillator(200000000ULL);
     // Initialize the data parser using the start, end and delimiting character
     Serial.begin(115200);
     // For frequency sweep: "^SWEEP,Fmin,Fmax,NFreq$"
