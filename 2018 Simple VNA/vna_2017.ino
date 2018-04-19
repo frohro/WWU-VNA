@@ -41,7 +41,6 @@ void setup()
     si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0);
     // For debugging 1/4/2018
     si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
-    setOscillator(200000000ULL);
     // Initialize the data parser using the start, end and delimiting character
     Serial.begin(115200);
     // For frequency sweep: "^SWEEP,Fmin,Fmax,NFreq$"
@@ -106,8 +105,8 @@ void sweepFreqMeas(char **values, int valueCount) // Might change function type 
         Serial.println("In sweepFreqMeas, number of arguments is not correct.");
         return;  // Something is wrong if you end up here.
     }
-    fMin = atoi(values[1])*100ULL;
-    fMax = atoi(values[2])*100ULL;
+    fMin = atoi(values[1]);
+    fMax = atoi(values[2]);
     numberFrequenciestoMeasure = atoi(values[3]);
 
     deltaFreq = (fMax-fMin)/numberFrequenciestoMeasure;
@@ -211,11 +210,11 @@ void voltageMeasurement(char **values, int valueCount) // Might want to return e
     Serial.print('Done sending both ref and meas.');
 }
 
-void setOscillator (unsigned long long freq)
+void setOscillator (unsigned long long freq) // freq in Hz
 {
-    si5351.set_freq(freq, SI5351_CLK0);
-    si5351.set_freq(freq+100ULL*F_IF, SI5351_CLK1);
-    si5351.set_freq(freq+100ULL*F_IF, SI5351_CLK2);
+    si5351.set_freq(freq*100ULL, SI5351_CLK0);
+    si5351.set_freq(freq*100ULL+100ULL*F_IF, SI5351_CLK1);
+    si5351.set_freq(freq*100ULL+100ULL*F_IF, SI5351_CLK2);
     delay(1000); // Wait for oscillator and steady state.  Do we need 1 second?
 }
 

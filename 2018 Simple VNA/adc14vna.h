@@ -11,7 +11,7 @@
 
 #define SMCLK_FREQUENCY     12000000
 
-#define SAMPLE_FREQUENCY    8000
+#define SAMPLE_FREQUENCY    7956
 #define SAMPLE_LENGTH       3840/2  // 8192 is too big.
 #define F_IF 500
 #define OMEGA_IF F_IF*TWO_PI

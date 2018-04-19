@@ -11,7 +11,7 @@
 
 #define SMCLK_FREQUENCY     12000000
 
-#define SAMPLE_FREQUENCY    8000
+#define SAMPLE_FREQUENCY    7956
 #define SAMPLE_LENGTH       512
 
 int adc14_main(void);
