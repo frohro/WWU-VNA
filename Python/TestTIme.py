@@ -7,27 +7,11 @@ Date: 4/23/18
 WORK IN PROGRESS
 """
 
-import time, serial, numpy, cmath
+import time, serial, numpy, statistics, cmath
 
 
 def average(arr):
     return sum(arr) / len(arr)
-
-
-def stdev(arr):
-    avg = average(arr)
-    squareSum = 0
-    for element in arr:
-        squareSum += (element - avg)**2
-    return cmath.sqrt(squareSum / len(arr))
-
-
-def variance(arr):
-    avg = average(arr)
-    squareSum = 0
-    for element in arr:
-        squareSum += (element - avg) ** 2
-    return squareSum / len(arr)
 
 fMin = 60e6
 
@@ -105,17 +89,44 @@ for x in range(samp):
     print('H5: ' + str(H5[x]) + '\n')
     print('H7: ' + str(H7[x]) + '\n')
 
-print('H1 Magnitude Mean: ' + str(abs(average(H1))) + '\n')
-print('H3 Magnitude Mean: ' + str(abs(average(H3))) + '\n')
-print('H5 Magnitude Mean: ' + str(abs(average(H5))) + '\n')
-print('H7 Magnitude Mean: ' + str(abs(average(H7))) + '\n')
+magH1 = [numpy.absolute(x) for x in H1]
+magH3 = [numpy.absolute(x) for x in H3]
+magH5 = [numpy.absolute(x) for x in H5]
+magH7 = [numpy.absolute(x) for x in H7]
 
-print('H1 Magnitude Standard Deviation: : ' + str(abs(stdev(H1))) + '\n')
-print('H3 Magnitude Standard Deviation: : ' + str(abs(stdev(H3))) + '\n')
-print('H5 Magnitude Standard Deviation: : ' + str(abs(stdev(H5))) + '\n')
-print('H7 Magnitude Standard Deviation: : ' + str(abs(stdev(H7))) + '\n')
+phaseH1 = [cmath.phase(x) for x in H1]
+phaseH3 = [cmath.phase(x) for x in H3]
+phaseH5 = [cmath.phase(x) for x in H5]
+phaseH7 = [cmath.phase(x) for x in H7]
 
-print('H1 Magnitude Variance: ' + str(abs(variance(H1))) + '\n')
-print('H3 Magnitude Variance: ' + str(abs(variance(H3))) + '\n')
-print('H5 Magnitude Variance: ' + str(abs(variance(H5))) + '\n')
-print('H7 Magnitude Variance: ' + str(abs(variance(H7))) + '\n')
+
+print('H1 Magnitude Mean: ' + str(statistics.mean(magH1)) + '\n')
+print('H3 Magnitude Mean: ' + str(statistics.mean(magH3)) + '\n')
+print('H5 Magnitude Mean: ' + str(statistics.mean(magH5)) + '\n')
+print('H7 Magnitude Mean: ' + str(statistics.mean(magH7)) + '\n')
+
+print('H1 Phase Mean: ' + str(statistics.mean(phaseH1)) + '\n')
+print('H3 Phase Mean: ' + str(statistics.mean(phaseH3)) + '\n')
+print('H5 Phase Mean: ' + str(statistics.mean(phaseH5)) + '\n')
+print('H7 Phase Mean: ' + str(statistics.mean(phaseH7)) + '\n')
+
+
+print('H1 Magnitude Standard Deviation: : ' + str(statistics.stdev(magH1)) + '\n')
+print('H3 Magnitude Standard Deviation: : ' + str(statistics.stdev(magH3)) + '\n')
+print('H5 Magnitude Standard Deviation: : ' + str(statistics.stdev(magH5)) + '\n')
+print('H7 Magnitude Standard Deviation: : ' + str(statistics.stdev(magH7)) + '\n')
+
+print('H1 Phase Standard Deviation: : ' + str(statistics.stdev(phaseH1)) + '\n')
+print('H3 Phase Standard Deviation: : ' + str(statistics.stdev(phaseH3)) + '\n')
+print('H5 Phase Standard Deviation: : ' + str(statistics.stdev(phaseH5)) + '\n')
+print('H7 Phase Standard Deviation: : ' + str(statistics.stdev(phaseH7)) + '\n')
+
+print('H1 Magnitude Variance: ' + str(statistics.variance(magH1)) + '\n')
+print('H3 Magnitude Variance: ' + str(statistics.variance(magH3)) + '\n')
+print('H5 Magnitude Variance: ' + str(statistics.variance(magH5)) + '\n')
+print('H7 Magnitude Variance: ' + str(statistics.variance(magH7)) + '\n')
+
+print('H1 Phase Variance: ' + str(statistics.variance(phaseH1)) + '\n')
+print('H3 Phase Variance: ' + str(statistics.variance(phaseH3)) + '\n')
+print('H5 Phase Variance: ' + str(statistics.variance(phaseH5)) + '\n')
+print('H7 Phase Variance: ' + str(statistics.variance(phaseH7)) + '\n')
