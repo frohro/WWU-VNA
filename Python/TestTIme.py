@@ -38,15 +38,11 @@ ser.flush()
 command = "^SAMPLERATE,"+"$\n"
 ser.write(command.encode())
 
-# Fs =
-ser.readline()
+Fs = int(ser.readline())
 N = int(ser.readline().decode().strip(' \n'))
 F_IF = int(ser.readline().decode().strip(' \n'))
 
-# Setting next line to fix frequency correction temporarily
-Fs = 8000
-
-T = 1/Fs
+T = 1./float(Fs)
 
 
 endRef = []
