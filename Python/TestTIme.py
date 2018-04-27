@@ -1,13 +1,17 @@
 """
-Python script to get the accuracy of the TIME command.
+Python script to test the accuracy of the TIME command.
 
 Author: Jacob Priddy
-Date: 4/23/18
-
-WORK IN PROGRESS
+Date: 4/27/18
 """
 
-import time, serial, numpy, statistics, cmath, datetime, os
+import time
+import serial
+import numpy
+import statistics
+import cmath
+import datetime
+import os
 
 
 def average(arr):
