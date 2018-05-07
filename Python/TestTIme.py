@@ -12,6 +12,7 @@ import statistics
 import cmath
 import datetime
 import os
+import operator
 
 
 def average(arr):
@@ -101,10 +102,14 @@ for x in range(samp):
     measfft = numpy.fft.fft(endMeas[x])
     ref.append(reffft[int(F_IF*N/Fs+1)])
     meas.append(measfft[int(F_IF*N/Fs+1)])
-    H1.append(measfft[int(F_IF * N / Fs + 1)] / reffft[int(F_IF * N / Fs + 1)])
-    H3.append(measfft[int(3 * F_IF * N / Fs + 1)] / reffft[int(3 * F_IF * N / Fs + 1)])
-    H5.append(measfft[int(5 * F_IF * N / Fs + 1)] / reffft[int(5 * F_IF * N / Fs + 1)])
-    H7.append(measfft[int(7 * F_IF * N / Fs + 1)] / reffft[int(7 * F_IF * N / Fs + 1)])
+
+    refMaxIndex, refMaxValue = max(enumerate(map(numpy.absolute, reffft[:int(len(reffft)/2)])), key=operator.itemgetter(1))
+    measMaxIndex, measMaxValue = max(enumerate(map(numpy.absolute, measfft[:int(len(measfft)/2)])), key=operator.itemgetter(1))
+
+    H1.append(measfft[int(measMaxIndex)] / reffft[int(refMaxIndex)])
+    H3.append(measfft[int(3 * measMaxIndex)] / reffft[int(3 * refMaxIndex)])
+    H5.append(measfft[int(5 * measMaxIndex)] / reffft[int(5 * refMaxIndex)])
+    H7.append(measfft[int(7 * measMaxIndex)] / reffft[int(7 * refMaxIndex)])
 
     file.write("Measurement " + str(x) + '\n')
     file.write('Ref: ' + str(ref[x]) + '\n')
