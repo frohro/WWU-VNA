@@ -358,8 +358,6 @@ Wire Wire Line
 Wire Wire Line
 	1600 1600 1900 1600
 Connection ~ 1900 1600
-Wire Wire Line
-	4950 5800 4950 6000
 Text Notes 5050 4850 0    60   ~ 0
 Test Channel
 Text Notes 5050 6200 0    60   ~ 0
@@ -1052,16 +1050,8 @@ F 3 "" H 3650 5100 50  0001 C CNN
 	1    3650 5100
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4900 4800 4900 4700
-Connection ~ 4900 4700
-Wire Wire Line
-	4900 4700 4900 4300
 Text Notes 3000 7000 0    39   ~ 0
 Need reference\nchannel\ninput Z >> 50\nat RF
-Wire Wire Line
-	4950 6300 4950 6000
-Connection ~ 4950 6000
 Wire Wire Line
 	3200 1300 4350 1300
 Text Notes 4350 1900 0    50   ~ 0
@@ -1444,20 +1434,14 @@ Wire Wire Line
 Wire Wire Line
 	6500 4150 7100 4150
 Wire Wire Line
-	4900 4700 6500 4700
-Wire Wire Line
 	6450 6000 6450 3950
-Wire Wire Line
-	6450 3950 7100 3950
-Wire Wire Line
-	4950 6000 6450 6000
 $Comp
 L Device:R R3
 U 1 1 5A773E10
 P 5050 2450
 F 0 "R3" H 5120 2496 50  0000 L CNN
 F 1 "56" V 5050 2400 50  0000 L CNN
-F 2 "" V 4980 2450 50  0000 C CNN
+F 2 "" V 4980 2450 50  0001 C CNN
 F 3 "" H 5050 2450 50  0000 C CNN
 F 4 "Added this after PCB was made." H 5050 2450 50  0001 C CNN "Note:"
 	1    5050 2450
@@ -1477,10 +1461,58 @@ F 3 "" H 5050 2600 50  0001 C CNN
 	1    5050 2600
 	-1   0    0    -1  
 $EndComp
-Wire Wire Line
-	3400 4800 3650 4800
-Wire Wire Line
-	3400 6300 3700 6300
 Text Notes 1450 7700 0    50   ~ 0
 C12 was wrong.  It is now changed from 0.01uF to 1nF on the schematic, and needs to be changed on the boards.
+$Comp
+L Device:Ferrite_Bead FB1
+U 1 1 5B0E8627
+P 6050 4700
+F 0 "FB1" V 5776 4700 50  0000 C CNN
+F 1 "Ferrite_Bead" V 5867 4700 50  0000 C CNN
+F 2 "Inductors_SMD:L_0805" V 5980 4700 50  0001 C CNN
+F 3 "~" H 6050 4700 50  0001 C CNN
+	1    6050 4700
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	6450 3950 7100 3950
+Wire Wire Line
+	6500 4700 6200 4700
+Wire Wire Line
+	5900 4700 4900 4700
+Wire Wire Line
+	4900 4300 4900 4700
+Connection ~ 4900 4700
+Wire Wire Line
+	4900 4700 4900 4800
+Wire Wire Line
+	4950 5800 4950 6000
+$Comp
+L Device:Ferrite_Bead FB2
+U 1 1 5B0F71A6
+P 6050 6000
+F 0 "FB2" V 5776 6000 50  0000 C CNN
+F 1 "Ferrite_Bead" V 5867 6000 50  0000 C CNN
+F 2 "Inductors_SMD:L_0805" V 5980 6000 50  0001 C CNN
+F 3 "~" H 6050 6000 50  0001 C CNN
+	1    6050 6000
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	6450 6000 6200 6000
+Wire Wire Line
+	5900 6000 4950 6000
+Connection ~ 4950 6000
+Wire Wire Line
+	4950 6000 4950 6300
+Wire Wire Line
+	3400 6300 3500 6300
+Connection ~ 3500 6300
+Wire Wire Line
+	3500 6300 3700 6300
+Wire Wire Line
+	3400 4800 3450 4800
+Wire Wire Line
+	3450 4800 3650 4800
+Connection ~ 3450 4800
 $EndSCHEMATC
