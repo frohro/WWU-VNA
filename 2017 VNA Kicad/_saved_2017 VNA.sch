@@ -1107,11 +1107,11 @@ $EndComp
 Text Notes 1450 7700 0    50   ~ 0
 C12 was wrong.  It is now changed from 0.01uF to 1nF on the schematic, and needs to be changed on the boards.
 Wire Wire Line
-	5850 2600 5850 2800
+	5850 2600 5850 2650
 Wire Wire Line
-	3200 1800 3700 1800
+	3200 1800 3400 1800
 Wire Wire Line
-	3200 2100 3650 2100
+	3200 2100 3400 2100
 $Comp
 L Device:Jumper JP_Test1
 U 1 1 5A6E48AD
@@ -1459,4 +1459,14 @@ Wire Wire Line
 Wire Wire Line
 	4850 6300 4950 6300
 Connection ~ 4950 6000
+Connection ~ 3400 1800
+Wire Wire Line
+	3400 1800 3700 1800
+Connection ~ 3200 1800
+Connection ~ 3400 2100
+Wire Wire Line
+	3400 2100 3650 2100
+Connection ~ 5850 2650
+Wire Wire Line
+	5850 2650 5850 2800
 $EndSCHEMATC
