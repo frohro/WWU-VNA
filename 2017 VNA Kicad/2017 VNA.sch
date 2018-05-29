@@ -5,11 +5,11 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 1
 Title "2018 Vector Network Analyzer BoosterPack"
-Date "2018-01-03"
-Rev "0.4"
+Date "2018-05-28"
+Rev "0.6"
 Comp "Walla Walla University"
 Comment1 "for Engineering Electronics II"
-Comment2 "Rob Frohne"
+Comment2 "Jacob Priddy"
 Comment3 "This version is designed to be as simple and cheap as can be."
 Comment4 ""
 $EndDescr
@@ -425,28 +425,6 @@ Wire Wire Line
 	7100 1650 6800 1650
 Wire Wire Line
 	7100 1650 7100 1550
-$Comp
-L Device:C C11
-U 1 1 58F654B3
-P 5850 3100
-F 0 "C11" H 5700 3000 50  0000 L CNN
-F 1 "0pF" H 5950 3100 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0805" H 5888 2950 50  0001 C CNN
-F 3 "" H 5850 3100 50  0001 C CNN
-	1    5850 3100
-	-1   0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR025
-U 1 1 58F6570B
-P 5850 3250
-F 0 "#PWR025" H 5850 3000 50  0001 C CNN
-F 1 "GND" H 6000 3200 50  0000 C CNN
-F 2 "" H 5850 3250 50  0001 C CNN
-F 3 "" H 5850 3250 50  0001 C CNN
-	1    5850 3250
-	-1   0    0    -1  
-$EndComp
 Connection ~ 5850 2800
 $Comp
 L power:GND #PWR06
@@ -511,8 +489,6 @@ F 3 "" H 8450 6200 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	1900 1600 1900 1700
-Wire Wire Line
-	5850 2800 5850 2950
 Text Label 1500 6100 2    60   ~ 0
 LO_I
 Text Label 1500 6300 2    60   ~ 0
@@ -1170,23 +1146,23 @@ $EndComp
 $Comp
 L Device:R R4
 U 1 1 5B0F27DC
-P 4100 4950
-F 0 "R4" H 4170 4996 50  0000 L CNN
-F 1 "INF" H 4170 4905 50  0000 L CNN
-F 2 "Resistors_SMD:R_0805" V 4030 4950 50  0001 C CNN
-F 3 "~" H 4100 4950 50  0001 C CNN
-	1    4100 4950
+P 4200 4950
+F 0 "R4" H 4300 5050 50  0000 L CNN
+F 1 "INF" H 4300 4850 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805" V 4130 4950 50  0001 C CNN
+F 3 "~" H 4200 4950 50  0001 C CNN
+	1    4200 4950
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:R R6
 U 1 1 5B0F28BE
-P 4300 4800
-F 0 "R6" V 4093 4800 50  0000 C CNN
-F 1 "50k" V 4184 4800 50  0000 C CNN
-F 2 "Resistors_SMD:R_0805" V 4230 4800 50  0001 C CNN
-F 3 "~" H 4300 4800 50  0001 C CNN
-	1    4300 4800
+P 3950 4800
+F 0 "R6" V 3743 4800 50  0000 C CNN
+F 1 "50k" V 3834 4800 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805" V 3880 4800 50  0001 C CNN
+F 3 "~" H 3950 4800 50  0001 C CNN
+	1    3950 4800
 	0    1    1    0   
 $EndComp
 $Comp
@@ -1208,15 +1184,8 @@ Wire Wire Line
 Connection ~ 4850 4800
 Wire Wire Line
 	4500 4800 4450 4800
-Connection ~ 4450 4800
-Wire Wire Line
-	4150 4800 4100 4800
-Wire Wire Line
-	4100 4800 3700 4800
-Connection ~ 4100 4800
 Wire Wire Line
 	3700 4800 3600 4800
-Connection ~ 3700 4800
 Wire Wire Line
 	3200 4800 3100 4800
 Connection ~ 3200 4800
@@ -1245,12 +1214,12 @@ $EndComp
 $Comp
 L power:GND #PWR030
 U 1 1 5B0FC32F
-P 4100 5100
-F 0 "#PWR030" H 4100 4850 50  0001 C CNN
-F 1 "GND" H 4105 4927 50  0000 C CNN
-F 2 "" H 4100 5100 50  0001 C CNN
-F 3 "" H 4100 5100 50  0001 C CNN
-	1    4100 5100
+P 4200 5100
+F 0 "#PWR030" H 4200 4850 50  0001 C CNN
+F 1 "GND" H 4205 4927 50  0000 C CNN
+F 2 "" H 4200 5100 50  0001 C CNN
+F 3 "" H 4200 5100 50  0001 C CNN
+	1    4200 5100
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1336,25 +1305,14 @@ F 3 "~" H 4850 6450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R R5
-U 1 1 5B104E62
-P 4100 6450
-F 0 "R5" H 4170 6496 50  0000 L CNN
-F 1 "INF" H 4170 6405 50  0000 L CNN
-F 2 "Resistors_SMD:R_0805" V 4030 6450 50  0001 C CNN
-F 3 "~" H 4100 6450 50  0001 C CNN
-	1    4100 6450
-	1    0    0    -1  
-$EndComp
-$Comp
 L Device:R R7
 U 1 1 5B104E69
-P 4300 6300
-F 0 "R7" V 4093 6300 50  0000 C CNN
-F 1 "50k" V 4184 6300 50  0000 C CNN
-F 2 "Resistors_SMD:R_0805" V 4230 6300 50  0001 C CNN
-F 3 "~" H 4300 6300 50  0001 C CNN
-	1    4300 6300
+P 3950 6300
+F 0 "R7" V 3743 6300 50  0000 C CNN
+F 1 "50k" V 3834 6300 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805" V 3880 6300 50  0001 C CNN
+F 3 "~" H 3950 6300 50  0001 C CNN
+	1    3950 6300
 	0    1    1    0   
 $EndComp
 $Comp
@@ -1373,15 +1331,8 @@ Wire Wire Line
 Connection ~ 4850 6300
 Wire Wire Line
 	4500 6300 4450 6300
-Connection ~ 4450 6300
-Wire Wire Line
-	4150 6300 4100 6300
-Wire Wire Line
-	4100 6300 3700 6300
-Connection ~ 4100 6300
 Wire Wire Line
 	3700 6300 3600 6300
-Connection ~ 3700 6300
 Wire Wire Line
 	3200 6300 3100 6300
 Connection ~ 3200 6300
@@ -1405,17 +1356,6 @@ F 1 "GND" H 3705 6427 50  0000 C CNN
 F 2 "" H 3700 6600 50  0001 C CNN
 F 3 "" H 3700 6600 50  0001 C CNN
 	1    3700 6600
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR031
-U 1 1 5B104E90
-P 4100 6600
-F 0 "#PWR031" H 4100 6350 50  0001 C CNN
-F 1 "GND" H 4105 6427 50  0000 C CNN
-F 2 "" H 4100 6600 50  0001 C CNN
-F 3 "" H 4100 6600 50  0001 C CNN
-	1    4100 6600
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1462,11 +1402,50 @@ Connection ~ 4950 6000
 Connection ~ 3400 1800
 Wire Wire Line
 	3400 1800 3700 1800
-Connection ~ 3200 1800
 Connection ~ 3400 2100
 Wire Wire Line
 	3400 2100 3650 2100
 Connection ~ 5850 2650
 Wire Wire Line
 	5850 2650 5850 2800
+Wire Wire Line
+	4200 4800 4450 4800
+Connection ~ 4450 4800
+Wire Wire Line
+	4200 4800 4100 4800
+Connection ~ 4200 4800
+Wire Wire Line
+	3800 4800 3700 4800
+Connection ~ 3700 4800
+$Comp
+L power:GND #PWR031
+U 1 1 5B104E90
+P 4200 6600
+F 0 "#PWR031" H 4200 6350 50  0001 C CNN
+F 1 "GND" H 4205 6427 50  0000 C CNN
+F 2 "" H 4200 6600 50  0001 C CNN
+F 3 "" H 4200 6600 50  0001 C CNN
+	1    4200 6600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R5
+U 1 1 5B104E62
+P 4200 6450
+F 0 "R5" H 4300 6550 50  0000 L CNN
+F 1 "INF" H 4250 6300 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805" V 4130 6450 50  0001 C CNN
+F 3 "~" H 4200 6450 50  0001 C CNN
+	1    4200 6450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4450 6300 4200 6300
+Wire Wire Line
+	4200 6300 4100 6300
+Connection ~ 4450 6300
+Connection ~ 4200 6300
+Wire Wire Line
+	3800 6300 3700 6300
+Connection ~ 3700 6300
 $EndSCHEMATC
