@@ -9,7 +9,14 @@
     (nets 61)
   )
 
-  (page A4)
+  (page A)
+  (title_block
+    (title WWU-VNA)
+    (date 2018-05-28)
+    (rev 0.5)
+    (company "Jake Neal & Andrew Glencross")
+  )
+
   (layers
     (0 F.Cu signal)
     (31 B.Cu signal)
@@ -2749,7 +2756,7 @@
   (segment (start 88.43 80.75) (end 89.96 80.75) (width 0.25) (layer B.Cu) (net 59))
   (segment (start 86.67 78.99) (end 88.43 80.75) (width 0.25) (layer B.Cu) (net 59))
 
-  (zone (net 1) (net_name GND) (layer B.Cu) (tstamp 5B2D4266) (hatch edge 0.508)
+  (zone (net 1) (net_name GND) (layer B.Cu) (tstamp 5B0CC8DC) (hatch edge 0.508)
     (connect_pads (clearance 0.3))
     (min_thickness 0.254)
     (fill yes (arc_segments 16) (thermal_gap 0.508) (thermal_bridge_width 0.508))
@@ -3043,7 +3050,7 @@
       )
     )
   )
-  (zone (net 1) (net_name GND) (layer F.Cu) (tstamp 5B2D4263) (hatch edge 0.508)
+  (zone (net 1) (net_name GND) (layer F.Cu) (tstamp 5B0CC8D9) (hatch edge 0.508)
     (connect_pads (clearance 0.3))
     (min_thickness 0.254)
     (fill yes (arc_segments 16) (thermal_gap 0.508) (thermal_bridge_width 0.508))
