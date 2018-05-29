@@ -6,7 +6,7 @@ encoding utf-8
 Sheet 1 1
 Title "2018 Vector Network Analyzer BoosterPack"
 Date "2018-01-03"
-Rev "0.4"
+Rev "0.5"
 Comp "Walla Walla University"
 Comment1 "for Engineering Electronics II"
 Comment2 "Rob Frohne"
@@ -550,8 +550,6 @@ Wire Wire Line
 	1800 3950 2000 3950
 Text Notes 3550 800  0    60   ~ 0
 Make HF signal traces 50 ohms.
-Wire Wire Line
-	5850 2650 5850 2800
 Text Notes 5800 1100 2    120  ~ 0
 Output Port
 Text Notes 4450 2950 0    120  ~ 0
@@ -657,12 +655,6 @@ Wire Wire Line
 	2200 6300 2350 6300
 Wire Wire Line
 	2500 4800 2350 4800
-Wire Wire Line
-	3400 1800 3700 1800
-Wire Wire Line
-	3200 2100 3400 2100
-Wire Wire Line
-	3400 2100 3650 2100
 $Comp
 L Connector_Specialized:Test_Point Ref_o1
 U 1 1 5A457BE5
@@ -696,7 +688,6 @@ F 3 "" H 3400 2100 50  0001 C CNN
 	1    3400 2100
 	-1   0    0    1   
 $EndComp
-Connection ~ 3400 1800
 $Comp
 L Connector_Specialized:Test_Point LO_Q1
 U 1 1 5A45ACB4
@@ -708,7 +699,6 @@ F 3 "" H 3400 1800 50  0001 C CNN
 	1    3400 1800
 	1    0    0    -1  
 $EndComp
-Connection ~ 3400 2100
 $Comp
 L Connector_Specialized:Test_Point A_GND1
 U 1 1 5A4615E3
@@ -743,9 +733,6 @@ F 3 "" H 5850 1300 50  0000 C CNN
 	1    5850 1300
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	5850 2650 5850 2600
-Connection ~ 5850 2650
 $Bitmap
 Pos 9950 7050
 Scale 1.000000
@@ -1370,8 +1357,6 @@ Connection ~ 4150 6300
 Wire Wire Line
 	3650 4800 3750 4800
 Wire Wire Line
-	3200 1800 3400 1800
-Wire Wire Line
 	3200 1300 3200 1500
 $Comp
 L Device:Jumper JP_Test1
@@ -1515,4 +1500,10 @@ Wire Wire Line
 Wire Wire Line
 	3450 4800 3650 4800
 Connection ~ 3450 4800
+Wire Wire Line
+	5850 2600 5850 2800
+Wire Wire Line
+	3200 1800 3700 1800
+Wire Wire Line
+	3200 2100 3650 2100
 $EndSCHEMATC
