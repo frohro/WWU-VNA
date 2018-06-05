@@ -53,21 +53,26 @@ void setup()
     /* This is no window: and partially optimized for RAM use:  You could improve it by
      * a factor of two, but using a quarter of a cycle.  With no window, we need to make
      * sure the sampling interval is an integer number of cycles. */
-    for(int n=0;n<SAMPLES_IN_ONE_CYCLE;n++)
+      for(int n=0;n<SAMPLES_IN_ONE_CYCLE;n++)
     {
-        shift[n] = cos(OMEGA_IF*n/SAMPLE_FREQUENCY);
+       //shift[n] = cos(OMEGA_IF*n/SAMPLE_FREQUENCY);
     }
     for(int n=0;n<SAMPLE_LENGTH;n++) // Initialize shift, should make constant later.
      {
          test[n] = shift[n%SAMPLES_IN_ONE_CYCLE];
          test1[n] = shift[(n+(int)(SAMPLES_IN_ONE_CYCLE/4+0.5))%SAMPLES_IN_ONE_CYCLE];
-
-         /* Pick one:  This is with a Hanning window; uses more memory, and isn't as good
-          * for a perfect sample length and rate which we control.
-         shift[n] = cos(OMEGA_IF*n/SAMPLE_FREQUENCY)\
-                 *0.5*(1-cos(2*PI*n/(SAMPLE_LENGTH-1))); // Hanning window
-         */
-     }
+        
+        shift[n] = cos(OMEGA_IF*n/SAMPLE_FREQUENCY)*0.5*(1-cos(2*PI*n/(SAMPLE_LENGTH-1))); // Hanning window
+        
+        //Dolph-Chebyshev
+        //shift[n] = cos(OMEGA_IF*SAMPLE_LENGTH/SAMPLE_FREQUENCY)\
+            //*(cos(SAMPLE_LENGTH*acos(cosh(1/SAMPLE_LENGTH*acosh(10^5))*cos(PI*n/SAMPLE_LENGTH)))\
+                ///(cosh(SAMPLE_LENGTH*acosh(cosh(1/SAMPLE_LENGTH*acosh(10^5)));
+        
+        //Blackman
+        //shift[n] = cos(OMEGA_IF*SAMPLE_LENGTH/SAMPLE_FREQUENCY)\
+           // *(0.42-0.5*cos(2*PI*n/(SAMPLE_LENGTH-1))+0.08*cos(4*PI*n/(SAMPLE_LENGTH-1)));
+}
     Serial.println("Done with setup.");
 }
 
