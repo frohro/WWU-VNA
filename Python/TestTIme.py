@@ -98,6 +98,12 @@ H7 = []
 
 for x in range(samp + 5):
     if x >= 5:
+        for y in range(len(endRef)):
+            endRef[x][y] = endRef[x][y] * numpy.hanning(len(endRef))[y]
+
+        for y in range(len(endMeas)):
+            endMeas[x][y] = endMeas[x][y] * numpy.hanning(len(endMeas))[y]
+
         reffft = numpy.fft.fft(endRef[x])
         measfft = numpy.fft.fft(endMeas[x])
         ref.append(reffft[int(F_IF*N/Fs+1)])

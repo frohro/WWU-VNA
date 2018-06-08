@@ -65,10 +65,10 @@ Ref = fft(hanning(length(ref))'.*ref);
 Meas = fft(hanning(length(meas))'.*meas);
 %Ref(F_IF*N/Fs+1)
 %Meas(F_IF*N/Fs+1)
-%H1 = Meas(F_IF*N/Fs+1)/Ref(F_IF*N/Fs+1)
-%H3 = Meas(3*F_IF*N/Fs+1)/Ref(3*F_IF*N/Fs+1)
-%H5 = Meas(5*F_IF*N/Fs+1)/Ref(5*F_IF*N/Fs+1)
-%H7 = Meas(7*F_IF*N/Fs+1)/Ref(7*F_IF*N/Fs+1)
+H1 = abs(Meas(round(F_IF*N/Fs+1))/Ref(round(F_IF*N/Fs+1)))
+H3 = abs(Meas(round(3*F_IF*N/Fs+1))/Ref(round(3*F_IF*N/Fs+1)))
+H5 = abs(Meas(round(5*F_IF*N/Fs+1))/Ref(round(5*F_IF*N/Fs+1)))
+H7 = abs(Meas(round(7*F_IF*N/Fs+1))/Ref(round(7*F_IF*N/Fs+1)))
 %plot(f,abs(fftshift(Ref)),"linewidth",1)
 xlabel('frequency (Hz)')
 title('Reference Response');
