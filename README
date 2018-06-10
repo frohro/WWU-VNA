@@ -1,2 +1,56 @@
-This is some source code for the WWU VNA.  The hardware files can be found at this repository:  
-https://github.com/frohro/WWU-VNA
+-----------------------------
+Jake Neal & Andrew Glencross
+ENGR 357
+WWU-VNA Project
+-----------------------------
+This branch of the WWU-VNA project was created by Andrew G. and Jake N.
+
+Improvement Outline:
+---------------------------------------------------------------------------------------------------------------
+* Provided better sheilding from the MSP432 Processor by moving all components to the topside of the PCB.
+* Decreased the negative effects of aliasing by changing the IF frequency from 500Hz to 155Hz.
+* Improved harmonic results by using a various window functions;
+* Added ferrite beads to the input and output of the ADC to filter any high frequencies that may leak through.
+---------------------------------------------------------------------------------------------------------------
+Suggested Improvements:
+--------------------------------------------------------------------------------------------------------------------
+* Investigate anamolies in output port coming from the inductor; posible ferrite bead.
+* Dynamic Access Memory; This will increase sampling frequency => decrease quantization frequency.
+* Add an improved LPF to provide more consistent measured response; whereas our changes improved refrence respone.
+* A frames using resistors and ferrite beads where R13 and R14 are(Version 0.4 Schematic).
+--------------------------------------------------------------------------------------------------------------------
+
+To begin this project we started with the 2017 class project and began testing their design and software.
+Aside from the standard testing equipment(oscilliscope, multimeter, etc..) the spectrum network analyzer was very helpful.
+Our test results found noise and leakage in the 500Hz signal. This was confirmed by large standard deviatitions.
+The large standard deviations were found using a python script written by Jacob Priddy and Igor Chisalita.
+We were concerend that the ADC was no measuring consistently.
+To determine if the ADC was the problem, we sent DC to the ADC but found a standard deviation of 0.0009.
+Thus the ADC was not the problem; knowing this allowed us to move past testing the MSP432 and look at the PCB.
+
+Since the ADC wasn't the problem then it was possible that the noise/leakage was coming from the MSP432's processor.
+The PCB has components sitting on the bottom side of the the board very close to the processor, \n
+so one thing we tried was taking grounded aluminum foil and blocked the bottom side of the board from the processor.
+This provided us with a better standard deviation.
+To implement this in our design, we moved all components to the top of the PCB to sheild them from the processor.
+
+At the 500Hz, the aliases align with the sampling frequency(8000Hz); this will cause poor measurments.
+This occurs because we are digitizing an analog signal and analyzing it in a Fourier analysis, \n
+the power contained in the frequencies above the Nyquist Frequency (half the sampling rate) of 4000Hz \n
+are added to the lower frequency components.
+These aliases are indistinguishable from lower frequency noise.
+To fix this problem, we worked with Dr.Frohne and changed the IF frequency up and found 155Hz to be much better.
+By changing the the IF frequency to 155Hz we were able to decrease the effects of aliasing.
+We also tested the use of a window function; the hanning window provided better results.
+
+During testing, we also found some worrying 250mV "spikes" in the DC offset.
+After consulting Dr.Frohne, we concluded that it was not a problem.
+However, later after Dr.Frohne looked at it closer, he thought that this might indeed be a problem.
+Since this signal is coming from the inductor at the voltage divider of the output port, \n
+we need to consider a better inductor or ferrit beads in series with the inductor.
+
+After our improvements were made, we found our refrence response had greatly improved and became incredibly consistent.
+However, our measured response seemed to have gotten worse with less consistent measurements.
+Now, another group added a better LPF and their results showed an improvement on the measured response, \n
+but no improvement or worse on their reference.
+So it's possible that using their LPF with our desing might provide promising results.
