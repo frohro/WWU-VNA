@@ -143,6 +143,15 @@ phaseH3bar = statistics.mean(phaseH3)
 phaseH5bar = statistics.mean(phaseH5)
 phaseH7bar = statistics.mean(phaseH7)
 
+file.write('Reference Magnitude Standard Deviation: ' + str(statistics.stdev([numpy.abs(x) for x in ref])) + '\n')
+file.write('Measured Magnitude Standard Deviation: ' + str(statistics.stdev([numpy.abs(x) for x in meas])) + '\n\n')
+
+file.write('Reference Real Part Standard Deviation: ' + str(statistics.stdev([numpy.real(x) for x in ref])) + '\n')
+file.write('Reference Imaginary Part Standard Deviation: ' + str(statistics.stdev([numpy.imag(x) for x in ref])) + '\n\n')
+
+file.write('Measured Real Part Standard Deviation: ' + str(statistics.stdev([numpy.real(x) for x in meas])) + '\n')
+file.write('Measured Imaginary Part Standard Deviation: ' + str(statistics.stdev([numpy.imag(x) for x in meas])) + '\n\n')
+
 file.write('H1 Magnitude Mean: ' + str(magH1bar) + '\n')
 file.write('H3 Magnitude Mean: ' + str(magH3bar) + '\n')
 file.write('H5 Magnitude Mean: ' + str(magH5bar) + '\n')
