@@ -46,7 +46,7 @@ We also tested the use of a window function; the hanning window provided better 
 During testing, we also found some worrying 250mV "spikes" in the DC offset.
 After consulting Dr.Frohne, we concluded that it was not a problem.
 However, later after Dr.Frohne looked at it closer, he thought that this might indeed be a problem.
-Since this signal is coming from the inductor at the voltage divider of the output port, \n
+Since this signal is coming from the inductor at the voltage divider of the input port, \n
 we need to consider a better inductor or ferrit beads in series with the inductor.
 
 After our improvements were made, we found our refrence response had greatly improved and became incredibly consistent.
