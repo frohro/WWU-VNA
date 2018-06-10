@@ -14,10 +14,9 @@ Improvement Outline:
 ---------------------------------------------------------------------------------------------------------------
 Suggested Improvements:
 --------------------------------------------------------------------------------------------------------------------
-* Investigate anamolies in output port coming from the inductor; posible ferrite bead.
+* Investigate anamolies in output port coming from the inductor; posible ferrite bead or inductor replacement.
 * Dynamic Access Memory; This will increase sampling frequency => decrease quantization frequency.
 * Add an improved LPF to provide more consistent measured response; whereas our changes improved refrence respone.
-* A frames using resistors and ferrite beads where R13 and R14 are(Version 0.4 Schematic).
 --------------------------------------------------------------------------------------------------------------------
 
 To begin this project we started with the 2017 class project and began testing their design and software.
