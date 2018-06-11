@@ -25,9 +25,7 @@ volatile bool sendMeasurement = false;
 volatile int numberFrequenciestoMeasure, frequencyIndex;
 volatile float refSumRe, measSumRe, refSumIm, measSumIm;
 
-float shift[SAMPLES_IN_ONE_CYCLE];  // Make this constant sometime.
-float test[SAMPLE_LENGTH];
-float test1[SAMPLE_LENGTH];
+float shift[SAMPLE_LENGTH];  // Make this constant sometime.
 
 int simpleDownConverter(void);
 void sweepFreqMeas(char **values, int valueCount);
@@ -37,7 +35,7 @@ void sendSampleRate(char **values, int valueCount);
 
 void setup()
 {
-    adc14_main(); // Initialize ADC14 for multichannel conversion at 8 kHz.
+	adc14_main(); // Initialize ADC14 for multichannel conversion at 500 kHz.
     si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0);
     // For debugging 1/4/2018
     si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
@@ -59,14 +57,13 @@ void setup()
     }*/
     for(int n=0;n<SAMPLE_LENGTH;n++) // Initialize shift, should make constant later.
      {
-//         test[n] = shift[n%SAMPLES_IN_ONE_CYCLE];
-//         test1[n] = shift[(n+(int)(SAMPLES_IN_ONE_CYCLE/4+0.5))%SAMPLES_IN_ONE_CYCLE];
 
          /* Pick one:  This is with a Hanning window; uses more memory, and isn't as good
           * for a perfect sample length and rate which we control.*/
          shift[n] = cos(OMEGA_IF*n/SAMPLE_FREQUENCY)\
                  *0.5*(1-cos(2*PI*n/(SAMPLE_LENGTH-1))); // Hanning window
      }
+    setOscillator(10000000);
     Serial.println("Done with setup.");
 }
 
@@ -87,10 +84,10 @@ int simpleDownConverter(void)    // Do DSP here.
     for(int n=0;n<SAMPLE_LENGTH;n++)
     {
         /* This needs to be changed if you use a Hanning window */
-        refSumRe += shift[n%SAMPLES_IN_ONE_CYCLE]*ref[n];
-        refSumIm -= shift[(n+(int)(SAMPLES_IN_ONE_CYCLE/4+0.5))%SAMPLES_IN_ONE_CYCLE]*ref[n];
-        measSumRe += shift[n%SAMPLES_IN_ONE_CYCLE]*meas[n];
-        measSumIm -= shift[(n+(int)(SAMPLES_IN_ONE_CYCLE/4+0.5))%SAMPLES_IN_ONE_CYCLE]*meas[n];
+        //refSumRe += shift[n%SAMPLES_IN_ONE_CYCLE]*ref[n];
+        //refSumIm -= shift[(n+(int)(SAMPLES_IN_ONE_CYCLE/4+0.5))%SAMPLES_IN_ONE_CYCLE]*ref[n];
+        //measSumRe += shift[n%SAMPLES_IN_ONE_CYCLE]*meas[n];
+        //measSumIm -= shift[(n+(int)(SAMPLES_IN_ONE_CYCLE/4+0.5))%SAMPLES_IN_ONE_CYCLE]*meas[n];
     }
     return(1);  // Later fix this to report errors if there are any.
 }
@@ -182,7 +179,8 @@ void voltageMeasurement(char **values, int valueCount) // Might want to return e
     }
     freq = atoi(values[1]);
     setOscillator(freq);
-    ADC14_enableConversion();
+    //ADC14_enableConversion();
+    startConversion();
     while(!doneADC)
     {}
     {
@@ -195,7 +193,7 @@ void voltageMeasurement(char **values, int valueCount) // Might want to return e
         Serial.print('\n');
         //Serial.println();
 //        Serial.flush();
-        delay(500);
+        //delay(500);
         for (j = 0; j < SAMPLE_LENGTH; j++)
         {
             Serial.print(meas[j]);
@@ -206,7 +204,6 @@ void voltageMeasurement(char **values, int valueCount) // Might want to return e
         //Serial.println();
 //        Serial.flush();
     }
-    Serial.print('Done sending both ref and meas.');
 }
 
 void setOscillator (unsigned long long freq) // freq in Hz
