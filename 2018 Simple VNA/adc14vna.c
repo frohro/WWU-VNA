@@ -94,6 +94,9 @@ extern volatile uint16_t ref[SAMPLE_LENGTH];
 extern volatile uint16_t meas[SAMPLE_LENGTH];
 extern volatile bool doneADC = false;
 
+static volatile int refSampleCount;
+static volatile int measSampleCount;
+
 /* DMA Control Table */
 #if defined(__TI_COMPILER_VERSION__)
 #pragma DATA_ALIGN(MSP_EXP432P401RLP_DMAControlTable, 1024)
@@ -108,7 +111,9 @@ static DMA_ControlTable MSP_EXP432P401RLP_DMAControlTable[16];
 
 void startConversion(void)
 {
-	doneADC = false;
+    refSampleCount = 0;
+    measSampleCount = 0;
+    doneADC = false;
     MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig);
 }
 
@@ -143,13 +148,13 @@ int adc14_main(void)
         UDMA_SIZE_16 | UDMA_SRC_INC_NONE | UDMA_DST_INC_16 | UDMA_ARB_1);
     MAP_DMA_setChannelTransfer(UDMA_PRI_SELECT | DMA_CH0_RESERVED0,
         UDMA_MODE_PINGPONG, (void*) &ADC14->MEM[6],
-        ref, SAMPLE_LENGTH);
+        ref, 1024);
 
     MAP_DMA_setChannelControl(UDMA_ALT_SELECT | DMA_CH0_RESERVED0,
         UDMA_SIZE_16 | UDMA_SRC_INC_NONE | UDMA_DST_INC_16 | UDMA_ARB_1);
     MAP_DMA_setChannelTransfer(UDMA_ALT_SELECT | DMA_CH0_RESERVED0,
         UDMA_MODE_PINGPONG, (void*) &ADC14->MEM[6],
-        ref, SAMPLE_LENGTH);
+        (void*)&ref[1024], 1024);
 
     /* Setting Control Indexes. In this case we will set the source of the
      * DMA transfer to ADC14 Memory 7
@@ -159,13 +164,13 @@ int adc14_main(void)
         UDMA_SIZE_16 | UDMA_SRC_INC_NONE | UDMA_DST_INC_16 | UDMA_ARB_1);
     MAP_DMA_setChannelTransfer(UDMA_PRI_SELECT | DMA_CH1_RESERVED0,
         UDMA_MODE_PINGPONG, (void*) &ADC14->MEM[7],
-        meas, SAMPLE_LENGTH);
+        meas, 1024);
 
     MAP_DMA_setChannelControl(UDMA_ALT_SELECT | DMA_CH1_RESERVED0,
         UDMA_SIZE_16 | UDMA_SRC_INC_NONE | UDMA_DST_INC_16 | UDMA_ARB_1);
     MAP_DMA_setChannelTransfer(UDMA_ALT_SELECT | DMA_CH1_RESERVED0,
         UDMA_MODE_PINGPONG, (void*) &ADC14->MEM[7],
-        meas, SAMPLE_LENGTH);
+        (void*)&meas[1024], 1024);
 
     /* Assigning/Enabling Interrupts */
     MAP_DMA_assignInterrupt(DMA_INT1, 0);
@@ -275,8 +280,6 @@ void ADC14_IRQHandler(void)
 		/* Forcing a software transfer on DMA Channel 1 */
 		//MAP_DMA_requestSoftwareTransfer(1);
 		BITBAND_PERI(DMA_Channel->SW_CHTRIG, DMA_SW_CHTRIG_CH1_OFS) = 1;
-		/* Forcing a software transfer on DMA Channel 2 */
-//        BITBAND_PERI(P1->OUT, 0) = 0;
 		//MAP_ADC14_enableConversion();
 		BITBAND_PERI(ADC14->CTL0, ADC14_CTL0_ENC_OFS) = 1;
 	}
@@ -287,24 +290,27 @@ void ADC14_IRQHandler(void)
 __attribute__((ramfunc))
 void DMA_INT1_IRQHandler(void)
 {
+    refSampleCount++;
     /* Switch between primary and alternate bufferes with DMA's PingPong mode */
     if (MAP_DMA_getChannelAttribute(0) & UDMA_ATTR_ALTSELECT)
     {
-//        MAP_DMA_setChannelTransfer(UDMA_PRI_SELECT | DMA_CH0_RESERVED0,
-//            UDMA_MODE_PINGPONG, (void*) &ADC14->MEM[6],
-//            prim_buffer0, NUMBER_OF_SAMPLES);
+        if (refSampleCount < SAMPLE_LENGTH / 1024)
+            MAP_DMA_setChannelTransfer(UDMA_PRI_SELECT | DMA_CH0_RESERVED0,
+                UDMA_MODE_PINGPONG, (void*) &ADC14->MEM[6],
+                (void*)&ref[1024 * refSampleCount], 1024);
         MSP_EXP432P401RLP_DMAControlTable[0].control =
                 (MSP_EXP432P401RLP_DMAControlTable[0].control & 0xff000000 ) |
-                (((SAMPLE_LENGTH)-1)<<4) | UDMA_MODE_PINGPONG;
+                (((1024)-1)<<4) | UDMA_MODE_PINGPONG;
     }
     else
     {
-//        MAP_DMA_setChannelTransfer(UDMA_ALT_SELECT | DMA_CH0_RESERVED0,
-//            UDMA_MODE_PINGPONG, (void*) &ADC14->MEM[6],
-//            alt_buffer0, NUMBER_OF_SAMPLES);
+        if (refSampleCount < SAMPLE_LENGTH / 1024)
+            MAP_DMA_setChannelTransfer(UDMA_ALT_SELECT | DMA_CH0_RESERVED0,
+                UDMA_MODE_PINGPONG, (void*) &ADC14->MEM[6],
+                (void*)&ref[1024 * refSampleCount], 1024);
         MSP_EXP432P401RLP_DMAControlTable[8].control =
                 (MSP_EXP432P401RLP_DMAControlTable[8].control & 0xff000000 ) |
-                (((SAMPLE_LENGTH)-1)<<4) | UDMA_MODE_PINGPONG;
+                (((1024)-1)<<4) | UDMA_MODE_PINGPONG;
     }
 }
 
@@ -312,28 +318,34 @@ void DMA_INT1_IRQHandler(void)
 __attribute__((ramfunc))
 void DMA_INT2_IRQHandler(void)
 {
+    measSampleCount++;
     /* Switch between primary and alternate bufferes with DMA's PingPong mode */
     if (MAP_DMA_getChannelAttribute(1) & UDMA_ATTR_ALTSELECT)
     {
-//        MAP_DMA_setChannelTransfer(UDMA_PRI_SELECT | DMA_CH2_RESERVED0,
-//            UDMA_MODE_PINGPONG, (void*) &ADC14->MEM[8],
-//            prim_buffer2, NUMBER_OF_SAMPLES);
+        if (measSampleCount < SAMPLE_LENGTH / 1024)
+            MAP_DMA_setChannelTransfer(UDMA_PRI_SELECT | DMA_CH1_RESERVED0,
+                UDMA_MODE_PINGPONG, (void*) &ADC14->MEM[7],
+                (void*)&meas[1024 * measSampleCount], 1024);
         MSP_EXP432P401RLP_DMAControlTable[1].control =
                 (MSP_EXP432P401RLP_DMAControlTable[1].control & 0xff000000 ) |
-                (((SAMPLE_LENGTH)-1)<<4) | UDMA_MODE_PINGPONG;
+                (((1024)-1)<<4) | UDMA_MODE_PINGPONG;
     }
     else
     {
-//        MAP_DMA_setChannelTransfer(UDMA_ALT_SELECT | DMA_CH2_RESERVED0,
-//            UDMA_MODE_PINGPONG, (void*) &ADC14->MEM[8],
-//            alt_buffer2, NUMBER_OF_SAMPLES);
+        if (measSampleCount < SAMPLE_LENGTH / 1024)
+            MAP_DMA_setChannelTransfer(UDMA_ALT_SELECT | DMA_CH1_RESERVED0,
+                UDMA_MODE_PINGPONG, (void*) &ADC14->MEM[7],
+                (void*)&meas[1024 * measSampleCount], 1024);
         MSP_EXP432P401RLP_DMAControlTable[9].control =
                 (MSP_EXP432P401RLP_DMAControlTable[9].control & 0xff000000 ) |
-                (((SAMPLE_LENGTH)-1)<<4) | UDMA_MODE_PINGPONG;
+                (((1024)-1)<<4) | UDMA_MODE_PINGPONG;
     }
-
-	MAP_Timer_A_stopTimer(TIMER_A0_BASE);
-	doneADC = true;
+    if (measSampleCount == SAMPLE_LENGTH / 1024 + 1)
+    {
+        MAP_Timer_A_stopTimer(TIMER_A0_BASE);
+        doneADC = true;
+        return;
+    }
 }
 
 

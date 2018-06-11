@@ -70,7 +70,7 @@ file.write("T = " + str(T) + '\n\n\n')
 endRef = []
 endMeas = []
 
-for x in range(samp + 5):
+for x in range(samp):
     command = "^TIME," + str(fMin) + "$\n"
     ser.write(command.encode())
     ref = ser.readline().decode()
@@ -96,30 +96,29 @@ H3 = []
 H5 = []
 H7 = []
 
-for x in range(samp + 5):
-    if x >= 5:
-        for y in range(len(endRef)):
-            endRef[x][y] = endRef[x][y] * numpy.hanning(len(endRef))[y]
+for x in range(samp):
+    for y in range(len(endRef)):
+        endRef[x][y] = endRef[x][y] * numpy.hanning(len(endRef))[y]
 
-        for y in range(len(endMeas)):
-            endMeas[x][y] = endMeas[x][y] * numpy.hanning(len(endMeas))[y]
+    for y in range(len(endMeas)):
+        endMeas[x][y] = endMeas[x][y] * numpy.hanning(len(endMeas))[y]
 
-        reffft = numpy.fft.fft(endRef[x])
-        measfft = numpy.fft.fft(endMeas[x])
-        ref.append(reffft[int(F_IF*N/Fs+1)])
-        meas.append(measfft[int(F_IF*N/Fs+1)])
-        H1.append(measfft[int(F_IF * N / Fs + 1)] / reffft[int(F_IF * N / Fs + 1)])
-        H3.append(measfft[int(3 * F_IF * N / Fs + 1)] / reffft[int(3 * F_IF * N / Fs + 1)])
-        H5.append(measfft[int(5 * F_IF * N / Fs + 1)] / reffft[int(5 * F_IF * N / Fs + 1)])
-        H7.append(measfft[int(7 * F_IF * N / Fs + 1)] / reffft[int(7 * F_IF * N / Fs + 1)])
+    reffft = numpy.fft.fft(endRef[x])
+    measfft = numpy.fft.fft(endMeas[x])
+    ref.append(reffft[int(F_IF*N/Fs+1)])
+    meas.append(measfft[int(F_IF*N/Fs+1)])
+    H1.append(measfft[int(F_IF * N / Fs + 1)] / reffft[int(F_IF * N / Fs + 1)])
+    H3.append(measfft[int(3 * F_IF * N / Fs + 1)] / reffft[int(3 * F_IF * N / Fs + 1)])
+    H5.append(measfft[int(5 * F_IF * N / Fs + 1)] / reffft[int(5 * F_IF * N / Fs + 1)])
+    H7.append(measfft[int(7 * F_IF * N / Fs + 1)] / reffft[int(7 * F_IF * N / Fs + 1)])
 
-        file.write("Measurement " + str(x - 4) + '\n')
-        file.write('Ref: ' + str(ref[x - 5]) + '\n')
-        file.write('Meas: ' + str(meas[x - 5]) + '\n')
-        file.write('H1: ' + str(H1[x - 5]) + '\n')
-        file.write('H3: ' + str(H3[x - 5]) + '\n')
-        file.write('H5: ' + str(H5[x - 5]) + '\n')
-        file.write('H7: ' + str(H7[x - 5]) + '\n\n\n')
+    file.write("Measurement " + str(x + 1) + '\n')
+    file.write('Ref: ' + str(ref[x]) + '\n')
+    file.write('Meas: ' + str(meas[x]) + '\n')
+    file.write('H1: ' + str(H1[x]) + '\n')
+    file.write('H3: ' + str(H3[x]) + '\n')
+    file.write('H5: ' + str(H5[x]) + '\n')
+    file.write('H7: ' + str(H7[x]) + '\n\n\n')
 
 magH1 = [numpy.absolute(x) for x in H1]
 magH3 = [numpy.absolute(x) for x in H3]
