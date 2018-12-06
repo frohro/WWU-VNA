@@ -187,7 +187,7 @@ void voltageMeasurement(char **values, int valueCount) // Might want to return e
         for (j = 0; j < SAMPLE_LENGTH; j++)
         {
             Serial.print(ref[j]);
-            Serial.print(", ");
+            Serial.print(",");
             //Serial.flush(); // Waits until completion of transmitted data.
         }
         Serial.print('\n');
@@ -197,7 +197,7 @@ void voltageMeasurement(char **values, int valueCount) // Might want to return e
         for (j = 0; j < SAMPLE_LENGTH; j++)
         {
             Serial.print(meas[j]);
-            Serial.print(", ");
+            Serial.print(",");
             //Serial.flush(); // Waits until completion of transmitted data.
         }
         Serial.print('\n');

@@ -97,6 +97,8 @@ extern volatile bool doneADC = false;
 static volatile int refSampleCount;
 static volatile int measSampleCount;
 
+const int to_skip = 2;
+
 /* DMA Control Table */
 #if defined(__TI_COMPILER_VERSION__)
 #pragma DATA_ALIGN(MSP_EXP432P401RLP_DMAControlTable, 1024)
@@ -290,24 +292,32 @@ void ADC14_IRQHandler(void)
 __attribute__((ramfunc))
 void DMA_INT1_IRQHandler(void)
 {
+    int actual;
     refSampleCount++;
+    if (refSampleCount >= to_skip)
+    {
+        actual = refSampleCount - to_skip;
+    } else {
+        actual = refSampleCount;
+    }
+
     /* Switch between primary and alternate bufferes with DMA's PingPong mode */
     if (MAP_DMA_getChannelAttribute(0) & UDMA_ATTR_ALTSELECT)
     {
-        if (refSampleCount < SAMPLE_LENGTH / 1024)
+        if (actual < SAMPLE_LENGTH / 1024)
             MAP_DMA_setChannelTransfer(UDMA_PRI_SELECT | DMA_CH0_RESERVED0,
                 UDMA_MODE_PINGPONG, (void*) &ADC14->MEM[6],
-                (void*)&ref[1024 * refSampleCount], 1024);
+                (void*)&ref[1024 * actual], 1024);
         MSP_EXP432P401RLP_DMAControlTable[0].control =
                 (MSP_EXP432P401RLP_DMAControlTable[0].control & 0xff000000 ) |
                 (((1024)-1)<<4) | UDMA_MODE_PINGPONG;
     }
     else
     {
-        if (refSampleCount < SAMPLE_LENGTH / 1024)
+        if (actual < SAMPLE_LENGTH / 1024)
             MAP_DMA_setChannelTransfer(UDMA_ALT_SELECT | DMA_CH0_RESERVED0,
                 UDMA_MODE_PINGPONG, (void*) &ADC14->MEM[6],
-                (void*)&ref[1024 * refSampleCount], 1024);
+                (void*)&ref[1024 * actual], 1024);
         MSP_EXP432P401RLP_DMAControlTable[8].control =
                 (MSP_EXP432P401RLP_DMAControlTable[8].control & 0xff000000 ) |
                 (((1024)-1)<<4) | UDMA_MODE_PINGPONG;
@@ -318,29 +328,37 @@ void DMA_INT1_IRQHandler(void)
 __attribute__((ramfunc))
 void DMA_INT2_IRQHandler(void)
 {
+
+    int actual;
     measSampleCount++;
+    if (measSampleCount >= to_skip)
+    {
+        actual = measSampleCount - to_skip;
+    } else {
+        actual = measSampleCount;
+    }
     /* Switch between primary and alternate bufferes with DMA's PingPong mode */
     if (MAP_DMA_getChannelAttribute(1) & UDMA_ATTR_ALTSELECT)
     {
-        if (measSampleCount < SAMPLE_LENGTH / 1024)
+        if (actual < SAMPLE_LENGTH / 1024)
             MAP_DMA_setChannelTransfer(UDMA_PRI_SELECT | DMA_CH1_RESERVED0,
                 UDMA_MODE_PINGPONG, (void*) &ADC14->MEM[7],
-                (void*)&meas[1024 * measSampleCount], 1024);
+                (void*)&meas[1024 * actual], 1024);
         MSP_EXP432P401RLP_DMAControlTable[1].control =
                 (MSP_EXP432P401RLP_DMAControlTable[1].control & 0xff000000 ) |
                 (((1024)-1)<<4) | UDMA_MODE_PINGPONG;
     }
     else
     {
-        if (measSampleCount < SAMPLE_LENGTH / 1024)
+        if (actual < SAMPLE_LENGTH / 1024)
             MAP_DMA_setChannelTransfer(UDMA_ALT_SELECT | DMA_CH1_RESERVED0,
                 UDMA_MODE_PINGPONG, (void*) &ADC14->MEM[7],
-                (void*)&meas[1024 * measSampleCount], 1024);
+                (void*)&meas[1024 * actual], 1024);
         MSP_EXP432P401RLP_DMAControlTable[9].control =
                 (MSP_EXP432P401RLP_DMAControlTable[9].control & 0xff000000 ) |
                 (((1024)-1)<<4) | UDMA_MODE_PINGPONG;
     }
-    if (measSampleCount == SAMPLE_LENGTH / 1024 + 1)
+    if (actual == SAMPLE_LENGTH / 1024 + 1)
     {
         MAP_Timer_A_stopTimer(TIMER_A0_BASE);
         doneADC = true;

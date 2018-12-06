@@ -1,17 +1,18 @@
 """
 Python script to test the accuracy of the TIME command.
-
 Author: Jacob Priddy
 Date: 4/27/18
 """
 
 import time
+# This is pyserial
 import serial
 import numpy
 import statistics
 import cmath
 import datetime
 import os
+import matplotlib.pyplot as plt
 
 
 def average(arr):
@@ -89,6 +90,14 @@ for x in range(samp):
 
 ser.close()
 
+
+plt.plot(numpy.arange(0, len(endRef[0]) / Fs, 1/Fs), endRef[0])
+plt.show()
+
+plt.plot(numpy.arange(0, len(endMeas[0]) / Fs, 1/Fs), endMeas[0])
+plt.show()
+
+
 ref = []
 meas = []
 H1 = []
@@ -120,6 +129,11 @@ for x in range(samp):
     file.write('H5: ' + str(H5[x]) + '\n')
     file.write('H7: ' + str(H7[x]) + '\n\n\n')
 
+X0 = numpy.fft.fftshift(numpy.fft.fft(endRef[0])/N)
+f = numpy.arange(-1/(2*T),1/(2*T),1/(N*T))
+plt.plot(f,numpy.abs(X0))
+plt.show()
+
 magH1 = [numpy.absolute(x) for x in H1]
 magH3 = [numpy.absolute(x) for x in H3]
 magH5 = [numpy.absolute(x) for x in H5]
@@ -142,8 +156,20 @@ phaseH3bar = statistics.mean(phaseH3)
 phaseH5bar = statistics.mean(phaseH5)
 phaseH7bar = statistics.mean(phaseH7)
 
-file.write('Reference Magnitude Standard Deviation: ' + str(statistics.stdev([numpy.abs(x) for x in ref])) + '\n')
-file.write('Measured Magnitude Standard Deviation: ' + str(statistics.stdev([numpy.abs(x) for x in meas])) + '\n\n')
+refmean = average([numpy.abs(x) for x in ref])
+measmean = average([numpy.abs(x) for x in meas])
+
+refstdv = statistics.stdev([numpy.abs(x) for x in ref])
+measstdv = statistics.stdev([numpy.abs(x) for x in meas])
+
+file.write('Reference Magnitude Mean: ' + str(refmean) + '\n')
+file.write('Measured Magnitude Mean: ' + str(measmean) + '\n\n')
+
+file.write('Reference Magnitude Standard Deviation: ' + str(refstdv) + '\n')
+file.write('Measured Magnitude Standard Deviation: ' + str(measstdv) + '\n\n')
+
+file.write('Standard deviation percent off mean ref: ' + str(refstdv/refmean * 100) + '%\n')
+file.write('Standard deviation percent off mean meas: ' + str(measstdv/measmean * 100) + '%\n\n')
 
 file.write('Reference Real Part Standard Deviation: ' + str(statistics.stdev([numpy.real(x) for x in ref])) + '\n')
 file.write('Reference Imaginary Part Standard Deviation: ' + str(statistics.stdev([numpy.imag(x) for x in ref])) + '\n\n')

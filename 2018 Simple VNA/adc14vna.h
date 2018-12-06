@@ -14,7 +14,7 @@
 
 #define SMCLK_FREQUENCY     12000000
 
-#define SAMPLE_FREQUENCY    200000	 // This is limited by the SMCLK speed. We have 2 conversions  so 2*23/12Mhz = 260ksps
+#define SAMPLE_FREQUENCY    10000	 // This is limited by the SMCLK speed. We have 2 conversions  so 2*23/12Mhz = 260ksps
 									 // To get more speed just re adjust the clock speeds with these lines in adc14main()
 									 // However bewarned, this messes up the SPI in the si5351 library. So something in
 									 // there needs changed too.
