@@ -13,5 +13,5 @@
 	<ignoreDefaultDeviceSettings value="true"/>
 	<origin value="/home/frohro/Classes/Electronics/VNA 2017/Si5351Arduino/examples/vna_2017/vna_2017.ino"/>
 	<filesToOpen value="vna_2017.ino,"/>
-	<isTargetManual value="false"/>
+	<isTargetManual value="true"/>
 </projectOptions>
