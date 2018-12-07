@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>2018 Simple VNA</name>
+	<name>vna_2018</name>
 	<comment></comment>
 	<projects>
-		<project>MSP-EXP432P401R_core</project>
+		<project>msp432r_MSP-EXP432P401R_core</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

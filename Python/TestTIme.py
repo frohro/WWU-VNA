@@ -49,7 +49,7 @@ if not ser.is_open:
 
 time.sleep(1)
 ser.flush()
-command = "^SAMPLERATE,"+"$\n"
+command = "^SAMPLERATE,1"+"$\n"
 ser.write(command.encode())
 
 Fs = int(ser.readline())
@@ -58,7 +58,7 @@ F_IF = int(ser.readline().decode().strip(' \n'))
 
 T = 1./float(Fs)
 
-
+file.write("Time Test\n")
 file.write("Frequency = " + str(fMin) + '\n')
 file.write("Samples = " + str(samp) + '\n')
 file.write("Port = " + str(port) + '\n')
@@ -132,6 +132,10 @@ for x in range(samp):
 X0 = numpy.fft.fftshift(numpy.fft.fft(endRef[0])/N)
 f = numpy.arange(-1/(2*T),1/(2*T),1/(N*T))
 plt.plot(f,numpy.abs(X0))
+plt.show()
+
+X1 = numpy.fft.fftshift(numpy.fft.fft(endRef[0])/N)
+plt.plot(f,numpy.abs(X1))
 plt.show()
 
 magH1 = [numpy.absolute(x) for x in H1]
