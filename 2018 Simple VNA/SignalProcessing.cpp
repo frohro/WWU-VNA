@@ -12,12 +12,12 @@ constexpr COMPUTATION_TYPE hanning_window(int n, int total) {
 }
 
 constexpr COMPUTATION_TYPE real_filter(int n, int total) {
-   return std::cos(TWO_PI * n * BIN_INDEX / (total - 1)) * hanning_window(n, total);
+   return std::cos(TWO_PI * n * BIN_INDEX / total) * hanning_window(n, total);
 }
 
 
 constexpr COMPUTATION_TYPE imag_filter(int n, int total) {
-    return - std::sin(TWO_PI * n * BIN_INDEX / (total - 1)) * hanning_window(n, total);
+    return - std::sin(TWO_PI * n * BIN_INDEX / total) * hanning_window(n, total);
 }
 
 void compute_block(computation &c, int index, uint16_t * block, size_t length) {
