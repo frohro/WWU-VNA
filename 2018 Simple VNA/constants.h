@@ -17,15 +17,12 @@
 
 constexpr const int DMA_Block = 1024;
 
-constexpr const int SAMPLE_LENGTH = 5 * DMA_Block;
+constexpr const int SAMPLE_LENGTH = 4 * DMA_Block;
 
 constexpr const int TIME_SAMPLE_LENGTH = 4 * DMA_Block;
 
 constexpr const int F_IF = 155;
 constexpr const float OMEGA_IF = F_IF*TWO_PI;
-
-
-constexpr const int to_skip = 2;
 
 
 const int SAMPLE_FREQUENCY = 53000;     // This is limited by the SMCLK speed. We have 2 conversions  so 2*23/12Mhz = 260ksps
@@ -53,8 +50,8 @@ const int BIN_INDEX = round(F_IF / df);
 
 
 struct computation {
-    COMPUTATION_TYPE real = 0.f;
-    COMPUTATION_TYPE imag = 0.f;
+    COMPUTATION_TYPE real = 0.;
+    COMPUTATION_TYPE imag = 0.;
 };
 
 // Globals

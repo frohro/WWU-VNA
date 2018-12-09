@@ -33,6 +33,6 @@ struct Table
 
 extern const Table<SAMPLE_LENGTH> lut;
 
-void compute_block(computation &c, int index, uint16_t * block);
+void compute_block(computation &c, int index, uint16_t * block, size_t length);
 
 #endif /* SIGNALPROCESSING_H_ */

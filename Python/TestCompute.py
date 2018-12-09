@@ -72,12 +72,13 @@ ref = []
 meas = []
 
 for x in range(samp):
+    print("Getting " + str(x + 1))
     command = "^COMPUTE," + str(fMin) + "$\n"
     ser.write(command.encode())
     computed = ser.readline().decode()
 
     computed = computed.split(',')
-    mr, mi, rr, ri = [float(x.strip(' \n')) for x in computed if x.strip(' \n')]
+    rr, ri, mr, mi = [float(x.strip(' \n')) for x in computed if x.strip(' \n')]
     ref.append(rr + 1j * ri)
     meas.append(mr + 1j * mi)
 

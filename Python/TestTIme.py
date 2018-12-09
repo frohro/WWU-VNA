@@ -3,8 +3,6 @@ Python script to test the accuracy of the TIME command.
 Author: Jacob Priddy
 Date: 4/27/18
 """
-
-import time
 # This is pyserial
 import serial
 import numpy
@@ -12,6 +10,7 @@ import statistics
 import cmath
 import datetime
 import os
+import time
 import matplotlib.pyplot as plt
 
 
@@ -28,6 +27,7 @@ fMin = int(float(input()) * 1e6)
 print("Enter number of samples")
 samp = int(input())
 
+start = time.time()
 
 filename = str(os.path.splitext(os.path.basename(__file__))[0]) + "_" + str(datetime.datetime.now()).replace(":", "-")\
     .replace(".", "-").replace(" ", "_") + ".dat"
@@ -72,6 +72,7 @@ endRef = []
 endMeas = []
 
 for x in range(samp):
+    print("Getting " + str(x) + '\n')
     command = "^TIME," + str(fMin) + "$\n"
     ser.write(command.encode())
     ref = ser.readline().decode()
@@ -105,12 +106,15 @@ H3 = []
 H5 = []
 H7 = []
 
-for x in range(samp):
-    for y in range(len(endRef)):
-        endRef[x][y] = endRef[x][y] * numpy.hanning(len(endRef))[y]
+window = numpy.hanning(N)
 
-    for y in range(len(endMeas)):
-        endMeas[x][y] = endMeas[x][y] * numpy.hanning(len(endMeas))[y]
+for x in range(samp):
+    print("Computing " + str(x) + '\n')
+    for y in range(len(endRef[x])):
+        endRef[x][y] *= window[y]
+
+    for y in range(len(endMeas[x])):
+        endMeas[x][y] *= window[y]
 
     reffft = numpy.fft.fft(endRef[x])
     measfft = numpy.fft.fft(endMeas[x])
@@ -214,3 +218,4 @@ file.write('H7 Phase Variance: ' + str(statistics.variance(phaseH7, phaseH7bar))
 file.close()
 
 print("DONE! CHECK measurements/" + filename + '\n')
+print("Total TIme: " + str(time.time() - start) + " seconds\n")

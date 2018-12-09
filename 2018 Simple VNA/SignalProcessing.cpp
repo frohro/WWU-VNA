@@ -12,18 +12,18 @@ constexpr COMPUTATION_TYPE hanning_window(int n, int total) {
 }
 
 constexpr COMPUTATION_TYPE real_filter(int n, int total) {
-   return std::cos(2 * PI * n * BIN_INDEX / total) * hanning_window(n, total);
+   return std::cos(TWO_PI * n * BIN_INDEX / (total - 1)) * hanning_window(n, total);
 }
 
 
 constexpr COMPUTATION_TYPE imag_filter(int n, int total) {
-    return std::sin(TWO_PI * n * BIN_INDEX / total) * hanning_window(n, total);
+    return - std::sin(TWO_PI * n * BIN_INDEX / (total - 1)) * hanning_window(n, total);
 }
 
-void compute_block(computation &c, int index, uint16_t * block) {
-    for (int i = 0; i < DMA_Block; ++i) {
-        c.real += lut.values[i + index * DMA_Block][0] * block[i];
-        c.imag += lut.values[i + index * DMA_Block][1] * block[i];
+void compute_block(computation &c, int index, uint16_t * block, size_t length) {
+    for (auto i = 0; i < length; ++i) {
+        c.real += static_cast<COMPUTATION_TYPE>(lut.values[i + index * DMA_Block][0] * static_cast<COMPUTATION_TYPE>(block[i]));
+        c.imag += static_cast<COMPUTATION_TYPE>(lut.values[i + index * DMA_Block][1] * static_cast<COMPUTATION_TYPE>(block[i]));
     }
 }
 

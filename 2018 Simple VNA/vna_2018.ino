@@ -45,6 +45,8 @@ void setup()
     // Returns the dft around 155 HZ with a bin of about 10 HZ:  "^COMPUTE,Fs$"
     dcp.addParser("COMPUTE", computeMeasurement);
 
+    dcp.addParser("TIMECOMPUTE", timeCompute);
+
     setOscillator(10000000);
     Serial.println("Done with setup.");
 }
@@ -167,8 +169,8 @@ void computeMeasurement(char **values, int valueCount)
         while(!doneConv) { /* about 800k cycles doing nothing :(  Applying a filter takes about 50k-55k*/}
         auto index = sampleCount - 1;
         doneConv = false;
-        compute_block(r, index, &ref[DMA_Block * (index % 2)]);
-        compute_block(m, index, &meas[DMA_Block * (index % 2)]);
+        compute_block(r, index, &ref[DMA_Block * (index % 2)], DMA_Block);
+        compute_block(m, index, &meas[DMA_Block * (index % 2)], DMA_Block);
     }
     Serial.print(m.real);
     Serial.print(",");
@@ -211,6 +213,54 @@ void voltageMeasurement(char **values, int valueCount) // Might want to return e
         }
         Serial.print('\n');
     }
+}
+
+void timeCompute(char **values, int valueCount)
+{
+    TIME_MEASUREMENT = true;
+    int j;
+    unsigned long long freq;
+    if (valueCount != 2)
+    {
+        Serial.println(
+                "In timeCompute, number of arguments is not correct.");
+        return;  // Something is wrong if you end up here.
+    }
+    freq = atoi(values[1]);
+    setOscillator(freq);
+    startConversion();
+    while(!doneADC)
+    {}
+    // Measured computation
+    computation m;
+    // Real computation
+    computation r;
+    compute_block(r, 0, ref, TIME_SAMPLE_LENGTH);
+    compute_block(m, 0, meas, TIME_SAMPLE_LENGTH);
+
+    {
+        for (j = 0; j < TIME_SAMPLE_LENGTH; j++)
+        {
+            Serial.print(ref[j]);
+            Serial.print(",");
+        }
+        Serial.print('\n');
+
+        for (j = 0; j < TIME_SAMPLE_LENGTH; j++)
+        {
+            Serial.print(meas[j]);
+            Serial.print(",");
+        }
+        Serial.print('\n');
+    }
+    Serial.print(r.real);
+    Serial.print(",");
+    Serial.print(r.imag);
+    Serial.print(",");
+    Serial.print(m.real);
+    Serial.print(",");
+    Serial.print(m.imag);
+    Serial.print("\n");
 }
 
 void setOscillator (unsigned long long freq) // freq in Hz
