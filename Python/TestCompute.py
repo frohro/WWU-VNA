@@ -78,7 +78,7 @@ for x in range(samp):
     computed = ser.readline().decode()
 
     computed = computed.split(',')
-    rr, ri, mr, mi = [float(x.strip(' \n')) for x in computed if x.strip(' \n')]
+    mr, mi, rr, ri = [float(x.strip(' \n')) for x in computed if x.strip(' \n')]
     ref.append(rr + 1j * ri)
     meas.append(mr + 1j * mi)
 
