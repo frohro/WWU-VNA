@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <?ccsproject version="1.0"?>
 <projectOptions>
-	<ccsVersion value="7.1.0"/>
+	<ccsVersion value="8.2.0"/>
 	<deviceVariant value="MSP432P401R"/>
 	<deviceFamily value="MSP432"/>
 	<deviceEndianness value="little"/>
-	<codegenToolVersion value="GNU_4.8.4:Linaro"/>
+	<codegenToolVersion value="GNU_6.3.1:Energia"/>
 	<isElfFormat value="true"/>
 	<connection value="common/targetdb/connections/TIXDS110_Connection.xml"/>
 	<rts value=""/>
 	<createSlaveProjects value=""/>
 	<ignoreDefaultDeviceSettings value="true"/>
-	<origin value="/home/frohro/Classes/Electronics/VNA 2017/Si5351Arduino/examples/vna_2017/vna_2017.ino"/>
-	<filesToOpen value="vna_2017.ino,"/>
-	<isTargetManual value="true"/>
+	<origin value="C:\Programming\WWU-VNA\2018 Simple VNA\vna_2018.ino"/>
+	<filesToOpen value="vna_2018.ino"/>
+	<isTargetManual value="false"/>
 </projectOptions>

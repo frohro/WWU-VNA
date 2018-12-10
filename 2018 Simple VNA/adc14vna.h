@@ -8,19 +8,16 @@
 #ifndef ADC14VNA_H_
 #define ADC14VNA_H_
 #include <ti/sysbios/family/arm/m3/Hwi.h>
+#include <ti/devices/msp432p4xx/driverlib/driverlib.h>
+#include "driverlib/dma.h"
+#include "driverlib/adc14.h"
 
 #define SMCLK_FREQUENCY     12000000
 
-#define SAMPLE_FREQUENCY    7956
-#define SAMPLE_LENGTH       3840/2  // 8192 is too big.
-#define F_IF 155
-#define OMEGA_IF F_IF*TWO_PI
-#define SAMPLES_IN_ONE_CYCLE 384 //(int)((float)SAMPLE_FREQUENCY/(float)F_IF)
-/* Make sure these above are such that SAMPLE_FREQUENCY/OMEGA_IF/4 is an integer
- * so that there are an integer number of points in a quarter cycles of the IF frequency.
- */
-
-
-int adc14_main(void);;
+int adc14_main(void);
+void startConversion(void);
+void ADC14_IRQHandler(void);
+void DMA_INT1_IRQHandler(void);
+void DMA_INT2_IRQHandler(void);
 
 #endif /* ADC14VNA_H_ */
