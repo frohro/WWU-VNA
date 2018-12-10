@@ -544,7 +544,7 @@ P 8200 3450
 F 0 "B1" H 8200 5743 60  0000 C CNN
 F 1 "EXP-_MSP432P401R_BoosterPack" H 8200 5637 60  0000 C CNN
 F 2 "SMA:TI_BoosterPack" H 8200 5500 60  0000 C CNN
-F 3 "http://www.ti.com/lit/ug/slau597d/slau597d.pdf" H 8200 5531 60  0001 C CNN
+F 3 "http://www.ti.com/lit/ug/slau597f/slau597f.pdf" H 8200 5531 60  0001 C CNN
 	1    8200 3450
 	1    0    0    -1  
 $EndComp
