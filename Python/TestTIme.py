@@ -1,17 +1,17 @@
 """
 Python script to test the accuracy of the TIME command.
-
 Author: Jacob Priddy
 Date: 4/27/18
 """
-
-import time
+# This is pyserial
 import serial
 import numpy
 import statistics
 import cmath
 import datetime
 import os
+import time
+import matplotlib.pyplot as plt
 
 
 def average(arr):
@@ -27,6 +27,7 @@ fMin = int(float(input()) * 1e6)
 print("Enter number of samples")
 samp = int(input())
 
+start = time.time()
 
 filename = str(os.path.splitext(os.path.basename(__file__))[0]) + "_" + str(datetime.datetime.now()).replace(":", "-")\
     .replace(".", "-").replace(" ", "_") + ".dat"
@@ -48,7 +49,7 @@ if not ser.is_open:
 
 time.sleep(1)
 ser.flush()
-command = "^SAMPLERATE,"+"$\n"
+command = "^SAMPLERATE,1"+"$\n"
 ser.write(command.encode())
 
 Fs = int(ser.readline())
@@ -57,7 +58,7 @@ F_IF = int(ser.readline().decode().strip(' \n'))
 
 T = 1./float(Fs)
 
-
+file.write("Time Test\n")
 file.write("Frequency = " + str(fMin) + '\n')
 file.write("Samples = " + str(samp) + '\n')
 file.write("Port = " + str(port) + '\n')
@@ -71,6 +72,7 @@ endRef = []
 endMeas = []
 
 for x in range(samp):
+    print("Getting " + str(x) + '\n')
     command = "^TIME," + str(fMin) + "$\n"
     ser.write(command.encode())
     ref = ser.readline().decode()
@@ -89,6 +91,14 @@ for x in range(samp):
 
 ser.close()
 
+
+plt.plot(numpy.arange(0, len(endRef[0]) / Fs, 1/Fs), endRef[0])
+plt.show()
+
+plt.plot(numpy.arange(0, len(endMeas[0]) / Fs, 1/Fs), endMeas[0])
+plt.show()
+
+
 ref = []
 meas = []
 H1 = []
@@ -96,12 +106,15 @@ H3 = []
 H5 = []
 H7 = []
 
-for x in range(samp):
-    for y in range(len(endRef)):
-        endRef[x][y] = endRef[x][y] * numpy.hanning(len(endRef))[y]
+window = numpy.hanning(N)
 
-    for y in range(len(endMeas)):
-        endMeas[x][y] = endMeas[x][y] * numpy.hanning(len(endMeas))[y]
+for x in range(samp):
+    print("Computing " + str(x) + '\n')
+    for y in range(len(endRef[x])):
+        endRef[x][y] *= window[y]
+
+    for y in range(len(endMeas[x])):
+        endMeas[x][y] *= window[y]
 
     reffft = numpy.fft.fft(endRef[x])
     measfft = numpy.fft.fft(endMeas[x])
@@ -119,6 +132,15 @@ for x in range(samp):
     file.write('H3: ' + str(H3[x]) + '\n')
     file.write('H5: ' + str(H5[x]) + '\n')
     file.write('H7: ' + str(H7[x]) + '\n\n\n')
+
+X0 = numpy.fft.fftshift(numpy.fft.fft(endRef[0])/N)
+f = numpy.arange(-1/(2*T),1/(2*T),1/(N*T))
+plt.plot(f,numpy.abs(X0))
+plt.show()
+
+X1 = numpy.fft.fftshift(numpy.fft.fft(endRef[0])/N)
+plt.plot(f,numpy.abs(X1))
+plt.show()
 
 magH1 = [numpy.absolute(x) for x in H1]
 magH3 = [numpy.absolute(x) for x in H3]
@@ -142,8 +164,20 @@ phaseH3bar = statistics.mean(phaseH3)
 phaseH5bar = statistics.mean(phaseH5)
 phaseH7bar = statistics.mean(phaseH7)
 
-file.write('Reference Magnitude Standard Deviation: ' + str(statistics.stdev([numpy.abs(x) for x in ref])) + '\n')
-file.write('Measured Magnitude Standard Deviation: ' + str(statistics.stdev([numpy.abs(x) for x in meas])) + '\n\n')
+refmean = average([numpy.abs(x) for x in ref])
+measmean = average([numpy.abs(x) for x in meas])
+
+refstdv = statistics.stdev([numpy.abs(x) for x in ref])
+measstdv = statistics.stdev([numpy.abs(x) for x in meas])
+
+file.write('Reference Magnitude Mean: ' + str(refmean) + '\n')
+file.write('Measured Magnitude Mean: ' + str(measmean) + '\n\n')
+
+file.write('Reference Magnitude Standard Deviation: ' + str(refstdv) + '\n')
+file.write('Measured Magnitude Standard Deviation: ' + str(measstdv) + '\n\n')
+
+file.write('Standard deviation percent off mean ref: ' + str(refstdv/refmean * 100) + '%\n')
+file.write('Standard deviation percent off mean meas: ' + str(measstdv/measmean * 100) + '%\n\n')
 
 file.write('Reference Real Part Standard Deviation: ' + str(statistics.stdev([numpy.real(x) for x in ref])) + '\n')
 file.write('Reference Imaginary Part Standard Deviation: ' + str(statistics.stdev([numpy.imag(x) for x in ref])) + '\n\n')
@@ -184,3 +218,4 @@ file.write('H7 Phase Variance: ' + str(statistics.variance(phaseH7, phaseH7bar))
 file.close()
 
 print("DONE! CHECK measurements/" + filename + '\n')
+print("Total TIme: " + str(time.time() - start) + " seconds\n")

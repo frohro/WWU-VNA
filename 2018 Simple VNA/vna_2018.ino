@@ -3,38 +3,33 @@
 #include "si5351.h"
 #include "quadrature.h"
 #include <driverlib.h>
+#include "constants.h"
 #include "DynamicCommandParser.h" // https://github.com/mdjarv/DynamicCommandParser
-
-extern "C"{
 #include "adc14vna.h"
-};
+#include "SignalProcessing.h"
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 
-#define BUFFER_LENGTH 256
 #define MAX_NUMBER_FREQ 1000
 
 
 Si5351 si5351;
 DynamicCommandParser dcp('^', '$', ',');  //https://github.com/mdjarv/DynamicCommandParser
 
-volatile uint16_t ref[SAMPLE_LENGTH];
-volatile uint16_t meas[SAMPLE_LENGTH];
-extern volatile bool doneADC;
 volatile bool sendMeasurement = false;
 volatile int numberFrequenciestoMeasure, frequencyIndex;
 volatile float refSumRe, measSumRe, refSumIm, measSumIm;
-
-float shift[SAMPLE_LENGTH];  // Make this constant sometime.
 
 int simpleDownConverter(void);
 void sweepFreqMeas(char **values, int valueCount);
 void voltageMeasurement(char **values, int valueCount); // For testing (sending individual voltages.
 void setOscillator(unsigned long long freq);
 void sendSampleRate(char **values, int valueCount);
+void computeMeasurement(char **values, int valueCount);
 
 void setup()
 {
+    Serial.begin(115200);
 	adc14_main(); // Initialize ADC14 for multichannel conversion at 500 kHz.
     si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0);
     // For debugging 1/4/2018
@@ -45,24 +40,13 @@ void setup()
     dcp.addParser("SWEEP", sweepFreqMeas);
     // Returns single frequency measurements as a function of time:  "^TIME,Freq$"
     dcp.addParser("TIME", voltageMeasurement);
-    // Returns the sample rate:  "^SAMPLERATE,Fs$"
+    // Returns the sample rate:  "^SAMPLERATE,1=TIME/0=COMPUTE$"
     dcp.addParser("SAMPLERATE", sendSampleRate);
+    // Returns the dft around 155 HZ with a bin of about 10 HZ:  "^COMPUTE,Fs$"
+    dcp.addParser("COMPUTE", computeMeasurement);
 
-    /* This is no window: and partially optimized for RAM use:  You could improve it by
-     * a factor of two, but using a quarter of a cycle.  With no window, we need to make
-     * sure the sampling interval is an integer number of cycles. */
-/*    for(int n=0;n<SAMPLES_IN_ONE_CYCLE;n++)
-    {
-        shift[n] = cos(OMEGA_IF*n/SAMPLE_FREQUENCY);
-    }*/
-    for(int n=0;n<SAMPLE_LENGTH;n++) // Initialize shift, should make constant later.
-     {
+    dcp.addParser("TIMECOMPUTE", timeCompute);
 
-         /* Pick one:  This is with a Hanning window; uses more memory, and isn't as good
-          * for a perfect sample length and rate which we control.*/
-         shift[n] = cos(OMEGA_IF*n/SAMPLE_FREQUENCY)\
-                 *0.5*(1-cos(2*PI*n/(SAMPLE_LENGTH-1))); // Hanning window
-     }
     setOscillator(10000000);
     Serial.println("Done with setup.");
 }
@@ -133,14 +117,6 @@ void sweepFreqMeas(char **values, int valueCount) // Might change function type 
              */
         }
         simpleDownConverter();
-        while(sendMeasurement)
-        {
-            /* Wait until the last measurement is sent.  (MultiTaskSerial sets it false.)
-             * Eventually we will want to do concurrent processing, but for now this is
-             * safer.
-             */
-        }
-        frequencyIndex = i;
         sendMeasurement = true;
     }
     for(i=0;i<numberFrequenciestoMeasure;i++)
@@ -167,8 +143,48 @@ void sweepFreqMeas(char **values, int valueCount) // Might change function type 
     return;
 }
 
+void computeMeasurement(char **values, int valueCount)
+{
+    int j;
+    unsigned long long freq;
+    if (valueCount != 2)
+    {
+        Serial.println(
+                "In computeMeasurement, number of arguments is not correct.");
+        return;  // Something is wrong if you end up here.
+    }
+    TIME_MEASUREMENT = false;
+    freq = atoi(values[1]);
+    setOscillator(freq);
+
+    // Measured computation
+    computation m;
+    // Real computation
+    computation r;
+
+    startConversion();
+
+    while(!doneADC) {
+        // Wait for next measurement
+        while(!doneConv) { /* about 800k cycles doing nothing :(  Applying a filter takes about 50k-55k*/}
+        auto index = sampleCount - 1;
+        doneConv = false;
+        compute_block(r, index, &ref[DMA_Block * (index % 2)], DMA_Block);
+        compute_block(m, index, &meas[DMA_Block * (index % 2)], DMA_Block);
+    }
+    Serial.print(m.real);
+    Serial.print(",");
+    Serial.print(m.imag);
+    Serial.print(",");
+    Serial.print(r.real);
+    Serial.print(",");
+    Serial.print(r.imag);
+    Serial.print("\n");
+}
+
 void voltageMeasurement(char **values, int valueCount) // Might want to return error number.
 {
+    TIME_MEASUREMENT = true;
     int j;
     unsigned long long freq;
     if (valueCount != 2)
@@ -179,31 +195,72 @@ void voltageMeasurement(char **values, int valueCount) // Might want to return e
     }
     freq = atoi(values[1]);
     setOscillator(freq);
-    //ADC14_enableConversion();
     startConversion();
     while(!doneADC)
     {}
     {
-        for (j = 0; j < SAMPLE_LENGTH; j++)
+        for (j = 0; j < TIME_SAMPLE_LENGTH; j++)
         {
             Serial.print(ref[j]);
-            Serial.print(", ");
-            //Serial.flush(); // Waits until completion of transmitted data.
+            Serial.print(",");
         }
         Serial.print('\n');
-        //Serial.println();
-//        Serial.flush();
-        //delay(500);
-        for (j = 0; j < SAMPLE_LENGTH; j++)
+
+        for (j = 0; j < TIME_SAMPLE_LENGTH; j++)
         {
             Serial.print(meas[j]);
-            Serial.print(", ");
-            //Serial.flush(); // Waits until completion of transmitted data.
+            Serial.print(",");
         }
         Serial.print('\n');
-        //Serial.println();
-//        Serial.flush();
     }
+}
+
+void timeCompute(char **values, int valueCount)
+{
+    TIME_MEASUREMENT = true;
+    int j;
+    unsigned long long freq;
+    if (valueCount != 2)
+    {
+        Serial.println(
+                "In timeCompute, number of arguments is not correct.");
+        return;  // Something is wrong if you end up here.
+    }
+    freq = atoi(values[1]);
+    setOscillator(freq);
+    startConversion();
+    while(!doneADC)
+    {}
+    // Measured computation
+    computation m;
+    // Real computation
+    computation r;
+    compute_block(r, 0, ref, TIME_SAMPLE_LENGTH);
+    compute_block(m, 0, meas, TIME_SAMPLE_LENGTH);
+
+    {
+        for (j = 0; j < TIME_SAMPLE_LENGTH; j++)
+        {
+            Serial.print(ref[j]);
+            Serial.print(",");
+        }
+        Serial.print('\n');
+
+        for (j = 0; j < TIME_SAMPLE_LENGTH; j++)
+        {
+            Serial.print(meas[j]);
+            Serial.print(",");
+        }
+        Serial.print('\n');
+    }
+    Serial.print(r.real);
+    Serial.print(",");
+    Serial.print(r.imag);
+    Serial.print(",");
+    Serial.print(m.real);
+    Serial.print(",");
+    Serial.print(m.imag);
+    Serial.print("\n");
 }
 
 void setOscillator (unsigned long long freq) // freq in Hz
@@ -216,10 +273,19 @@ void setOscillator (unsigned long long freq) // freq in Hz
 
 void sendSampleRate (char **values, int valueCount)
 {
-    int Fs = SAMPLE_FREQUENCY;
-    int N = SAMPLE_LENGTH;
-    Serial.println(Fs);
-    Serial.println(N);
+    if (valueCount != 2)
+    {
+        Serial.println(
+                "In sendSampleRate, number of arguments is not correct.");
+        return;  // Something is wrong if you end up here.
+    }
+    auto type = atoi(values[1]);
+
+    Serial.println(SAMPLE_FREQUENCY);
+    if (!type)
+        Serial.println(SAMPLE_LENGTH);
+    else
+        Serial.println(TIME_SAMPLE_LENGTH);
     Serial.println(F_IF);
 }
 
