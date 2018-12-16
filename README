@@ -5,9 +5,14 @@ Build Instructions:
 
 	- git clone the repository.  
 	- Install Code Composer Studio. (I'm using version 8.2 as of this writing in December 2018.) 
+		- You need the MSP432 Red board library version 5.23.1 or later or you will have build errors.
 	- Install Energia, and using Energia's Tools->Boards:->Boards Manager, add the MSP432P401P (red board).  (I'm using Energia version 21.)
 	- Import Energia Sketch using File->Import...->Energia->Energia Sketch.
 	- Be sure to select MSP432P401R as the processor.
 	- Right click on the project, and select add files.
 		- Add the .cpp, .c, and .h files.
 	- Click the hammer to build in CCS.
+
+	- Under languages, select C11 and c++17
+	- Under Build Settings->Miscellaneous->Miscellaneous C++ source specific flags add -fpermissive.
+

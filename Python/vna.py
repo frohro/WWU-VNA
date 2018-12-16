@@ -681,7 +681,7 @@ class VNA(QMainWindow, Ui_VNA):
     self.sweepTimer.stop()
     self.auto = False
     self.reading = False
-    #self.serial.write(struct.pack('<I', 11 << 28))                 This is an abort while sweeping command we may want to implement
+    #self.serial.write(struct.pack('<I', 11 << 28))   This is an abort while sweeping command we may want to implement
     self.progressBar.setValue(0)
     self.set_enabled(True)
 
