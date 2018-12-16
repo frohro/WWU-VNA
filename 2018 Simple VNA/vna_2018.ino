@@ -26,6 +26,7 @@ void voltageMeasurement(char **values, int valueCount); // For testing (sending 
 void setOscillator(unsigned long long freq);
 void sendSampleRate(char **values, int valueCount);
 void computeMeasurement(char **values, int valueCount);
+void computeFundamental(void);
 
 void setup()
 {
@@ -76,10 +77,10 @@ int simpleDownConverter(void)    // Do DSP here.
     return(1);  // Later fix this to report errors if there are any.
 }
 
-void sweepFreqMeas(char **values, int valueCount) // Might change function type to return errors.
+void sweepFreqMeas(char **values, int valueCount)
 {
-    int i;
     unsigned long long fMin, fMax, deltaFreq, freq[MAX_NUMBER_FREQ];
+    int i;
     if(valueCount != 4)
     {
         Serial.println("In sweepFreqMeas, number of arguments is not correct.");
@@ -88,59 +89,27 @@ void sweepFreqMeas(char **values, int valueCount) // Might change function type 
     fMin = atoi(values[1]);
     fMax = atoi(values[2]);
     numberFrequenciestoMeasure = atoi(values[3]);
-
     deltaFreq = (fMax-fMin)/numberFrequenciestoMeasure;
-    /* The idea is that we will get the first frequency's data, and then
-     * send it out the serial port to gnu octave while we are getting the
-     * next frequency's data.  We use the multithreaded Energia stuff to do
-     * this sending.  The MultiTaskSerial.ino does the sending.  We compute the data
-     * after we have collected the SAMPLE_LENGTH of it at one frequency.
-     * Then we go on to the next frequency.
-     *
-     * At this time, we are waiting until the sending is finished, before
-     * going on to the next frequency.  However, we should be able to determine
-     * which operation takes the longest, and do both at the same time, to make
-     * measurements quicker.  It would also speed things up to send binary data,
-     * but this is harder to debug, so for now, we want to use ASCII.
-     */
-    for(i=0;i<numberFrequenciestoMeasure;i++)
-    {
-        freq[i]=fMin+i*deltaFreq;
-        setOscillator(freq[i]);
-        ADC14_enableConversion();
-        while(!doneADC)
-        {
-            /* Wait until it is done converting everything at
-             * this frequency.  Eventually we want to do concurrent processing.
-             * For now we will just let the ADC interrupt this loop
-             * and finish up its job.
-             */
-        }
-        simpleDownConverter();
-        sendMeasurement = true;
-    }
-    for(i=0;i<numberFrequenciestoMeasure;i++)
-    {
-        Serial.print(refSumRe);
-        Serial.println(", ");
-    }
-    for(i=0;i<numberFrequenciestoMeasure;i++)
-    {
-        Serial.print(refSumIm);
-        Serial.println(", ");
-    }
-    for(i=0;i<numberFrequenciestoMeasure;i++)
-    {
-        Serial.print(measSumRe);
-        Serial.println(", ");
-    }
-    for(i=0;i<numberFrequenciestoMeasure;i++)
-    {
-        Serial.print(measSumIm);
-        Serial.println(", ");
-    }
-    // After we are done sending all the data, we should probably send a termination character or string.
-    return;
+    /*The idea is that we will get the first frequency's data, and then
+    * send it out the serial port to Gnu Octave while we are getting the
+    * next frequency's data.  We use the multithreaded Energia stuff to do
+    * this sending.  The MultiTaskSerial.ino does the sending.  We compute the data
+    * after we have collected the SAMPLE_LENGTH of it at one frequency.
+    * Then we go on to the next frequency.
+    *
+    * At this time, we are waiting until the sending is finished, before
+    * going on to the next frequency.  However, we should be able to determine
+    * which operation takes the longest, and do both at the same time, to make
+    * measurements quicker.  It would also speed things up to send binary data,
+    * but this is harder to debug, so for now, we want to use ASCII.
+    */
+
+   for(i=0;i<numberFrequenciestoMeasure;i++)
+   {
+       freq[i]=fMin+i*deltaFreq;
+       setOscillator(freq[i]);
+       computeFundamental();
+   }
 }
 
 void computeMeasurement(char **values, int valueCount)
@@ -157,6 +126,11 @@ void computeMeasurement(char **values, int valueCount)
     freq = atoi(values[1]);
     setOscillator(freq);
 
+    computeFundamental();
+}
+
+void computeFundamental()
+{
     // Measured computation
     computation m;
     // Real computation
