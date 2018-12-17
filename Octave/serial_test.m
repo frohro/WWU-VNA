@@ -2,10 +2,11 @@
 % Rob Frohne, May 2017.
 
 clc; clear;
+close all;
 
-fMin = 50e6;
+fMin = 1e6;
 fMax = 50e6;
-nFreq = 1;
+nFreq = 10;
 
 Sum = zeros(nFreq,2);
 % Load the package
@@ -18,8 +19,8 @@ endif
 % Naturally, set the COM port # to match your device
 % Use this crazy notation for any COM port number: 1 - 255
 %s1 = serial("/dev/pts/2");
-s1 = serial("/tmp/ttyDUMMY"); % $ interceptty /dev/ttyACM0 /tmp/ttyDUMMY
-%s1 = serial("/dev/ttyACM0");
+%s1 = serial("/tmp/ttyDUMMY"); % $ interceptty /dev/ttyACM0 /tmp/ttyDUMMY
+s1 = serial("/dev/ttyACM0");
 pause(1); % Wait a second as it takes some ports a while to wake up
 % Set the port parameters
 set(s1,'baudrate', 115200);
@@ -37,21 +38,23 @@ string_to_send = strcat("^SWEEP,",num2str(uint64(fMin)),","...
                   ,num2str(uint64(fMax)),",",num2str(uint64(nFreq)),"$\n")
 srl_write(s1,string_to_send);
 for i=1:nFreq
-  refSumRe(i,:) = str2num(ReadToTermination(s1, 10))
+  raw(i,:) = str2num(ReadToTermination(s1, 10))
 endfor
 for i=1:nFreq
-  refSumIm(i,:) = str2num(ReadToTermination(s1, 10))
+  H1(i) = (raw(i,1)+j*raw(i,2))./(raw(i,3)+j*raw(i,4));
 endfor
-for i=1:nFreq
-  measSumRe(i,:) = str2num(ReadToTermination(s1, 10))
-endfor
-for i=1:nFreq
-  measSumIm(i,:) = str2num(ReadToTermination(s1, 10))
-endfor
-refSum = refSumRe + j*refSumIm
-measSum = measSumRe + j*measSumIm
-H1 = measSum/refSum
-%abs(H1)
-%angle(H1)*180/pi
+% Assume this is for S21.
+figure(1)
+df = (fMax-fMin)/nFreq;
+f=fMin:df:fMax-df;
+plot(f,20*log10(abs(H1)),'bo')
+xlabel('Frequency (Hz)')
+title('|S_{21}|')
+ylabel('(dB)')
+figure(2)
+plot(f,angle(H1)*180/pi,'bo')
+xlabel('Frequency (Hz)')
+title('Angle of S_{21}')
+ylabel('(degrees)')
 % Finally, Close the port
 fclose(s1);
