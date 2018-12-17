@@ -41,7 +41,7 @@ srl_flush(s1);
 %F_IF = str2num(ReadToTermination(s1,10));
 F_IF = 155;
 N = 3840/2;
-Fs=8000;  % Fix the frequency correction.
+Fs=8000;  
 T = 1/Fs;
 %srl_flush(s1);
 string_to_send = strcat("^TIME,",num2str(uint64(fMin)),"$\n");

@@ -92,11 +92,11 @@ for x in range(samp):
 ser.close()
 
 
-plt.plot(numpy.arange(0, len(endRef[0]) / Fs, 1/Fs), endRef[0])
+plt.plot(numpy.arange(0, len(endRef[0]) / Fs, 1/Fs), endRef[0],numpy.arange(0, len(endMeas[0]) / Fs, 1/Fs), endMeas[0])
 plt.show()
 
-plt.plot(numpy.arange(0, len(endMeas[0]) / Fs, 1/Fs), endMeas[0])
-plt.show()
+#plt.plot(numpy.arange(0, len(endMeas[0]) / Fs, 1/Fs), endMeas[0])
+#plt.show()
 
 
 ref = []
