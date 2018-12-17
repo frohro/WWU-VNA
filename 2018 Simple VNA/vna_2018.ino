@@ -240,8 +240,9 @@ void timeCompute(char **values, int valueCount)
 void setOscillator (unsigned long long freq) // freq in Hz
 {
     si5351.set_freq(freq*100ULL, SI5351_CLK0);
-    si5351.set_freq(freq*100ULL+100ULL*F_IF, SI5351_CLK1);
-    si5351.set_freq(freq*100ULL+100ULL*F_IF, SI5351_CLK2);
+    si5351.set_freq(freq*100ULL-100ULL*F_IF, SI5351_CLK2); // LO_I
+    //si5351.set_freq(freq*100ULL+100ULL*F_IF, SI5351_CLK1);  //We don't need this oscillator.  Don't turn it on.
+
     delay(1000); // Wait for oscillator and steady state.  Do we need 1 second?
 }
 
