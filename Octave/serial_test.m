@@ -4,10 +4,9 @@
 clc; clear;
 close all;
 
-fMin = .1e6;
-fMax = 100e6;
-nFreq = 1000;
-
+fMin = 1.e6;
+fMax = 100.e6;
+nFreq = 40;
 Sum = zeros(nFreq,2);
 % Load the package
 pkg load instrument-control
@@ -39,7 +38,9 @@ string_to_send = strcat("^SWEEP,",num2str(uint64(fMin)),","...
 srl_write(s1,string_to_send);
 for i=1:nFreq
   raw(i,:) = str2num(ReadToTermination(s1, 10));
-  i
+  if(mod(i,10) == 0) 
+    disp(i)
+  endif
 endfor
 for i=1:nFreq
   H1(i) = (raw(i,1)+j*raw(i,2))./(raw(i,3)+j*raw(i,4));

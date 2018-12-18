@@ -33,12 +33,16 @@ void setup()
     Serial.begin(115200);
 	adc14_main(); // Initialize ADC14 for multichannel conversion at 500 kHz.
     si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0);
+    delay(5);
     si5351.output_enable(SI5351_CLK1, 0); // Disable this clock LO_Q (not used).
+    delay(5);
     // For debugging 1/4/2018
     //si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
     //si5351.drive_strength(SI5351_CLK2, SI5351_DRIVE_8MA);
-   // si5351.set_ms_source(SI5351_CLK0, SI5351_PLLA);
-    //si5351.set_ms_source(SI5351_CLK2, SI5351_PLLB);
+   /* si5351.set_ms_source(SI5351_CLK0, SI5351_PLLA);
+    delay(50);
+    si5351.set_ms_source(SI5351_CLK2, SI5351_PLLB);
+    delay(50);*/
     // Initialize the data parser using the start, end and delimiting character
     Serial.begin(115200);
     // For frequency sweep: "^SWEEP,Fmin,Fmax,NFreq$"
@@ -245,8 +249,24 @@ void setOscillator (unsigned long long freq) // freq in Hz
 {
 
     si5351.set_freq(freq*100ULL, SI5351_CLK0);
+    delay(5);
     si5351.set_freq(freq*100ULL-100ULL*F_IF, SI5351_CLK2); // LO_I
-    delay(50); // Wait for oscillator and steady state.  Do we need 1 second?
+    delay(5); // Wait for oscillator and steady state.  Do we need 1 second?
+ /*   si5351.update_status();
+    delay(5);
+    while(si5351.dev_status.SYS_INIT+si5351.dev_status.LOL_A+si5351.dev_status.LOL_B)
+    { // Wait until PLLs lock.
+        si5351.update_status();
+        delay(50);
+        Serial.print("SYS_INIT: ");
+        Serial.print(si5351.dev_status.SYS_INIT);
+        Serial.print("  LOL_A: ");
+        Serial.print(si5351.dev_status.LOL_A);
+        Serial.print("  LOL_B: ");
+        Serial.print(si5351.dev_status.LOL_B);
+        Serial.print("  LOS: ");
+        Serial.print(si5351.dev_status.LOS);
+    }*/
 }
 
 void sendSampleRate (char **values, int valueCount)
