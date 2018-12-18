@@ -4,9 +4,9 @@
 clc; clear;
 close all;
 
-fMin = 1e6;
-fMax = 50e6;
-nFreq = 10;
+fMin = .1e6;
+fMax = 100e6;
+nFreq = 1000;
 
 Sum = zeros(nFreq,2);
 % Load the package
@@ -38,7 +38,8 @@ string_to_send = strcat("^SWEEP,",num2str(uint64(fMin)),","...
                   ,num2str(uint64(fMax)),",",num2str(uint64(nFreq)),"$\n")
 srl_write(s1,string_to_send);
 for i=1:nFreq
-  raw(i,:) = str2num(ReadToTermination(s1, 10))
+  raw(i,:) = str2num(ReadToTermination(s1, 10));
+  i
 endfor
 for i=1:nFreq
   H1(i) = (raw(i,1)+j*raw(i,2))./(raw(i,3)+j*raw(i,4));

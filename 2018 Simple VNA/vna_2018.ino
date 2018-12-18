@@ -33,8 +33,12 @@ void setup()
     Serial.begin(115200);
 	adc14_main(); // Initialize ADC14 for multichannel conversion at 500 kHz.
     si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0);
+    si5351.output_enable(SI5351_CLK1, 0); // Disable this clock LO_Q (not used).
     // For debugging 1/4/2018
-    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
+    //si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
+    //si5351.drive_strength(SI5351_CLK2, SI5351_DRIVE_8MA);
+   // si5351.set_ms_source(SI5351_CLK0, SI5351_PLLA);
+    //si5351.set_ms_source(SI5351_CLK2, SI5351_PLLB);
     // Initialize the data parser using the start, end and delimiting character
     Serial.begin(115200);
     // For frequency sweep: "^SWEEP,Fmin,Fmax,NFreq$"
@@ -239,11 +243,10 @@ void timeCompute(char **values, int valueCount)
 
 void setOscillator (unsigned long long freq) // freq in Hz
 {
+
     si5351.set_freq(freq*100ULL, SI5351_CLK0);
     si5351.set_freq(freq*100ULL-100ULL*F_IF, SI5351_CLK2); // LO_I
-    //si5351.set_freq(freq*100ULL+100ULL*F_IF, SI5351_CLK1);  //We don't need this oscillator.  Don't turn it on.
-
-    delay(1000); // Wait for oscillator and steady state.  Do we need 1 second?
+    delay(50); // Wait for oscillator and steady state.  Do we need 1 second?
 }
 
 void sendSampleRate (char **values, int valueCount)
