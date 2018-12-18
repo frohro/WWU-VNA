@@ -6,7 +6,7 @@ close all;
 
 fMin = 1.e6;
 fMax = 100.e6;
-nFreq = 40;
+nFreq = 10000;
 Sum = zeros(nFreq,2);
 % Load the package
 pkg load instrument-control

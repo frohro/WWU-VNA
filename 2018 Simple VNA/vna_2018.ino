@@ -37,8 +37,10 @@ void setup()
     si5351.output_enable(SI5351_CLK1, 0); // Disable this clock LO_Q (not used).
     delay(5);
     // For debugging 1/4/2018
-    //si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
-    //si5351.drive_strength(SI5351_CLK2, SI5351_DRIVE_8MA);
+    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
+    delay(5);
+    si5351.drive_strength(SI5351_CLK2, SI5351_DRIVE_8MA);
+    delay(5);
    /* si5351.set_ms_source(SI5351_CLK0, SI5351_PLLA);
     delay(50);
     si5351.set_ms_source(SI5351_CLK2, SI5351_PLLB);
