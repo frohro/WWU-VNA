@@ -466,12 +466,13 @@ class VNA(QMainWindow, Ui_VNA):
     self.auto = False
     # sweep parameters
     self.sweep_start = 10
-    self.sweep_stop = 60000
-    self.sweep_size = 6000
+    self.sweep_stop = 100000
+    self.sweep_size = 10
     # buffer and offset for the incoming samples
     self.buffer = bytearray(16 * 32768)
     self.offset = 0
-    self.data = QByteArray()
+    self.data = np.frombuffer(self.buffer, np.complex64)
+    self.dataQ = QByteArray()
     # create measurements
     self.open = Measurement(self.sweep_start, self.sweep_stop, self.sweep_size)
     self.short = Measurement(self.sweep_start, self.sweep_stop, self.sweep_size)
@@ -543,6 +544,8 @@ class VNA(QMainWindow, Ui_VNA):
       self.serial.setBaudRate(QSerialPort.Baud115200)
       if self.serial.open(QIODevice.ReadWrite):
         self.connected()
+      else:
+        raise IOError("Cannot connect to device on port {}".format(port))
       #self.startTimer.start(5000)              No timer needed here self.timeout handles any errors
     else:
       self.stop()
@@ -577,13 +580,23 @@ class VNA(QMainWindow, Ui_VNA):
 
   def read_data(self):
       while(not self.serial.atEnd()):
-        self.data.append(self.serial.readAll())           #self.data is a QbyteArray
+        self.dataQ.append(self.serial.readAll())           #self.dataQ is a QbyteArray
       self.received_chunks += 1
       if self.received_chunks == self.sweep_size:
-        lineParts = str(self.data).replace('\\n','\n').split('\n')
+        lineParts = str(self.dataQ,"utf-8").replace('\\n','\n').split('\n')
+        print(lineParts)
+        print(lineParts[1])
+        print(lineParts[1].split(","))
 
-        print("Do things")
-        self.cancel()
+        print(lineParts[1].split(",")[0])
+        print(len(lineParts))
+        for i in range(len(lineParts)-1):
+          u=float(lineParts[i].split(",")[0])
+          v=float(lineParts[i].split(",")[1])
+          x=float(lineParts[i].split(",")[2])
+          y=float(lineParts[i].split(",")[3])
+          self.data = np.divide(np.complex(u,v),complex(x,y))
+      self.cancel()
   '''if not self.reading:
         self.serial.readAll()
         return
@@ -670,7 +683,7 @@ class VNA(QMainWindow, Ui_VNA):
     self.serial.write(struct.pack('<I', 1 << 28 | int(self.sweep_stop * 1000)))
     self.serial.write(struct.pack('<I', 2 << 28 | int(self.sweep_size)))
     self.serial.write(struct.pack('<I', 10 << 28))'''
-    command = '^SWEEP,' + str(self.sweep_start) + ',' + str(self.sweep_stop) + ',' + str(self.sweep_size) + '$\n'
+    command = '^SWEEP,' + str(self.sweep_start*1000) + ',' + str(self.sweep_stop*1000) + ',' + str(self.sweep_size) + '$\n'
     #command = "^SAMPLERATE,1" + "$\n"
     self.serial.write(command.encode())
     self.progressBar.setMinimum(0)
@@ -793,7 +806,7 @@ class VNA(QMainWindow, Ui_VNA):
       settings.setValue('dut_imag_%d' % i, float(data.imag[i]))
 
   def read_cfg_settings(self, settings):
-    self.addrValue.setText(settings.value('addr', 'COM4'))
+    self.addrValue.setText(settings.value('addr', '/dev/ttyACM0'))
     self.rateValue.setCurrentIndex(settings.value('rate', 0, type = int))
     self.corrValue.setValue(settings.value('corr', 0, type = int))
     self.phase1Value.setValue(settings.value('phase_1', 0, type = int))
