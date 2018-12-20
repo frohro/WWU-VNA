@@ -9,10 +9,6 @@
 clc; clear;
 close all;
 
-% Put data here to avoid having to enter it in dialogs all the time.
-fMin = 1.e6;
-fMax = 100.e6;
-nFreq = 10;
 Z0=50;
 
 notDone = true;
@@ -32,10 +28,12 @@ if (!exist("Z0","var"))
 endif
 switch (questdlg("Do you wish to load a calibration from disk?"));
   case 'Yes'
-    [file,path] = uigetfile();
-    filename = fullfile(path,file);
-    load(filename, 'fMin', 'fMax', 'nFreq', 'gamma_s', 'gamma_o', 'gamma_l');
-  case 'No'  
+    if file != 0
+      [file,path] = uigetfile();
+      filename = fullfile(path,file);
+      load(filename, 'fMin', 'fMax', 'nFreq', 'gamma_s', 'gamma_o', 'gamma_l');
+    endif
+  case {'No' 'Cancel'}  
     msgbox("Connect the short connection and hit return.");
     gamma_s = readVNA(fMin, fMax, nFreq);
     msgbox("Connect the open connection and hit return.");
@@ -45,8 +43,10 @@ switch (questdlg("Do you wish to load a calibration from disk?"));
     switch (questdlg("Do you wish to save a calibration from disk?"));
       case 'Yes'
         [file,path] = uiputfile();
-        filename = fullfile(path,file);
-        save(filename, 'fMin', 'fMax', 'nFreq', 'gamma_s', 'gamma_o', 'gamma_l');
+        if file != 0
+          filename = fullfile(path,file);
+          save(filename, 'fMin', 'fMax', 'nFreq', 'gamma_s', 'gamma_o', 'gamma_l');
+       endif
        case 'No'
     end    
 end

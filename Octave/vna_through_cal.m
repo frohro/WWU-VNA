@@ -25,10 +25,14 @@ endif
 switch (questdlg("Do you wish to load a calibration from disk?"));
   case 'Yes'
     calFile = uigetfile();
-    load (calFile, 'fMin', 'fMax','nFreq', 'H1thru','H1iso');
-  case 'No' 
+    if calFile != 0
+      load (calFile, 'fMin', 'fMax','nFreq', 'H1thru','H1iso');
+    else
+      return
+    endif
+  case {'No' 'Cancel'}
     if(!exist("fMin","var"))
-      [fMin, fMax, nFreq] = getSweep();
+      [fMin, fMax, nFreq] = getSweep()
     endif
     msgbox("Connect the through connection and hit okay.");
     H1thru = readVNA(fMin, fMax, nFreq);
@@ -37,7 +41,9 @@ switch (questdlg("Do you wish to load a calibration from disk?"));
     switch (questdlg("Do you wish to save a calibration from disk?"));
       case 'Yes'
         calFile = uiputfile();
-        save(calFile, 'fMin', 'fMax','nFreq', 'H1thru','H1iso');
+        if calFile != 0
+          save(calFile, 'fMin', 'fMax','nFreq', 'H1thru','H1iso');
+        endif
     end    
 end
 while (notDone)
@@ -50,7 +56,9 @@ while (notDone)
   f=fMin:df:fMax-df;
   % Assume this is for S21.
   fileTitle = inputdlg({"Title"},"Sweep Title",[1 30]){1};
-  figure("name",fileTitle)
+  if fileTitle !=0 
+    figure("name",fileTitle)
+  endif
   plot(f,20*log10(abs(H1dut)),'bo')
   xlabel('Frequency (Hz)')
   title('|S_{21}|')
@@ -63,7 +71,7 @@ while (notDone)
   switch(questdlg("Do you wish to measure another network using this calibration?"));
     case 'Yes'
       notDone = true;
-    case 'No'
+    case 
       notDone = false;
   end
 end
