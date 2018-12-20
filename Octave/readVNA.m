@@ -1,5 +1,5 @@
 function data = readVNA(fMin, fMax, nFreq)
-  % This is the function than reads data from the serial port.
+  % This is the function than reads VNA data from the serial port.
   %s1 = serial("/tmp/ttyDUMMY"); % $ interceptty /dev/ttyACM0 /tmp/ttyDUMMY
   if(exist(".port","file"))
     load ".port" port

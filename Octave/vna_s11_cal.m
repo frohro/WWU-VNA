@@ -9,10 +9,15 @@
 clc; clear;
 close all;
 
+% Put data here to avoid having to enter it in dialogs all the time.
 fMin = 1.e6;
 fMax = 100.e6;
-nFreq = 100;
-Z0 = 50;
+nFreq = 10;
+Z0=50;
+
+if(!exist("fMin","var"))
+  [fMin, fMax, nFreq] = getSweep();
+endif
 
 % Load the package
 pkg load instrument-control
@@ -20,90 +25,35 @@ pkg load instrument-control
 if (exist("serial") != 3)
   disp("No Serial Support");
 endif
-% Instantiate the Serial Port
-% Naturally, set the COM port # to match your device
-% Use this crazy notation for any COM port number: 1 - 255
-%s1 = serial("/dev/pts/2");
-%s1 = serial("/tmp/ttyDUMMY"); % $ interceptty /dev/ttyACM0 /tmp/ttyDUMMY
-s1 = serial("/dev/ttyACM0");
-pause(1); % Wait a second as it takes some ports a while to wake up
-% Set the port parameters
-set(s1,'baudrate', 115200);
-set(s1,'bytesize', 8);
-set(s1,'parity', 'n');
-set(s1,'stopbits', 1);
-set(s1,'timeout', 255); % 12.3 Seconds as an example here
-% Optional commands, these can be 'on' or 'off'
-%set(s1, 'requesttosend', 'on');
- % Sets the RTS line
-%set(s1, 'dataterminalready', 'on'); % Sets the DTR line
-disp("Connect the short connection and hit return.")
-pause;
-% Optional - Flush input and output buffers
-srl_flush(s1);
-string_to_send = strcat("^SWEEP,",num2str(uint64(fMin)),","...
-                  ,num2str(uint64(fMax)),",",num2str(uint64(nFreq)),"$\n")
-srl_write(s1,string_to_send);
-for i=1:nFreq
-  raw(i,:) = str2num(ReadToTermination(s1, 10));
-  if(mod(i,10) == 0) 
-    disp(i)
-  endif
-endfor
-for i=1:nFreq
-  gamma_s(i) = (raw(i,1)+j*raw(i,2))./(raw(i,3)+j*raw(i,4));
-endfor
-disp("Connect the open connection and hit return.")
-pause;
-% Optional - Flush input and output buffers
-srl_flush(s1);
-string_to_send = strcat("^SWEEP,",num2str(uint64(fMin)),","...
-                  ,num2str(uint64(fMax)),",",num2str(uint64(nFreq)),"$\n")
-srl_write(s1,string_to_send);
-for i=1:nFreq
-  raw(i,:) = str2num(ReadToTermination(s1, 10));
-  if(mod(i,10) == 0) 
-    disp(i)
-  endif
-endfor
-for i=1:nFreq
-  gamma_o(i) = (raw(i,1)+j*raw(i,2))./(raw(i,3)+j*raw(i,4));
-endfor
-disp("Connect the Z_0 load connection and hit return.")
-pause;
-% Optional - Flush input and output buffers
-srl_flush(s1);
-string_to_send = strcat("^SWEEP,",num2str(uint64(fMin)),","...
-                  ,num2str(uint64(fMax)),",",num2str(uint64(nFreq)),"$\n")
-srl_write(s1,string_to_send);
-for i=1:nFreq
-  raw(i,:) = str2num(ReadToTermination(s1, 10));
-  if(mod(i,10) == 0) 
-    disp(i)
-  endif
-endfor
-for i=1:nFreq
-  gamma_l(i) = (raw(i,1)+j*raw(i,2))./(raw(i,3)+j*raw(i,4));
-endfor
-disp("Now connect your DUT, and push return.")
-pause;
-srl_flush(s1);
-string_to_send = strcat("^SWEEP,",num2str(uint64(fMin)),","...
-                  ,num2str(uint64(fMax)),",",num2str(uint64(nFreq)),"$\n")
-srl_write(s1,string_to_send);
-for i=1:nFreq
-  raw(i,:) = str2num(ReadToTermination(s1, 10));
-  if(mod(i,10) == 0) 
-    disp(i)
-  endif
-endfor
-for i=1:nFreq
-  gamma_m(i) = (raw(i,1)+j*raw(i,2))./(raw(i,3)+j*raw(i,4));
-endfor
+
+if (!exist("Z0","var"))
+  Z0 = inputdlg({"Z_0 "},"Characteristic Impedance",[1 3]);
+endif
+switch (questdlg("Do you wish to load a calibration from disk?"));
+  case 'Yes'
+    [file,path] = uigetfile();
+    filename = fullfile(path,file);
+    load(filename, 'fMin', 'fMax', 'nFreq', 'gamma_s', 'gamma_o', 'gamma_l');
+  case 'No'  
+    msgbox("Connect the short connection and hit return.");
+    gamma_s = readVNA(fMin, fMax, nFreq);
+    msgbox("Connect the open connection and hit return.");
+    gamma_o = readVNA(fMin, fMax, nFreq);
+    msgbox("Connect the Z_0 load connection and hit return.")
+    gamma_l = readVNA(fMin, fMax, nFreq);
+    switch (questdlg("Do you wish to save a calibration from disk?"));
+      case 'Yes'
+        [file,path] = uiputfile();
+        filename = fullfile(path,file);
+        save(filename, 'fMin', 'fMax', 'nFreq', 'gamma_s', 'gamma_o', 'gamma_l');
+       case 'No'
+    end    
+end
+msgbox("Now connect your DUT, and push return.");
+gamma_m = readVNA(fMin, fMax, nFreq);
 % Do calibration.
 gamma_u = SOL(gamma_s, gamma_o, gamma_l, gamma_m);
 Z = Z0*(1+gamma_u)./(1-gamma_u);
 % Plot it on the Smith Chart.
-SmithChart(gamma_u, '-or')
+SmithChart(gamma_u, '-or');
 title('S_{11}');
-fclose(s1);

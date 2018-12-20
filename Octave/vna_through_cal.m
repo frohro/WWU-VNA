@@ -11,7 +11,9 @@
 % Start script here.
 clc; clear;
 close all;
-% Load the package
+
+% Put fMin, fMax, and nFreq here, if you want to avoid all the dialogs.
+
 pkg load instrument-control
 % Check if serial support exists
 if (exist("serial") != 3)
@@ -19,44 +21,28 @@ if (exist("serial") != 3)
   return
 endif
 
-% If you wish to hardcode fMin, fMax, and Nfreq do it here, and you won't
-% be bothered with entering it everytime.
-if(!exist("fMin","var"))
-  sweep = inputdlg({"fMin","fMax","N"},"Frequency Sweep",[1 10; 1 10; 1 3]);
-    if isempty(sweep)
-      fMin = 1.e6;
-      fMax = 100.e6;
-      nFreq = 100;
-    elseif (isempty(sweep{1})||isempty(sweep{2})||isempty(sweep{3}))
-      fMin = 1.e6;
-      fMax = 100.e6;
-      nFreq = 100;
-    else
-      fMin = sweep{1};
-      fMax = sweep{2};
-      N = sweep{3};
-    endif
-endif
-
-df = (fMax-fMin)/nFreq;
-f=fMin:df:fMax-df;
-
 switch (questdlg("Do you wish to load a calibration from disk?"));
   case 'Yes'
     calFile = uigetfile();
-    load calFile f,H1thru;
-  case 'No'  
+    load (calFile, 'fMin', 'fMax','nFreq', 'H1thru');
+  case 'No' 
+    if(!exist("fMin","var"))
+      [fMin, fMax, nFreq] = getSweep();
+    endif
     msgbox("Connect the through connection and hit okay.");
     H1thru = readVNA(fMin, fMax, nFreq);
     switch (questdlg("Do you wish to save a calibration from disk?"));
       case 'Yes'
         calFile = uiputfile();
-        save calFile f,H1thru;
+        save(calFile, 'fMin', 'fMax','nFreq', 'H1thru');
     end    
 end
 msgbox("Now connect your DUT, and push okay.");
 H1comb = readVNA(fMin, fMax, nFreq);
 H1dut = H1comb./H1thru;
+
+df = (fMax-fMin)/nFreq;
+f=fMin:df:fMax-df;
 % Assume this is for S21.
 figure(1)
 plot(f,20*log10(abs(H1dut)),'bo')
