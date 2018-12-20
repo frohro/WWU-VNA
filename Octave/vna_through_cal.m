@@ -14,6 +14,7 @@ close all;
 
 % Put fMin, fMax, and nFreq here, if you want to avoid all the dialogs.
 
+notDone = true;
 pkg load instrument-control
 % Check if serial support exists
 if (exist("serial") != 3)
@@ -39,23 +40,31 @@ switch (questdlg("Do you wish to load a calibration from disk?"));
         save(calFile, 'fMin', 'fMax','nFreq', 'H1thru','H1iso');
     end    
 end
-msgbox("Now connect your DUT, and push okay.");
-H1comb = readVNA(fMin, fMax, nFreq);
-H1comb = H1comb - H1iso;
-H1dut = H1comb./H1thru;
-
-df = (fMax-fMin)/nFreq;
-f=fMin:df:fMax-df;
-% Assume this is for S21.
-figure(1)
-plot(f,20*log10(abs(H1dut)),'bo')
-xlabel('Frequency (Hz)')
-title('|S_{21}|')
-ylabel('(dB)')
-figure(2)
-plot(f,angle(H1dut)*180/pi,'bo')
-xlabel('Frequency (Hz)')
-title('Angle of S_{21}')
-ylabel('(degrees)')
-
+while (notDone)
+  msgbox("Now connect your DUT, and push okay.");
+  H1comb = readVNA(fMin, fMax, nFreq);
+  H1comb = H1comb - H1iso;
+  H1dut = H1comb./H1thru;
+  
+  df = (fMax-fMin)/nFreq;
+  f=fMin:df:fMax-df;
+  % Assume this is for S21.
+  fileTitle = inputdlg({"Title"},"Sweep Title",[1 30]){1};
+  figure("name",fileTitle)
+  plot(f,20*log10(abs(H1dut)),'bo')
+  xlabel('Frequency (Hz)')
+  title('|S_{21}|')
+  ylabel('(dB)')
+  figure("name",fileTitle)
+  plot(f,angle(H1dut)*180/pi,'bo')
+  xlabel('Frequency (Hz)')
+  title('Angle of S_{21}')
+  ylabel('(degrees)')
+  switch(questdlg("Do you wish to measure another network using this calibration?"));
+    case 'Yes'
+      notDone = true;
+    case 'No'
+      notDone = false;
+  end
+end
 

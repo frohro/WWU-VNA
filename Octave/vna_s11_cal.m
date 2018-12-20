@@ -15,6 +15,7 @@ fMax = 100.e6;
 nFreq = 10;
 Z0=50;
 
+notDone = true;
 if(!exist("fMin","var"))
   [fMin, fMax, nFreq] = getSweep();
 endif
@@ -49,11 +50,21 @@ switch (questdlg("Do you wish to load a calibration from disk?"));
        case 'No'
     end    
 end
-msgbox("Now connect your DUT, and push return.");
-gamma_m = readVNA(fMin, fMax, nFreq);
-% Do calibration.
-gamma_u = SOL(gamma_s, gamma_o, gamma_l, gamma_m);
-Z = Z0*(1+gamma_u)./(1-gamma_u);
-% Plot it on the Smith Chart.
-SmithChart(gamma_u, '-or');
-title('S_{11}');
+while notDone
+  msgbox("Now connect your DUT, and push return.");
+  gamma_m = readVNA(fMin, fMax, nFreq);
+  % Do calibration.
+  gamma_u = SOL(gamma_s, gamma_o, gamma_l, gamma_m);
+  Z = Z0*(1+gamma_u)./(1-gamma_u);
+  % Plot it on the Smith Chart.
+  fileTitle = inputdlg({"Title"},"Sweep Title",[1 30]){1};
+  figHandle = figure("name",fileTitle)
+  SmithChart(gamma_u, figHandle, '-or');
+  title('S_{11}');
+  switch(questdlg("Do you wish to measure another network using this calibration?"));
+    case 'Yes'
+      notDone = true;
+    case 'No'
+      notDone = false;
+  end
+end
