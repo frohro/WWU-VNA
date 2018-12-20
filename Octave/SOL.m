@@ -1,7 +1,7 @@
 % This function is to do an short, open, load (SOL) one port calibration
 % for vector network analyzer calibration measurements.
 % This is shown 
-% This is worked out in my Electronics II class notes.  Here are some photos of the whiteboard, that outline the procedure. 
+% This is worked out in my Electronics II class notes.  
 %
 %    The first photo shows how to calculate the reflection in a cascade of two 
 %    scattering matrices.  Here is a link:  (See May 25, 2016.)

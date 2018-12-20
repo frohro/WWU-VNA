@@ -11,7 +11,7 @@ close all;
 
 fMin = 1.e6;
 fMax = 100.e6;
-nFreq = 10;
+nFreq = 100;
 Z0 = 50;
 
 % Load the package
@@ -105,5 +105,5 @@ gamma_u = SOL(gamma_s, gamma_o, gamma_l, gamma_m);
 Z = Z0*(1+gamma_u)./(1-gamma_u);
 % Plot it on the Smith Chart.
 SmithChart(gamma_u, '-or')
-title('S11');
+title('S_{11}');
 fclose(s1);
