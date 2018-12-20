@@ -24,21 +24,24 @@ endif
 switch (questdlg("Do you wish to load a calibration from disk?"));
   case 'Yes'
     calFile = uigetfile();
-    load (calFile, 'fMin', 'fMax','nFreq', 'H1thru');
+    load (calFile, 'fMin', 'fMax','nFreq', 'H1thru','H1iso');
   case 'No' 
     if(!exist("fMin","var"))
       [fMin, fMax, nFreq] = getSweep();
     endif
     msgbox("Connect the through connection and hit okay.");
     H1thru = readVNA(fMin, fMax, nFreq);
+    msgbox("Disconnect the through connection and hit okay.");
+    H1iso = readVNA(fMin, fMax, nFreq);
     switch (questdlg("Do you wish to save a calibration from disk?"));
       case 'Yes'
         calFile = uiputfile();
-        save(calFile, 'fMin', 'fMax','nFreq', 'H1thru');
+        save(calFile, 'fMin', 'fMax','nFreq', 'H1thru','H1iso');
     end    
 end
 msgbox("Now connect your DUT, and push okay.");
 H1comb = readVNA(fMin, fMax, nFreq);
+H1comb = H1comb - H1iso;
 H1dut = H1comb./H1thru;
 
 df = (fMax-fMin)/nFreq;
