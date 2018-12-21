@@ -34,24 +34,37 @@ switch (questdlg("Do you wish to load a calibration from disk?"));
     if(!exist("fMin","var"))
       [fMin, fMax, nFreq] = getSweep()
     endif
-    msgbox("Connect the through connection and hit okay.");
-    H1thru = readVNA(fMin, fMax, nFreq);
-    msgbox("Disconnect the through connection and hit okay.");
-    H1iso = readVNA(fMin, fMax, nFreq);
-    switch (questdlg("Do you wish to save a calibration from disk?"));
+    switch (questdlg("Do you wish use a through caliration?"));
       case 'Yes'
-        calFile = uiputfile();
-        if calFile != 0
-          save(calFile, 'fMin', 'fMax','nFreq', 'H1thru','H1iso');
-        endif
-    end    
+        msgbox("Connect the through connection and hit okay.");
+        H1thru = readVNA(fMin, fMax, nFreq);
+        switch (questdlg("Do you wish to calibrate for crosstalk?"));
+          case 'Yes'
+            msgbox("Disconnect the through connection and hit okay.");
+            H1iso = readVNA(fMin, fMax, nFreq);
+          case {'No' 'Cancel'}
+        endswitch
+        switch (questdlg("Do you wish to save a calibration from disk?"));
+          case 'Yes'
+            calFile = uiputfile();
+            if calFile != 0
+              save(calFile, 'fMin', 'fMax','nFreq', 'H1thru','H1iso');
+            endif
+        endswitch
+     case {'No1, Cancel'}
+   endswitch    
 end
 while (notDone)
   msgbox("Now connect your DUT, and push okay.");
   H1comb = readVNA(fMin, fMax, nFreq);
-  H1comb = H1comb - H1iso;
-  H1dut = H1comb./H1thru;
-  
+  if (exist("H1iso","var"))
+    H1comb = H1comb - H1iso; % Calibrate for isolation.
+  endif
+  if (exist("Hithru","var"))
+    H1dut = H1comb./H1thru;
+  else
+    H1dut = H1comb;
+  endif
   df = (fMax-fMin)/nFreq;
   f=fMin:df:fMax-df;
   % Assume this is for S21.

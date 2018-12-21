@@ -28,9 +28,9 @@ if (!exist("Z0","var"))
 endif
 switch (questdlg("Do you wish to load a calibration from disk?"));
   case 'Yes'
-    if file != 0
-      [file,path] = uigetfile();
-      filename = fullfile(path,file);
+    [calFile,calFilePath] = uigetfile();
+    if (calFile != 0)
+      filename = fullfile(calFilePath,calFile);
       load(filename, 'fMin', 'fMax', 'nFreq', 'gamma_s', 'gamma_o', 'gamma_l');
     endif
   case {'No' 'Cancel'}  
@@ -42,12 +42,12 @@ switch (questdlg("Do you wish to load a calibration from disk?"));
     gamma_l = readVNA(fMin, fMax, nFreq);
     switch (questdlg("Do you wish to save a calibration from disk?"));
       case 'Yes'
-        [file,path] = uiputfile();
+        [calFile,calFilePath] = uiputfile();
         if file != 0
-          filename = fullfile(path,file);
+          filename = fullfile(calFilePath,calFile);
           save(filename, 'fMin', 'fMax', 'nFreq', 'gamma_s', 'gamma_o', 'gamma_l');
-       endif
-       case 'No'
+        endif
+       case {'No' 'Cancel'}
     end    
 end
 while notDone
@@ -64,7 +64,7 @@ while notDone
   switch(questdlg("Do you wish to measure another network using this calibration?"));
     case 'Yes'
       notDone = true;
-    case 'No'
+    case {'No' 'Cancel'}
       notDone = false;
   end
 end
