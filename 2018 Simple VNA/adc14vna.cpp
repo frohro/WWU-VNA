@@ -35,23 +35,15 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * --/COPYRIGHT--*/
 /*******************************************************************************
- * MSP432 ADC14 - Multiple Channel Sample without Repeat
+ * MSP432 ADC14 - Multiple Channel Sample without Repeat using DMA Ping Pong
  *
- * Description: In this code example, the feature of being able to scan multiple
- * ADC channels is demonstrated by the user a the DriverLib APIs.  Conversion
- * memory registers ADC_MEM0 - ADC_MEM3 are configured to read conversion
- * results from A6, A12, A10, A8 respectively. Conversion is enabled and then sampling is
- * toggled using a software toggle. Repeat mode is not enabled and sampling only
- * occurs once (and it is expected that the user pauses the debugger to observe
- * the results). Once the final sample has been taken, the interrupt for
- * ADC_MEM3 is triggered and the result is stored in the resultsBuffer buffer.
- *
+ * Pins set up for v 0.5 2/20/2019
  *                MSP432P401
  *             ------------------
  *         /|\|                  |
  *          | |                  |
- *          --|RST         P4.0  |<--- A13 (Analog Input, Measured)
- *            |            P6.1  |<--- A14 (Analog Input, Reference)
+ *          --|RST         P5.1  |<--- A4 (Analog Input, Measured) (was P4.0 A13)
+ *            |            P4.7  |<--- A6 (Analog Input, Reference) (was P6.1 A14)
  *            |                  |
  *            |                  |
  *
@@ -188,11 +180,11 @@ int adc14_main(void)
             0);
 
     /*
-	 * Configuring GPIOs (4.0 A13, 6.1 A14)
+	 * Configuring GPIOs (5.1 A4, 4.7 A6)
 	 */
-	MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P4, GPIO_PIN0,
+	MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P5, GPIO_PIN1,
 		GPIO_TERTIARY_MODULE_FUNCTION);
-	MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P6, GPIO_PIN1,
+	MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P4, GPIO_PIN7,
 		GPIO_TERTIARY_MODULE_FUNCTION);
 	/*
 	 * Debug: set TA0.1 as output to see ADC trigger signal
@@ -205,10 +197,10 @@ int adc14_main(void)
 	MAP_ADC14_configureMultiSequenceMode(ADC_MEM6, ADC_MEM7, false);
 	MAP_ADC14_configureConversionMemory(ADC_MEM6,
 			ADC_VREFPOS_INTBUF_VREFNEG_VSS,
-			ADC_INPUT_A14, ADC_NONDIFFERENTIAL_INPUTS);
+			ADC_INPUT_A6, ADC_NONDIFFERENTIAL_INPUTS);
 	MAP_ADC14_configureConversionMemory(ADC_MEM7,
 			ADC_VREFPOS_INTBUF_VREFNEG_VSS,
-			ADC_INPUT_A13, ADC_NONDIFFERENTIAL_INPUTS);
+			ADC_INPUT_A4, ADC_NONDIFFERENTIAL_INPUTS);
 
     /*
      * Configuring the sample trigger to be sourced from Timer_A0 CCR1
