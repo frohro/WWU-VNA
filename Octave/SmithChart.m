@@ -1,4 +1,4 @@
-function SmithChart(S, style_input, VSWRcircle)
+function SmithChart(S, fh, style_input, VSWRcircle)
 %--------------------------------------------------------------------------
 %SmithChart -- this function takes an input vector "S", the Sii parameter of
 %a given system, and plots it on an impedance smith chart, along with the
@@ -10,6 +10,8 @@ function SmithChart(S, style_input, VSWRcircle)
 %OPTIONS:  in addition to specifying the s-parameter vector, the linestyle
 %of the impedance loci can be set, and VSWR circles (constant reflection)
 %circles can be plotted at an arbitraty VSWR level.
+%
+%Figure Handle:  The figure handle of the figure you wish to plot this is fh.
 %
 %Loci linestyle:  the second input argument should be of the same form used
 %in the regular plot function in matlab, i.e. 'r' for red, '--r' for dotted
@@ -34,22 +36,26 @@ function SmithChart(S, style_input, VSWRcircle)
 if nargin < 1
     error('Requires 1 or more input arguments.')
 elseif nargin == 1
+    fh = figure();
     LINE_STYLE = 'b';
     VSWRcircles = 0;
 elseif nargin == 2
+    LINE_STYLE = 'b';
+    VSWRcircles = 0;
+elseif nargin == 3
     LINE_STYLE = style_input;
     VSWRcircles = 0;
 elseif nargin == 3
     LINE_STYLE = style_input;
     VSWRcircles = 1;
     VSWR_CIRCLE = VSWRcircle;
-elseif nargin > 3
+elseif nargin > 4
     error('Too many arguments!!')
 end
 
 %--------------------------------------------------------------------------
 %--------------------------------------------------------------------------
-
+figure(fh); 
 plot([-1 1],[0 0],'k')
 axis equal
 axis off
@@ -66,6 +72,7 @@ for x = [.2 .5 1 2 5]           % specify the x=const lines you want to draw
         rx = 1/x;
         cx = rx;
         tx = 2*atan(x)*(0:.01:1);
+        figure(fh)
         plot(1-rx*sin(tx),cx-rx*cos(tx),'k')
         plot(1-rx*sin(tx),-cx+rx*cos(tx),'k')
 end
@@ -102,10 +109,8 @@ if VSWRcircles == 1
     end
 end
 
- fh = figure(1); 
- set(fh, 'color', 'white'); % sets the color to white
- hold on
-
+set(fh, 'color', 'white'); % sets the color to white
+hold on
 plot(S, LINE_STYLE, 'LineWidth', 2)
 endfunction
 
