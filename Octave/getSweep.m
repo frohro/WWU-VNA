@@ -2,7 +2,7 @@ function [fMin, fMax, nFreq] =  getSweep()
   fMin = 1.e6;
   fMax = 100.e6;
   nFreq = 100;
-  sweep = inputdlg({"fMin","fMax","N"},"Frequency Sweep",[1 10; 1 10; 1 3]);
+  sweep = inputdlg({"fMin (Hz)","fMax (Hz)","N"},"Frequency Sweep",[1 10; 1 10; 1 3]);
   if (!isempty(sweep))
     if (!isempty(sweep{1}))
       fMin = str2num(sweep{1});

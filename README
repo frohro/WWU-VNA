@@ -1,12 +1,31 @@
 This is some source code for the WWU VNA.  The hardware files can be found at this repository:  
 https://github.com/frohro/WWU-VNA
 
+These instructions were done an a Ubuntu Linux computer.  They will vary slightly for Windows or OS X.
+
 Build Instructions:
 
 	- git clone the repository.  
-	- Install Code Composer Studio. (I'm using version 8.2 as of this writing in December 2018.) 
+	- Install Code Composer Studio. (This works with CCS 8.2 and 9.0.) 
 		- You need the MSP432 Red board library version 5.23.1 or later or you will have build errors.
-	- Install Energia, and using Energia's Tools->Boards:->Boards Manager, add the MSP432P401P (red board).  (I'm using Energia version 21.)
+	- Install Energia, and using Energia's Tools->Boards:->Boards Manager, add the MSP432P401P (red board)
+	- Energia uses the Arduino way of handling libraries, and it is easiest to use that as well, because
+		CCS knows how to import things better that way.  So in your ~/Energia/libraries folder make 
+		folders for each of the libraries.  Mine look like this.
+		:~/Energia$ ls -lah libraries
+		total 36K
+		drwxr-xr-x 8 frohro frohro 4.0K Apr 15 21:07 .
+		drwxr-xr-x 5 frohro frohro 4.0K Apr  5 14:30 ..
+		drwxr-xr-x 2 frohro frohro 4.0K Apr 21 21:29 adc14vna
+		drwxr-xr-x 2 frohro frohro 4.0K Apr 15 21:15 constants
+		drwxr-xr-x 2 frohro frohro 4.0K Apr  5 14:33 DynamicCommandParser
+		-rw-r--r-- 1 frohro frohro   88 Oct 11  2018 readme.txt
+		drwxr-xr-x 2 frohro frohro 4.0K Apr 21 21:31 si5351
+		drwxr-xr-x 2 frohro frohro 4.0K Apr 21 21:30 SignalProcessing
+		
+		Inside those make symbolic links to the appropriate files in your git repository.
+		For example, 
+
 	- Import Energia Sketch using File->Import...->Energia->Energia Sketch.
 	- Be sure to select MSP432P401R as the processor.
 	- Right click on the project, and select add files.

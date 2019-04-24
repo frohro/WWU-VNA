@@ -1,7 +1,6 @@
 #include "Arduino.h"
 #include "Wire.h"
 #include "si5351.h"
-#include "quadrature.h"
 #include <driverlib.h>
 #include "constants.h"
 #include "DynamicCommandParser.h" // https://github.com/mdjarv/DynamicCommandParser
@@ -30,7 +29,7 @@ void computeFundamental(void);
 
 void setup()
 {
-    Serial.begin(115200);
+    Serial.begin(9600);
 	adc14_main(); // Initialize ADC14 for multichannel conversion at 500 kHz.
     si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0);
     delay(5);
