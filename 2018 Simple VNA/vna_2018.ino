@@ -29,7 +29,7 @@ void computeFundamental(void);
 
 void setup()
 {
-    Serial.begin(115200);
+    Serial.begin(9600);
 	adc14_main(); // Initialize ADC14 for multichannel conversion at 500 kHz.
     si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0);
     delay(5);
@@ -161,8 +161,10 @@ void computeFundamental()
     Serial.print(",");
     Serial.print(r.real);
     Serial.print(",");
-    Serial.print(r.imag);
-    Serial.print("\n");
+    Serial.println(r.imag);
+    //Serial.print("X");
+    //Serial.println();
+    //Serial.print("\n");
 }
 
 void voltageMeasurement(char **values, int valueCount) // Might want to return error number.
