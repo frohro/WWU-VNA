@@ -19,7 +19,7 @@ volatile bool sendMeasurement = false;
 volatile int numberFrequenciestoMeasure, frequencyIndex;
 volatile float refSumRe, measSumRe, refSumIm, measSumIm;
 
-int simpleDownConverter(void);
+//int simpleDownConverter(void);
 void sweepFreqMeas(char **values, int valueCount);
 void voltageMeasurement(char **values, int valueCount); // For testing (sending individual voltages.
 void setOscillator(unsigned long long freq);
@@ -69,6 +69,7 @@ void loop()
     }
 }
 
+/*
 int simpleDownConverter(void)    // Do DSP here.
 {
     refSumRe = 0.0;
@@ -77,14 +78,14 @@ int simpleDownConverter(void)    // Do DSP here.
     measSumRe = 0.0;
     for(int n=0;n<SAMPLE_LENGTH;n++)
     {
-        /* This needs to be changed if you use a Hanning window */
+         This needs to be changed if you use a Hanning window
         //refSumRe += shift[n%SAMPLES_IN_ONE_CYCLE]*ref[n];
         //refSumIm -= shift[(n+(int)(SAMPLES_IN_ONE_CYCLE/4+0.5))%SAMPLES_IN_ONE_CYCLE]*ref[n];
         //measSumRe += shift[n%SAMPLES_IN_ONE_CYCLE]*meas[n];
         //measSumIm -= shift[(n+(int)(SAMPLES_IN_ONE_CYCLE/4+0.5))%SAMPLES_IN_ONE_CYCLE]*meas[n];
     }
     return(1);  // Later fix this to report errors if there are any.
-}
+}*/
 
 void sweepFreqMeas(char **values, int valueCount)
 {
@@ -162,7 +163,7 @@ void computeFundamental()
     Serial.print(r.real);
     Serial.print(",");
     Serial.println(r.imag);
-    //Serial.print("X");
+    //Serial.print("X"); Trying to figure out why it sometimes hangs.
     //Serial.println();
     //Serial.print("\n");
 }
@@ -222,7 +223,6 @@ void timeCompute(char **values, int valueCount)
     computation r;
     compute_block(r, 0, ref, TIME_SAMPLE_LENGTH);
     compute_block(m, 0, meas, TIME_SAMPLE_LENGTH);
-
     {
         for (j = 0; j < TIME_SAMPLE_LENGTH; j++)
         {
@@ -230,7 +230,6 @@ void timeCompute(char **values, int valueCount)
             Serial.print(",");
         }
         Serial.print('\n');
-
         for (j = 0; j < TIME_SAMPLE_LENGTH; j++)
         {
             Serial.print(meas[j]);
