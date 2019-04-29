@@ -1,7 +1,6 @@
 #include "Arduino.h"
 #include "Wire.h"
 #include "si5351.h"
-#include "quadrature.h"
 #include <driverlib.h>
 #include "constants.h"
 #include "DynamicCommandParser.h" // https://github.com/mdjarv/DynamicCommandParser
