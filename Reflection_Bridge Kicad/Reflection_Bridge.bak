@@ -15,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L Reflection_Bridge-rescue:SMA_Female P1
+L sma:SMA_Female P1
 U 1 1 58F53FEF
 P 4400 3350
 F 0 "P1" H 4501 3326 50  0000 L CNN
@@ -26,7 +26,7 @@ F 3 "" H 4400 3350 50  0000 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L Reflection_Bridge-rescue:SMA_Female P2
+L sma:SMA_Female P2
 U 1 1 58F540C0
 P 5300 4750
 F 0 "P2" H 5401 4726 50  0000 L CNN
@@ -37,7 +37,7 @@ F 3 "" H 5300 4750 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Reflection_Bridge-rescue:SMA_Female P3
+L sma:SMA_Female P3
 U 1 1 58F540F2
 P 5350 3850
 F 0 "P3" H 5451 3826 50  0000 L CNN
