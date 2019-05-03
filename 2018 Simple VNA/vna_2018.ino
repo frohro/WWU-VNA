@@ -29,8 +29,8 @@ void computeFundamental(void);
 
 void setup()
 {
-    Serial.begin(9600);
-	adc14_main(); // Initialize ADC14 for multichannel conversion at 500 kHz.
+    Serial.begin(115200);
+	adc14_main(); // Initialize ADC14 for multi-channel conversion.
     si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0);
     delay(5);
     si5351.output_enable(SI5351_CLK1, 0); // Disable this clock LO_Q (not used).
@@ -163,9 +163,8 @@ void computeFundamental()
     Serial.print(r.real);
     Serial.print(",");
     Serial.println(r.imag);
-    //Serial.print("X"); Trying to figure out why it sometimes hangs.
-    //Serial.println();
-    //Serial.print("\n");
+    delay(3);  // Testing to see if this stops the hangs.  delay(500) seems to fix the problem.
+    // What about shorter delays?
 }
 
 void voltageMeasurement(char **values, int valueCount) // Might want to return error number.

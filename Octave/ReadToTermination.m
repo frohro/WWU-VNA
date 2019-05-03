@@ -10,14 +10,16 @@ int_array = uint8(1);
 while not_terminated
   val = srl_read(srl_handle, 1);
   if(val == term_char)
-    not_terminated = false
+    not_terminated = false;
   end
-  i, char(int_array)
+  i; char(int_array);
   % Add char received to array
   if size(val,2) != 0
     int_array(i) = val;
   else
-    display("Problem")
+    i,val,char(int_array)
+    display("Problem: Increase the delay on the MSP432 routine \
+    computeFundamental, about line 166 of wwu_vna.ino.")
   end
   i = i + 1;
 end

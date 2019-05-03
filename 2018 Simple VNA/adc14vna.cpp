@@ -59,7 +59,7 @@
  *
  * Author: Timothy Logan
  * This was modified by Rob Frohne to do multiple ADC at 8 kHz sample rate,
- * and in concert with Energia.
+ * and in concert with Energia.   DMA was added by J.D. Priddy.
  ******************************************************************************/
 #include "adc14vna.h"
 /* DriverLib Includes */
@@ -104,9 +104,9 @@ static DMA_ControlTable MSP_EXP432P401RLP_DMAControlTable[16];
 
 void startConversion(void)
 {
-    doneADC = false;
+    doneADC = false;  // Done with one batch of samples.
     sampleCount = 0;
-    doneConv = false;
+    doneConv = false; // Done with one sample.
 
     MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig);
 }

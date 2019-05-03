@@ -6,7 +6,7 @@ close all;
 
 fMin = 1.e6;
 fMax = 100e6;
-nFreq = 100;
+nFreq = 1000;
 Sum = zeros(nFreq,2);
 % Load the package
 pkg load instrument-control
@@ -22,7 +22,7 @@ endif
 s1 = serial("/dev/ttyACM0");
 pause(1); % Wait a second as it takes some ports a while to wake up
 % Set the port parameters
-set(s1,'baudrate', 9600);
+set(s1,'baudrate', 115200);
 set(s1,'bytesize', 8);
 set(s1,'parity', 'n');
 set(s1,'stopbits', 1);
