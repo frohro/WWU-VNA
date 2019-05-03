@@ -29,7 +29,7 @@ void computeFundamental(void);
 
 void setup()
 {
-    Serial.begin(9600);
+    Serial.begin(115200);
 	adc14_main(); // Initialize ADC14 for multichannel conversion at 500 kHz.
     si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0);
     delay(5);
@@ -163,6 +163,7 @@ void computeFundamental()
     Serial.print(",");
     Serial.print(r.imag);
     Serial.print("\n");
+    delay(3);  // Fixes annoying bug where the VNA goes picking dasies.
 }
 
 void voltageMeasurement(char **values, int valueCount) // Might want to return error number.

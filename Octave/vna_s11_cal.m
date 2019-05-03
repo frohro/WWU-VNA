@@ -38,12 +38,12 @@ switch (questdlg("Do you wish to load a calibration from disk?"));
     gamma_s = readVNA(fMin, fMax, nFreq);
     msgbox("Connect the open connection and hit return.");
     gamma_o = readVNA(fMin, fMax, nFreq);
-    msgbox("Connect the Z_0 load connection and hit return.")
+    msgbox("Connect the Z_0 load connection and hit return.");
     gamma_l = readVNA(fMin, fMax, nFreq);
     switch (questdlg("Do you wish to save a calibration from disk?"));
       case 'Yes'
         [calFile,calFilePath] = uiputfile();
-        if file != 0
+        if calFile != 0
           filename = fullfile(calFilePath,calFile);
           save(filename, 'fMin', 'fMax', 'nFreq', 'gamma_s', 'gamma_o', 'gamma_l');
         endif
@@ -58,7 +58,7 @@ while notDone
   Z = Z0*(1+gamma_u)./(1-gamma_u);
   % Plot it on the Smith Chart.
   fileTitle = inputdlg({"Title"},"Sweep Title",[1 30]){1};
-  figHandle = figure("name",fileTitle)
+  figHandle = figure("name",fileTitle);
   SmithChart(gamma_u, figHandle, '-or');
   title('S_{11}');
   switch(questdlg("Do you wish to measure another network using this calibration?"));
