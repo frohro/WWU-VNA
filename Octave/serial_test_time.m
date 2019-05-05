@@ -5,6 +5,7 @@
 % Rob Frohne, May 2017.
 
 clc; clear;
+close all;
 
 fMin = 10e6; % Note:  We need to figure out what the aliased frequency is
 % and make sure it doesn't interfere with our measurement even with the LPF.
@@ -19,8 +20,8 @@ endif
 % Naturally, set the COM port # to match your device
 % Use this crazy notation for any COM port number: 1 - 255
 %s1 = serial("/dev/pts/2");
-s1 = serial("/tmp/ttyDUMMY"); % $ 
-%s1 = serial("/dev/ttyACM0"); % This needs debugged.  It is missing data.
+%s1 = serial("/tmp/ttyDUMMY"); % $ 
+s1 = serial("/dev/ttyACM1"); % This needs debugged.  It is missing data.
 pause(1); % Wait a second as it takes some ports a while to wake up
 % Set the port parameters
 set(s1,'baudrate', 115200);
@@ -40,8 +41,8 @@ srl_flush(s1);
 %N = str2num(ReadToTermination(s1,10));
 %F_IF = str2num(ReadToTermination(s1,10));
 F_IF = 155;
-N = 3840/2;
-Fs=8000;  
+N = 1024*4;  % was 3840/2;
+Fs=53000;  
 T = 1/Fs;
 %srl_flush(s1);
 string_to_send = strcat("^TIME,",num2str(uint64(fMin)),"$\n");

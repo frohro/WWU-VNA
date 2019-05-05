@@ -48,10 +48,13 @@ void setup()
     Serial.begin(115200);
     // For frequency sweep: "^SWEEP,Fmin,Fmax,NFreq$"
     dcp.addParser("SWEEP", sweepFreqMeas);
+
     // Returns single frequency measurements as a function of time:  "^TIME,Freq$"
     dcp.addParser("TIME", voltageMeasurement);
+
     // Returns the sample rate:  "^SAMPLERATE,1=TIME/0=COMPUTE$"
     dcp.addParser("SAMPLERATE", sendSampleRate);
+
     // Returns the dft around 155 HZ with a bin of about 10 HZ:  "^COMPUTE,Fs$"
     dcp.addParser("COMPUTE", computeMeasurement);
 
@@ -190,6 +193,7 @@ void voltageMeasurement(char **values, int valueCount) // Might want to return e
             Serial.print(",");
         }
         Serial.print('\n');
+        delay(2000);
 
         for (j = 0; j < TIME_SAMPLE_LENGTH; j++)
         {
@@ -197,6 +201,7 @@ void voltageMeasurement(char **values, int valueCount) // Might want to return e
             Serial.print(",");
         }
         Serial.print('\n');
+        delay(2000);
     }
 }
 
