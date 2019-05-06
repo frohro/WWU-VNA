@@ -50,8 +50,8 @@
  *
  *
  * Author: Timothy Logan
- * This was modified by Rob Frohne to do multiple ADC at 8 kHz sample rate,
- * and in concert with Energia.
+ * This was modified by Rob Frohne and J.D. Priddy.  It works in concert with
+ * Energia.
  ******************************************************************************/
 #include "adc14vna.h"
 /* DriverLib Includes */
@@ -107,7 +107,7 @@ int adc14_main(void)
 {
 	int i;
 
-    MAP_Interrupt_disableMaster();
+    Interrupt_disableMaster();
 
     /* Zero-filling buffer */
 	// Initialize results arrays and done flag.
@@ -192,7 +192,7 @@ int adc14_main(void)
 	MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN4,
 		GPIO_PRIMARY_MODULE_FUNCTION);
 
-	/* Configuring ADC Memory (ADC_MEM6 - ADC_MEM7 (A6 - A7)  without repeat)
+	/* Configuring ADC Memory (ADC_MEM6 - ADC_MEM7 (A6 - A4)  without repeat)
 	 * with internal 2.5v reference */
 	MAP_ADC14_configureMultiSequenceMode(ADC_MEM6, ADC_MEM7, false);
 	MAP_ADC14_configureConversionMemory(ADC_MEM6,
@@ -218,7 +218,7 @@ int adc14_main(void)
 	 * Enabling the interrupt when a conversion on channel 7
 	 * and enabling conversions
 	 */
-	MAP_ADC14_enableInterrupt(ADC_INT7);
+	ADC14_enableInterrupt(ADC_INT7);
     MAP_ADC14_enableConversion();
     /*
      * Clear IFGs before enabling interrupt
