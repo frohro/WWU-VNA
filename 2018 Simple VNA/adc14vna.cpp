@@ -54,9 +54,6 @@
  * Energia.
  ******************************************************************************/
 #include "adc14vna.h"
-/* DriverLib Includes */
-#include <driverlib.h>
-#include "msp.h"
 
 /* Standard Includes */
 #include <string.h>
@@ -105,26 +102,26 @@ void startConversion(void)
 
 int adc14_main(void)
 {
-	int i;
+    int i;
 
-    Interrupt_disableMaster();
+    MAP_Interrupt_disableMaster();
 
     /* Zero-filling buffer */
-	// Initialize results arrays and done flag.
+    // Initialize results arrays and done flag.
     memset(ref,0x0000, sizeof(ref));
     memset(meas,0x0000, sizeof(meas));
-	doneADC = false;
+    doneADC = false;
 
-	/*
-	 * Revision C silicon supports wait states of 1 at 48Mhz
-	 */
-	MAP_PCM_setCoreVoltageLevel(PCM_VCORE1);
-	MAP_FlashCtl_setWaitState(FLASH_BANK0, 1);
-	MAP_FlashCtl_setWaitState(FLASH_BANK1, 1);
+    /*
+     * Revision C silicon supports wait states of 1 at 48Mhz
+     */
+    MAP_PCM_setCoreVoltageLevel(PCM_VCORE1);
+    MAP_FlashCtl_setWaitState(FLASH_BANK0, 1);
+    MAP_FlashCtl_setWaitState(FLASH_BANK1, 1);
 
-	/* Configuring DMA module */
-	MAP_DMA_enableModule();
-	MAP_DMA_setControlBase(MSP_EXP432P401RLP_DMAControlTable);
+    /* Configuring DMA module */
+    MAP_DMA_enableModule();
+    MAP_DMA_setControlBase(MSP_EXP432P401RLP_DMAControlTable);
 
     /* Setting Control Indexes. In this case we will set the source of the
      * DMA transfer to ADC14 Memory 6
@@ -180,27 +177,27 @@ int adc14_main(void)
             0);
 
     /*
-	 * Configuring GPIOs (5.1 A4, 4.7 A6)
-	 */
-	MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P5, GPIO_PIN1,
-		GPIO_TERTIARY_MODULE_FUNCTION);
-	MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P4, GPIO_PIN7,
-		GPIO_TERTIARY_MODULE_FUNCTION);
-	/*
-	 * Debug: set TA0.1 as output to see ADC trigger signal
-	 */
-	MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN4,
-		GPIO_PRIMARY_MODULE_FUNCTION);
+     * Configuring GPIOs (5.1 A4, 4.7 A6)
+     */
+    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P5, GPIO_PIN1,
+        GPIO_TERTIARY_MODULE_FUNCTION);
+    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P4, GPIO_PIN7,
+        GPIO_TERTIARY_MODULE_FUNCTION);
+    /*
+     * Debug: set TA0.1 as output to see ADC trigger signal
+     */
+    MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN4,
+        GPIO_PRIMARY_MODULE_FUNCTION);
 
-	/* Configuring ADC Memory (ADC_MEM6 - ADC_MEM7 (A6 - A4)  without repeat)
-	 * with internal 2.5v reference */
-	MAP_ADC14_configureMultiSequenceMode(ADC_MEM6, ADC_MEM7, false);
-	MAP_ADC14_configureConversionMemory(ADC_MEM6,
-			ADC_VREFPOS_INTBUF_VREFNEG_VSS,
-			ADC_INPUT_A6, ADC_NONDIFFERENTIAL_INPUTS);
-	MAP_ADC14_configureConversionMemory(ADC_MEM7,
-			ADC_VREFPOS_INTBUF_VREFNEG_VSS,
-			ADC_INPUT_A4, ADC_NONDIFFERENTIAL_INPUTS);
+    /* Configuring ADC Memory (ADC_MEM6 - ADC_MEM7 (A6 - A4)  without repeat)
+     * with internal 2.5v reference */
+    MAP_ADC14_configureMultiSequenceMode(ADC_MEM6, ADC_MEM7, false);
+    MAP_ADC14_configureConversionMemory(ADC_MEM6,
+            ADC_VREFPOS_INTBUF_VREFNEG_VSS,
+            ADC_INPUT_A6, ADC_NONDIFFERENTIAL_INPUTS);
+    MAP_ADC14_configureConversionMemory(ADC_MEM7,
+            ADC_VREFPOS_INTBUF_VREFNEG_VSS,
+            ADC_INPUT_A4, ADC_NONDIFFERENTIAL_INPUTS);
 
     /*
      * Configuring the sample trigger to be sourced from Timer_A0 CCR1
@@ -215,10 +212,10 @@ int adc14_main(void)
     MAP_ADC14_enableSampleTimer(ADC_AUTOMATIC_ITERATION);
 
     /*
-	 * Enabling the interrupt when a conversion on channel 7
-	 * and enabling conversions
-	 */
-	ADC14_enableInterrupt(ADC_INT7);
+     * Enabling the interrupt when a conversion on channel 7
+     * and enabling conversions
+     */
+    MAP_ADC14_enableInterrupt(ADC_INT7);
     MAP_ADC14_enableConversion();
     /*
      * Clear IFGs before enabling interrupt
@@ -233,8 +230,8 @@ int adc14_main(void)
     Hwi_create(DMA_INT1, DMA_INT1_IRQHandler, &params, 0);
     Hwi_create(DMA_INT2, DMA_INT2_IRQHandler, &params, 0);
 
-	Hwi_setPriority(DMA_INT1, 58);
-	Hwi_setPriority(DMA_INT2, 59);
+    Hwi_setPriority(DMA_INT1, 58);
+    Hwi_setPriority(DMA_INT2, 59);
     Hwi_setPriority(INT_ADC14, 60);
 
     MAP_Interrupt_enableMaster();
@@ -248,27 +245,27 @@ int adc14_main(void)
 __attribute__((ramfunc))
 void ADC14_IRQHandler(void)
 {
-	uint64_t status;
-	// Turn on LED
+    uint64_t status;
+    // Turn on LED
 
-	//MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
+    //MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
 //    BITBAND_PERI(P1->OUT, 0) = 1;
 
-	status = MAP_ADC14_getEnabledInterruptStatus();
-	MAP_ADC14_clearInterruptFlag(status);
-	if(status & ADC_INT7)
-	{
-		//MAP_ADC14_disableConversion();
-		BITBAND_PERI(ADC14->CTL0, ADC14_CTL0_ENC_OFS) = 0;
-		/* Forcing a software transfer on DMA Channel 0 */
-		//MAP_DMA_requestSoftwareTransfer(0);
-		BITBAND_PERI(DMA_Channel->SW_CHTRIG, DMA_SW_CHTRIG_CH0_OFS) = 1;
-		/* Forcing a software transfer on DMA Channel 1 */
-		//MAP_DMA_requestSoftwareTransfer(1);
-		BITBAND_PERI(DMA_Channel->SW_CHTRIG, DMA_SW_CHTRIG_CH1_OFS) = 1;
-		//MAP_ADC14_enableConversion();
-		BITBAND_PERI(ADC14->CTL0, ADC14_CTL0_ENC_OFS) = 1;
-	}
+    status = MAP_ADC14_getEnabledInterruptStatus();
+    MAP_ADC14_clearInterruptFlag(status);
+    if(status & ADC_INT7)
+    {
+        //MAP_ADC14_disableConversion();
+        BITBAND_PERI(ADC14->CTL0, ADC14_CTL0_ENC_OFS) = 0;
+        /* Forcing a software transfer on DMA Channel 0 */
+        //MAP_DMA_requestSoftwareTransfer(0);
+        BITBAND_PERI(DMA_Channel->SW_CHTRIG, DMA_SW_CHTRIG_CH0_OFS) = 1;
+        /* Forcing a software transfer on DMA Channel 1 */
+        //MAP_DMA_requestSoftwareTransfer(1);
+        BITBAND_PERI(DMA_Channel->SW_CHTRIG, DMA_SW_CHTRIG_CH1_OFS) = 1;
+        //MAP_ADC14_enableConversion();
+        BITBAND_PERI(ADC14->CTL0, ADC14_CTL0_ENC_OFS) = 1;
+    }
 }
 
 /* Completion interrupt for ADC14 MEM7 */

@@ -8,9 +8,10 @@
 #ifndef ADC14VNA_H_
 #define ADC14VNA_H_
 #include <ti/sysbios/family/arm/m3/Hwi.h>
-//#include <ti/devices/msp432p4xx/driverlib/driverlib.h>  // These were needed before we went to Energia Library
-//#include "driverlib/dma.h"
-//#include "driverlib/adc14.h"
+
+/* DriverLib Includes */
+#include <driverlib.h>
+#include "msp.h"
 
 #define SMCLK_FREQUENCY     12000000
 
