@@ -1,13 +1,9 @@
-% VNA 2017 test script.
-% Rob Frohne, May 2017.
-
 clc; clear;
 close all;
 
-fMin = 1.e6;
-fMax = 100e6;
-nFreq = 1000;
-Sum = zeros(nFreq,2);
+fMin = 10e6; % Note:  We need to figure out what the aliased frequency is
+% and make sure it doesn't interfere with our measurement even with the LPF.
+
 % Load the package
 pkg load instrument-control
 % Check if serial support exists
@@ -18,7 +14,7 @@ endif
 % Naturally, set the COM port # to match your device
 % Use this crazy notation for any COM port number: 1 - 255
 %s1 = serial("/dev/pts/2");
-%s1 = serial("/tmp/ttyDUMMY"); % $ interceptty /dev/ttyACM0 /tmp/ttyDUMMY
+%s1 = serial("/tmp/ttyDUMMY"); % $ 
 if exist("/dev/ttyACM0","file")
   s1 = serial("/dev/ttyACM0"); 
 elseif exist("/dev/ttyACM1","file")
@@ -26,6 +22,7 @@ elseif exist("/dev/ttyACM1","file")
 else
   s1 = serial("/tmp/ttyDUMMY");
 endif
+
 pause(1); % Wait a second as it takes some ports a while to wake up
 % Set the port parameters
 set(s1,'baudrate', 115200);
@@ -35,34 +32,35 @@ set(s1,'stopbits', 1);
 set(s1,'timeout', 255); % 12.3 Seconds as an example here
 % Optional commands, these can be 'on' or 'off'
 %set(s1, 'requesttosend', 'on');
- % Sets the RTS line
+% Sets the RTS line
 %set(s1, 'dataterminalready', 'on'); % Sets the DTR line
 % Optional - Flush input and output buffers
 srl_flush(s1);
-string_to_send = strcat("^SWEEP,",num2str(uint64(fMin)),","...
-                  ,num2str(uint64(fMax)),",",num2str(uint64(nFreq)),"$\n")
+%string_to_send = strcat("^SAMPLERATE,","$\n");
+%srl_write(s1,string_to_send);
+%Fs = str2num(ReadToTermination(s1,10));
+%N = str2num(ReadToTermination(s1,10));
+%F_IF = str2num(ReadToTermination(s1,10));
+F_IF = 155;
+N = 1024*4;  % was 3840/2;
+Fs=53000;  
+T = 1/Fs;
+%srl_flush(s1);
+string_to_send = strcat("^TIME,",num2str(uint64(fMin)),"$\n");
 srl_write(s1,string_to_send);
-for i=1:nFreq
-  raw(i,:) = str2num(ReadToTermination(s1, 10));
-  if(mod(i,10) == 0) 
-    disp(i)
-  endif
-endfor
-for i=1:nFreq
-  H1(i) = (raw(i,1)+j*raw(i,2))./(raw(i,3)+j*raw(i,4));
-endfor
-% Assume this is for S21.
+ref(1,:) = str2num(ReadToTermination(s1,10));
+pause(1);
+meas(1,:)= str2num(ReadToTermination(s1,10));
+ref=ref-2^13;
+meas=meas-2^13;
+t=0:T:(N-1)*T;
 figure(1)
-df = (fMax-fMin)/nFreq;
-f=fMin:df:fMax-df;
-plot(f,20*log10(abs(H1)),'bo')
-xlabel('Frequency (Hz)')
-title('|S_{21}|')
-ylabel('(dB)')
+plot(t,ref);
+hold on
+plot(t,meas,"linewidth",1)
+legend('ref','meas')
+title('Results')
+xlabel('Time (s)')
+
 figure(2)
-plot(f,angle(H1)*180/pi,'bo')
-xlabel('Frequency (Hz)')
-title('Angle of S_{21}')
-ylabel('(degrees)')
-% Finally, Close the port
-fclose(s1);
+plot(t,meas)
