@@ -21,9 +21,9 @@ endif
 %s1 = serial("/tmp/ttyDUMMY"); % $ interceptty /dev/ttyACM0 /tmp/ttyDUMMY
 if exist("/dev/ttyACM0","file")
   s1 = serial("/dev/ttyACM0"); 
-else if exist("/dev/ttyACM1","file")
+elseif exist("/dev/ttyACM1","file")
     s1 = serial("/dev/ttyACM1");
-  endif
+else
   s1 = serial("/tmp/ttyDUMMY");
 endif
 pause(1); % Wait a second as it takes some ports a while to wake up
