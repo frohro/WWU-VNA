@@ -221,6 +221,8 @@ int adc14_main(void)
      * convert.
      */
     MAP_ADC14_enableSampleTimer(ADC_AUTOMATIC_ITERATION);
+    MAP_ADC14_setSampleHoldTime(ADC_PULSE_WIDTH_8, ADC_PULSE_WIDTH_8); // this can be 4 (default), 8, 16, 32, 64, 96, 128, 192
+
 
     /*
 	 * Enabling the interrupt when a conversion on channel 7
