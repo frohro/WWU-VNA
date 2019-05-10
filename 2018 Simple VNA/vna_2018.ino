@@ -33,8 +33,8 @@ void setup()
 	adc14_main(); // Initialize ADC14 for multi-channel conversion.
     si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0);
     delay(5);
-    si5351.output_enable(SI5351_CLK1, 0); // Disable this clock LO_Q (not used).
-    delay(5);
+    /*si5351.output_enable(SI5351_CLK1, 0); // Disable this clock LO_Q (not used).
+    delay(5);*/
     // For debugging 1/4/2018
     si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
     delay(5);
@@ -255,6 +255,8 @@ void setOscillator (unsigned long long freq) // freq in Hz
 {
 
     si5351.set_freq(freq*100ULL, SI5351_CLK0);
+    delay(5);
+    si5351.set_freq(freq*100ULL, SI5351_CLK1);
     delay(5);
     si5351.set_freq(freq*100ULL-100ULL*F_IF, SI5351_CLK2); // LO_I
     delay(5); // Wait for oscillator and steady state.  Do we need 1 second?

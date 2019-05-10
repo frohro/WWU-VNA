@@ -1,14 +1,20 @@
 function data = readVNA(fMin, fMax, nFreq)
-  % This is the function than reads VNA data from the serial port.
-  %s1 = serial("/tmp/ttyDUMMY"); % $ interceptty /dev/ttyACM0 /tmp/ttyDUMMY
-  if(exist(".port","file"))
-    load ".port" port
-  else
-    port = inputdlg({"For example: COM1 or /dev/ttyACM0 "},"Serial Port",[1 10]);
-    save ".port" port
-  endif
+
+##  if exist("/dev/ttyACM0","file")
+##    port ="/dev/ttyACM0"; 
+##  elseif exist("/dev/ttyACM1","file")
+##    port = "/dev/ttyACM1";
+##  elseif exist(".port","file")
+##    load ".port" port
+##    s1 = serial(port)
+##  else
+##    port = inputdlg({"For example: COM1 or /dev/ttyACM0 "},"Serial Port",[1 10]);
+##    save ".port" port
+##  endif
+  port = "/dev/ttyACM0";
   try
-    serialPort = serial(port{1});
+    %serialPort = serial(port{1});
+    serialPort = serial("/dev/ttyACM1")
   catch
     errordlg("Problem checkinng serial port.")
     delete(".port")  % In case the port got typed incorrectly.
