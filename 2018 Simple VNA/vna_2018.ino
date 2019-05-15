@@ -166,7 +166,7 @@ void computeFundamental()
     Serial.print(r.real);
     Serial.print(",");
     Serial.println(r.imag);
-    delay(3);  // Testing to see if this stops the hangs.  delay(500) seems to fix the problem.
+    delay(5);  // Testing to see if this stops the hangs.  delay(500) seems to fix the problem.
     // What about shorter delays?
 }
 

@@ -14,7 +14,7 @@ function data = readVNA(fMin, fMax, nFreq)
   port = "/dev/ttyACM0";
   try
     %serialPort = serial(port{1});
-    serialPort = serial("/dev/ttyACM1")
+    serialPort = serial("/dev/ttyACM0")
   catch
     errordlg("Problem checkinng serial port.")
     delete(".port")  % In case the port got typed incorrectly.
