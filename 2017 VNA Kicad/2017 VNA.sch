@@ -139,12 +139,12 @@ Use Z0=85 for clocks.\n
 $Comp
 L power:+3V3 #PWR02
 U 1 1 58EB9EBE
-P 7100 1550
-F 0 "#PWR02" H 7100 1400 50  0001 C CNN
-F 1 "+3V3" V 7115 1678 50  0000 L CNN
-F 2 "" H 7100 1550 50  0001 C CNN
-F 3 "" H 7100 1550 50  0001 C CNN
-	1    7100 1550
+P 6950 1550
+F 0 "#PWR02" H 6950 1400 50  0001 C CNN
+F 1 "+3V3" V 6965 1678 50  0000 L CNN
+F 2 "" H 6950 1550 50  0001 C CNN
+F 3 "" H 6950 1550 50  0001 C CNN
+	1    6950 1550
 	0    -1   -1   0   
 $EndComp
 $Comp
@@ -241,8 +241,6 @@ F 3 "" H 2350 4500 50  0001 C CNN
 	1    2350 4500
 	1    0    0    -1  
 $EndComp
-Text Label 3900 1800 0    60   ~ 0
-Ref_In
 NoConn ~ 9300 2150
 $Comp
 L Device:C C4
@@ -331,10 +329,6 @@ F 3 "" H 6800 1950 50  0001 C CNN
 	1    6800 1950
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	7100 1650 6800 1650
-Wire Wire Line
-	7100 1650 7100 1550
 Connection ~ 3350 6150
 $Comp
 L power:GND #PWR06
@@ -419,7 +413,7 @@ Text Notes 1550 1100 0    119  ~ 0
 Oscillator
 Text Notes 3300 5050 0    59   ~ 0
 Low Pass\nFilter
-Text Notes 1150 4950 0    119  ~ 0
+Text Notes 950  5050 0    119  ~ 0
 Sampling\nDownconverter
 $Comp
 L power:+3V3 #PWR014
@@ -1362,8 +1356,6 @@ Wire Wire Line
 Wire Wire Line
 	2500 7300 3100 7300
 Wire Wire Line
-	6700 4950 7100 4950
-Wire Wire Line
 	9600 6650 9600 4950
 $Comp
 L power:GND #PWR024
@@ -1432,7 +1424,7 @@ $EndComp
 Wire Wire Line
 	6100 4750 6100 4950
 Wire Wire Line
-	6100 4950 6700 4950
+	6100 4950 6350 4950
 Connection ~ 6700 4950
 $Comp
 L Amplifier_Operational:LM2904 U4
@@ -1472,7 +1464,6 @@ F 3 "http://www.ti.com/lit/ds/symlink/lm358.pdf" H 6550 3850 50  0001 C CNN
 	3    6550 3850
 	1    0    0    -1  
 $EndComp
-Connection ~ 7100 1550
 $Comp
 L cx3225:EXP-_MSP432P401R_BoosterPack B1
 U 1 1 5A3C5894
@@ -1507,9 +1498,7 @@ Wire Wire Line
 Wire Wire Line
 	3400 1800 3900 1800
 Wire Wire Line
-	900  2400 3900 2400
-Wire Wire Line
-	3900 2400 3900 1800
+	900  2400 3550 2400
 $Comp
 L nl7w66:NL7WB66 U2
 U 1 1 5A4348B9
@@ -1583,7 +1572,7 @@ Wire Wire Line
 	6700 5900 6700 6650
 Connection ~ 6700 6650
 Wire Wire Line
-	6700 6650 9600 6650
+	6700 6650 7050 6650
 $Comp
 L power:GND #PWR045
 U 1 1 5D060AEA
@@ -1991,13 +1980,77 @@ Wire Wire Line
 $Comp
 L power:PWR_FLAG #FLG0101
 U 1 1 5CF352CB
-P 7100 1550
-F 0 "#FLG0101" H 7100 1625 50  0001 C CNN
-F 1 "PWR_FLAG" H 7100 1723 50  0000 C CNN
-F 2 "" H 7100 1550 50  0001 C CNN
-F 3 "~" H 7100 1550 50  0001 C CNN
-	1    7100 1550
+P 6950 1550
+F 0 "#FLG0101" H 6950 1625 50  0001 C CNN
+F 1 "PWR_FLAG" H 6950 1723 50  0000 C CNN
+F 2 "" H 6950 1550 50  0001 C CNN
+F 3 "~" H 6950 1550 50  0001 C CNN
+	1    6950 1550
 	1    0    0    -1  
 $EndComp
 NoConn ~ 10050 2950
+$Comp
+L Device:Jumper JP1
+U 1 1 5CDE2229
+P 3900 2100
+F 0 "JP1" V 3854 2227 50  0000 L CNN
+F 1 "Jumper" V 3945 2227 50  0000 L CNN
+F 2 "EtherkitKicadLibrary:SOLDER_JUMPER" H 3900 2100 50  0001 C CNN
+F 3 "~" H 3900 2100 50  0001 C CNN
+	1    3900 2100
+	0    1    1    0   
+$EndComp
+$Comp
+L test:TEST TP1
+U 1 1 5CDE4616
+P 3550 2400
+F 0 "TP1" H 3472 2446 50  0000 R CNN
+F 1 "REF_IN" H 3472 2537 50  0000 R CNN
+F 2 "Connectors:PINTST" H 3550 2400 50  0001 C CNN
+F 3 "" H 3550 2400 50  0001 C CNN
+	1    3550 2400
+	-1   0    0    1   
+$EndComp
+Connection ~ 3550 2400
+Wire Wire Line
+	3550 2400 3900 2400
+Text Label 3900 2400 0    60   ~ 0
+Ref_In
+$Comp
+L test:TEST TP3
+U 1 1 5CDE6E55
+P 7050 6650
+F 0 "TP3" H 7128 6788 50  0000 L CNN
+F 1 "TEST" H 7128 6697 50  0000 L CNN
+F 2 "Connectors:PINTST" H 7050 6650 50  0001 C CNN
+F 3 "" H 7050 6650 50  0001 C CNN
+	1    7050 6650
+	1    0    0    -1  
+$EndComp
+Connection ~ 7050 6650
+Wire Wire Line
+	7050 6650 9600 6650
+$Comp
+L test:TEST TP2
+U 1 1 5CDE8842
+P 6350 4950
+F 0 "TP2" H 6272 4996 50  0000 R CNN
+F 1 "REF" H 6272 5087 50  0000 R CNN
+F 2 "Connectors:PINTST" H 6350 4950 50  0001 C CNN
+F 3 "" H 6350 4950 50  0001 C CNN
+	1    6350 4950
+	-1   0    0    1   
+$EndComp
+Connection ~ 6350 4950
+Wire Wire Line
+	6350 4950 6700 4950
+Wire Wire Line
+	6700 4950 7100 4950
+Wire Wire Line
+	6800 1650 6950 1650
+Wire Wire Line
+	6950 1650 6950 1550
+Connection ~ 6950 1550
+Wire Wire Line
+	6950 1550 7100 1550
 $EndSCHEMATC
