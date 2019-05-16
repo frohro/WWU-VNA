@@ -38,6 +38,8 @@ void setup()
     // For debugging 1/4/2018
     si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
     delay(5);
+    si5351.drive_strength(SI5351_CLK1, SI5351_DRIVE_8MA);
+    delay(5);
     si5351.drive_strength(SI5351_CLK2, SI5351_DRIVE_8MA);
     delay(5);
    /* si5351.set_ms_source(SI5351_CLK0, SI5351_PLLA);
@@ -255,7 +257,7 @@ void setOscillator (unsigned long long freq) // freq in Hz
 {
 
     si5351.set_freq(freq*100ULL, SI5351_CLK0);
-    delay(5);
+    //delay(5);
     si5351.set_freq(freq*100ULL, SI5351_CLK1);
     delay(5);
     si5351.set_freq(freq*100ULL-100ULL*F_IF, SI5351_CLK2); // LO_I

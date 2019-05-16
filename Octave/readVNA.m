@@ -1,20 +1,20 @@
 function data = readVNA(fMin, fMax, nFreq)
 
-##  if exist("/dev/ttyACM0","file")
-##    port ="/dev/ttyACM0"; 
-##  elseif exist("/dev/ttyACM1","file")
-##    port = "/dev/ttyACM1";
+  if exist("/dev/ttyACM0","file")
+    port ="/dev/ttyACM0"; 
+  elseif exist("/dev/ttyACM1","file")
+    port = "/dev/ttyACM1";
 ##  elseif exist(".port","file")
 ##    load ".port" port
 ##    s1 = serial(port)
 ##  else
 ##    port = inputdlg({"For example: COM1 or /dev/ttyACM0 "},"Serial Port",[1 10]);
 ##    save ".port" port
-##  endif
-  port = "/dev/ttyACM0";
+endif
+  %port = "/dev/ttyACM0";
   try
     %serialPort = serial(port{1});
-    serialPort = serial("/dev/ttyACM0")
+    serialPort = serial(port)
   catch
     errordlg("Problem checkinng serial port.")
     delete(".port")  % In case the port got typed incorrectly.
@@ -35,6 +35,6 @@ function data = readVNA(fMin, fMax, nFreq)
     waitbar(i/nFreq, f);
   endfor
   close(f);
-  data = (raw(:,1)+j*raw(:,2))./(raw(:,3)+j*raw(:,4));
+  data = 8*(raw(:,1)+j*raw(:,2))./(raw(:,3)+j*raw(:,4));
   fclose(serialPort);
 endfunction

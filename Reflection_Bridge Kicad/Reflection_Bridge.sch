@@ -6,8 +6,8 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 1
 Title "Reflection Bridge"
-Date "2017-04-20"
-Rev "0.1"
+Date "2019-05-16"
+Rev "0.2"
 Comp "Walla Walla University"
 Comment1 "Rob Frohne"
 Comment2 ""
@@ -171,6 +171,4 @@ Wire Wire Line
 	4600 3350 5150 3350
 Wire Wire Line
 	5150 3850 5150 4350
-Text Notes 3700 5350 0    50   ~ 0
-T1 footprint is really badly done.  Fix it before making another board!
 $EndSCHEMATC

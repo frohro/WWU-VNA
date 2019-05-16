@@ -4,9 +4,9 @@
 clc; clear;
 close all;
 
-fMin = 1.e6;
-fMax = 100e6;
-nFreq = 1000;
+fMin = 10.e6;
+fMax = 11e6;
+nFreq = 2;
 Sum = zeros(nFreq,2);
 % Load the package
 pkg load instrument-control

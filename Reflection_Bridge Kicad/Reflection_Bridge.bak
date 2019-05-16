@@ -1,6 +1,6 @@
 EESchema Schematic File Version 4
 LIBS:Reflection_Bridge-cache
-EELAYER 26 0
+EELAYER 29 0
 EELAYER END
 $Descr USLetter 11000 8500
 encoding utf-8
@@ -171,4 +171,6 @@ Wire Wire Line
 	4600 3350 5150 3350
 Wire Wire Line
 	5150 3850 5150 4350
+Text Notes 3700 5350 0    50   ~ 0
+T1 footprint is really badly done.  Fix it before making another board!
 $EndSCHEMATC
