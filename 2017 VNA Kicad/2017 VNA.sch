@@ -1550,7 +1550,7 @@ P 7050 5800
 F 0 "J1" H 6770 5825 50  0000 R CNN
 F 1 "AudioJack3" H 6770 5734 50  0000 R CNN
 F 2 "2017 VNA Kicad:Tayda_3.5mm_stereo_TRS_jack_A-853" H 7050 5800 50  0001 C CNN
-F 3 "~" H 7050 5800 50  0001 C CNN
+F 3 "https://www.cui.com/product/resource/sj1-352xn-series.pdf" H 7050 5800 50  0001 C CNN
 	1    7050 5800
 	-1   0    0    -1  
 $EndComp

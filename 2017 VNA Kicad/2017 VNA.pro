@@ -1,4 +1,4 @@
-update=Tue 14 May 2019 08:51:27 PM PDT
+update=Fri 17 May 2019 02:23:00 PM PDT
 version=1
 last_client=kicad
 [cvpcb]
@@ -28,7 +28,7 @@ BoardThickness=1.6
 AllowMicroVias=0
 AllowBlindVias=0
 RequireCourtyardDefinitions=0
-ProhibitOverlappingCourtyards=1
+ProhibitOverlappingCourtyards=0
 MinTrackWidth=0
 MinViaDiameter=0.4
 MinViaDrill=0.3
@@ -65,8 +65,8 @@ OthersTextItalic=0
 OthersTextUpright=1
 SolderMaskClearance=0.2
 SolderMaskMinWidth=0.25
-SolderPasteClearance=-0.05
-SolderPasteRatio=0
+SolderPasteClearance=-0.06999999999999999
+SolderPasteRatio=-0
 [pcbnew/Layer.F.Cu]
 Name=F.Cu
 Type=0
@@ -224,7 +224,7 @@ Enabled=1
 [pcbnew/Layer.Margin]
 Enabled=1
 [pcbnew/Layer.B.CrtYd]
-Enabled=0
+Enabled=1
 [pcbnew/Layer.F.CrtYd]
 Enabled=1
 [pcbnew/Layer.B.Fab]
