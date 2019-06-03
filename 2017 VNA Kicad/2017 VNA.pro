@@ -1,4 +1,4 @@
-update=Fri 17 May 2019 02:23:00 PM PDT
+update=Mon 03 Jun 2019 04:44:09 PM PDT
 version=1
 last_client=kicad
 [cvpcb]
@@ -9,16 +9,6 @@ version=1
 [eeschema]
 version=1
 LibDir=
-[schematic_editor]
-version=1
-PageLayoutDescrFile=
-PlotDirectoryName=./Version0.3
-SubpartIdSeparator=0
-SubpartFirstId=65
-NetFmtName=
-SpiceAjustPassiveValues=0
-LabSize=50
-ERC_TestSimilarLabels=1
 [pcbnew]
 version=1
 PageLayoutDescrFile=
@@ -63,7 +53,7 @@ OthersTextSizeH=1
 OthersTextSizeThickness=0.15
 OthersTextItalic=0
 OthersTextUpright=1
-SolderMaskClearance=0.2
+SolderMaskClearance=0
 SolderMaskMinWidth=0.25
 SolderPasteClearance=-0.06999999999999999
 SolderPasteRatio=-0
@@ -267,3 +257,13 @@ uViaDrill=0.3
 dPairWidth=0.2
 dPairGap=0.25
 dPairViaGap=0.25
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=/home/frohro/Downloads/
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceAjustPassiveValues=0
+LabSize=50
+ERC_TestSimilarLabels=1
