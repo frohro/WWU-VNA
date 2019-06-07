@@ -7,7 +7,7 @@ encoding utf-8
 Sheet 1 1
 Title "2019 Vector Network Analyzer BoosterPack"
 Date "2019-05-13"
-Rev "0.51"
+Rev "0.52"
 Comp "Walla Walla University"
 Comment1 "for Engineering Electronics II"
 Comment2 "Rob Frohne"
