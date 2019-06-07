@@ -2045,7 +2045,7 @@ Connection ~ 6350 4950
 Wire Wire Line
 	6350 4950 6700 4950
 Wire Wire Line
-	6700 4950 7100 4950
+	6700 4950 6850 4950
 Wire Wire Line
 	6800 1650 6950 1650
 Wire Wire Line
@@ -2053,4 +2053,53 @@ Wire Wire Line
 Connection ~ 6950 1550
 Wire Wire Line
 	6950 1550 7100 1550
+$Comp
+L Device:R R16
+U 1 1 5CF9F926
+P 6500 6800
+F 0 "R16" H 6570 6846 50  0000 L CNN
+F 1 "180" H 6570 6755 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805" V 6430 6800 50  0001 C CNN
+F 3 "~" H 6500 6800 50  0001 C CNN
+	1    6500 6800
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R17
+U 1 1 5CFA0534
+P 6850 5100
+F 0 "R17" H 6920 5146 50  0000 L CNN
+F 1 "180" H 6850 4950 50  0000 L CNN
+F 2 "Resistors_SMD:R_0805" V 6780 5100 50  0001 C CNN
+F 3 "~" H 6850 5100 50  0001 C CNN
+	1    6850 5100
+	1    0    0    -1  
+$EndComp
+Connection ~ 6850 4950
+Wire Wire Line
+	6850 4950 7100 4950
+$Comp
+L power:GND #PWR063
+U 1 1 5CFA1FCB
+P 6850 5250
+F 0 "#PWR063" H 6850 5000 50  0001 C CNN
+F 1 "GND" H 6850 5100 50  0000 C CNN
+F 2 "" H 6850 5250 50  0001 C CNN
+F 3 "" H 6850 5250 50  0001 C CNN
+	1    6850 5250
+	-1   0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR062
+U 1 1 5CFA23B7
+P 6500 6950
+F 0 "#PWR062" H 6500 6700 50  0001 C CNN
+F 1 "GND" H 6400 6800 50  0000 C CNN
+F 2 "" H 6500 6950 50  0001 C CNN
+F 3 "" H 6500 6950 50  0001 C CNN
+	1    6500 6950
+	-1   0    0    -1  
+$EndComp
+Text Notes 6000 7300 0    50   ~ 0
+R16 and R17 added to bias the emitter follower on the output of the LM2904.
 $EndSCHEMATC
